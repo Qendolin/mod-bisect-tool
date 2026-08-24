@@ -5,10 +5,10 @@ import (
 	"os"
 
 	gioapp "gioui.org/app"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/app"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/guiapp"
-	guii18n "github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/i18n"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/app"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/guiapp"
+	guii18n "github.com/Qendolin/mod-bisect-tool/pkg/gui/i18n"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/ncruces/zenity"
 )
 

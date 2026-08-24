@@ -13,10 +13,10 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 )
 

@@ -3,7 +3,7 @@ package probe
 import (
 	"sync"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // Worker serializes directory probes: at most one probe runs at a time. While a

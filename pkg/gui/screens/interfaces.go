@@ -1,8 +1,8 @@
 package screens
 
 import (
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/i18n"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/i18n"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // App defines the interface that screens use to communicate with the GUI App.

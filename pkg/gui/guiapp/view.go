@@ -1,9 +1,9 @@
 package guiapp
 
 import (
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/screens"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/screens"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 func (a *App) Update() {

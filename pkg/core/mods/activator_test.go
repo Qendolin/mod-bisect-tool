@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // writeModFile creates an empty mod file (either active or disabled) on disk.

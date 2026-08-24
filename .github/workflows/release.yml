@@ -27,9 +27,9 @@ jobs:
           compress_assets: OFF
           md5sum: FALSE
           ldflags: >
-            -X 'github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppDistribution=${{ matrix.goos }}-binary'
-            -X 'github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppVersion=${{ github.event.release.tag_name }}'
-            -X 'github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppRevision=${{ github.sha }}'
+            -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppDistribution=${{ matrix.goos }}-binary'
+            -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppVersion=${{ github.event.release.tag_name }}'
+            -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppRevision=${{ github.sha }}'
 
   # --- JOB 2: Build Standalone GUI Binaries ---
   releases-matrix-gui:

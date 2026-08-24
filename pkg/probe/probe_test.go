@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 )
 
 // writeJar writes a jar containing the given files (path -> content).

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 )
 
 func TestTranslateMavenVersion(t *testing.T) {

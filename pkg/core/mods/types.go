@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/titanous/json5"
 )
 

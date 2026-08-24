@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 )
 
 const AppCommonName = "mod-bisect-tool"

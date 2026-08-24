@@ -3,7 +3,7 @@ package version_test
 import (
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 )
 
 func TestVersionParsing(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // oracleFunc decides the outcome of a test on a set of mod ids.

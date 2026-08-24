@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 func TestModLoader(t *testing.T) {

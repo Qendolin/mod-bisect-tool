@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/app"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui/tuiapp"
+	"github.com/Qendolin/mod-bisect-tool/pkg/app"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui/tuiapp"
 )
 
 func main() {

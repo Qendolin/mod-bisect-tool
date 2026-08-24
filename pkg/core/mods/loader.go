@@ -10,9 +10,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // ModLoader loads mod information from the filesystem, parses metadata,

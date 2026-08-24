@@ -3,9 +3,9 @@ package pages
 import (
 	"time"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui/widgets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui/widgets"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )

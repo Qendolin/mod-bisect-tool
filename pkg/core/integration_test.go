@@ -9,11 +9,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/bisect"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/bisect"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // runBisectionTest is a test harness that executes the full bisection process.

@@ -3,8 +3,8 @@ package app_test
 import (
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 const (

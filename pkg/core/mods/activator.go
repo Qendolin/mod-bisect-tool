@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 type FileAdapter struct {

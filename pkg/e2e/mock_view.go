@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // DialogKind enumerates the blocking dialogs the app can request.

@@ -10,8 +10,8 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/i18n"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/i18n"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
 )
 
 // ModListTag marks how a mod row should be styled relative to a plain entry.

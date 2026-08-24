@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )

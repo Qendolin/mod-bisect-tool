@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // ErrNeedsReconciliation is returned by service methods that require a consistent

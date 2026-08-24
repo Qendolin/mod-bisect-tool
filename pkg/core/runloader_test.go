@@ -3,7 +3,7 @@ package app_test
 import (
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 )
 
 // nfModTOML is a minimal neoforge.mods.toml for the "nf_mod" test mod.

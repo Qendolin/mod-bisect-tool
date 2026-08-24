@@ -3,8 +3,8 @@ package imcs
 import (
 	"math"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // Engine orchestrates the bisection search, owning the state and using

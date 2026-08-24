@@ -1,6 +1,6 @@
 package imcs
 
-import "github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+import "github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 
 // TestPlanKind identifies the algorithm branch that produced a test plan.
 type TestPlanKind string

@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // buildUnresolvableModInfos converts the reconcile report's directly-unresolvable

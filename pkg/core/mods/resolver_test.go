@@ -3,8 +3,8 @@ package mods
 import (
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // parsePred is a test helper to parse a version predicate string.

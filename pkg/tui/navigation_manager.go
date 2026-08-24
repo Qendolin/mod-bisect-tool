@@ -1,7 +1,7 @@
 package tui
 
 import (
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/rivo/tview"
 )
 

@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // zipIndex is a zip archive with its entries indexed by path for O(1) lookups.

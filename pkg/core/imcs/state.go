@@ -3,7 +3,7 @@ package imcs
 import (
 	"sort"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // TestResult indicates the outcome of a test run.

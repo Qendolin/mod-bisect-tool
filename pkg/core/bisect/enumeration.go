@@ -1,8 +1,8 @@
 package bisect
 
 import (
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // Enumeration holds the state for the entire process of finding multiple independent conflict sets.

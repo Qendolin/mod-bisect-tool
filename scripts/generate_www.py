@@ -14,7 +14,13 @@ REPO = "Qendolin/mod-bisect-tool"
 API = f"https://api.github.com/repos/{REPO}/releases?per_page=100"
 LATEST_API = f"https://api.github.com/repos/{REPO}/releases/latest"
 DIST = Path("dist/www")
-STATIC = ("style.css", "favicon.svg", ".nojekyll", "GUI-User-Guide.html", "TUI-User-Guide.html")
+STATIC = (
+    "style.css",
+    "favicon.svg",
+    ".nojekyll",
+    "GUI-User-Guide.html",
+    "TUI-User-Guide.html",
+)
 
 OS_INFO = {
     "windows": ("Windows", 0),
@@ -50,7 +56,7 @@ def parse_asset(name):
     )
     for prefix, kind in prefixes:
         if name.startswith(prefix):
-            match = ASSET_RE.match(name[len(prefix):])
+            match = ASSET_RE.match(name[len(prefix) :])
             if match:
                 return kind, match.group("os"), match.group("arch")
             return None
@@ -66,20 +72,25 @@ def release_assets(release):
         kind, os_name, arch = parsed
         os_label = OS_INFO[os_name][0]
         arch_label = ARCH_INFO[arch][0]
-        assets.append({
-            "kind": kind,
-            "os": os_name,
-            "osLabel": os_label,
-            "arch": arch,
-            "archLabel": arch_label,
-            "name": asset["name"],
-            "url": asset.get("browser_download_url") or download_url(release["tag_name"], asset["name"]),
-        })
-    assets.sort(key=lambda item: (
-        OS_INFO[item["os"]][1],
-        ARCH_INFO[item["arch"]][1],
-        item["kind"],
-    ))
+        assets.append(
+            {
+                "kind": kind,
+                "os": os_name,
+                "osLabel": os_label,
+                "arch": arch,
+                "archLabel": arch_label,
+                "name": asset["name"],
+                "url": asset.get("browser_download_url")
+                or download_url(release["tag_name"], asset["name"]),
+            }
+        )
+    assets.sort(
+        key=lambda item: (
+            OS_INFO[item["os"]][1],
+            ARCH_INFO[item["arch"]][1],
+            item["kind"],
+        )
+    )
     return assets
 
 
@@ -114,9 +125,9 @@ def build_catalogue(releases):
         if rows:
             tag = html.escape(release["tag_name"])
             groups.append(
-                "      <details class=\"version-group\">\n"
+                '      <details class="version-group">\n'
                 f"        <summary><span>{tag}</span> <small>{channel_label(release)}</small></summary>\n"
-                "        <table class=\"catalogue\">\n"
+                '        <table class="catalogue">\n'
                 "          <thead><tr><th>Operating system</th><th>Interface</th><th>Architecture</th><th>File</th></tr></thead>\n"
                 "          <tbody>\n"
                 + "\n".join(rows)
@@ -142,17 +153,20 @@ def main():
     # flag. The /releases/latest endpoint identifies that release; prereleases
     # are included by their explicit prerelease flag.
     releases = [
-        release for release in all_releases
+        release
+        for release in all_releases
         if release.get("prerelease") or release.get("tag_name") == latest_tag
     ]
     release_data = []
     for release in releases:
-        release_data.append({
-            "tag": release["tag_name"],
-            "prerelease": bool(release.get("prerelease")),
-            "date": fmt_date(release.get("published_at")),
-            "assets": release_assets(release),
-        })
+        release_data.append(
+            {
+                "tag": release["tag_name"],
+                "prerelease": bool(release.get("prerelease")),
+                "date": fmt_date(release.get("published_at")),
+                "assets": release_assets(release),
+            }
+        )
 
     template = (source / "index.html").read_text(encoding="utf-8")
     # Prevent a release name or filename from prematurely closing the script tag.

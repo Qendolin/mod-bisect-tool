@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	apppkg "github.com/Qendolin/fabric-mod-bisect-tool/pkg/app"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/probe"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui/widgets"
+	apppkg "github.com/Qendolin/mod-bisect-tool/pkg/app"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/probe"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui/widgets"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -138,7 +138,7 @@ func NewSetupPage(app tui.TUIApp) *SetupPage {
 [::b]Tool Information:[-:-:-]
   - Build: %s
   - Author: Qendolin
-  - Source: https://github.com/Qendolin/fabric-mod-bisect-tool
+  - Source: https://github.com/Qendolin/mod-bisect-tool
 `, buildInfo))
 	instructions.SetBorderPadding(0, 0, 1, 1)
 

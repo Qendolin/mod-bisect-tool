@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // TestGenerateLogReportIncludesCurrentConflictSet ensures the report does not

@@ -6,7 +6,7 @@ import (
 	"gioui.org/text"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
 )
 
 type LoadingScreen struct {

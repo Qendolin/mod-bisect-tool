@@ -9,10 +9,10 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
-	exwidgets "github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/widgets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
+	exwidgets "github.com/Qendolin/mod-bisect-tool/pkg/gui/widgets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 type ModSelectionScreen struct {

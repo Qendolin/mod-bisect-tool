@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui/pages"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui/pages"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )

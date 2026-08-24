@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/tui/widgets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/tui/widgets"
 	"github.com/rivo/tview"
 )
 

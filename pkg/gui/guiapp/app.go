@@ -12,11 +12,11 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	guii18n "github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/i18n"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/screens"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	guii18n "github.com/Qendolin/mod-bisect-tool/pkg/gui/i18n"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/screens"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 	"github.com/ncruces/zenity"
 )
 

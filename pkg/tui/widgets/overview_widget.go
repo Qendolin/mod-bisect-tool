@@ -1,7 +1,7 @@
 package widgets
 
 import (
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )

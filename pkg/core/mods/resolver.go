@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // DependencyResolver is a long-lived service that holds the static universe of all mods

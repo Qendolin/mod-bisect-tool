@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/mods/version"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/pelletier/go-toml/v2"
 )
 

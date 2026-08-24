@@ -3,7 +3,7 @@ package mods
 import (
 	"sort"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 )
 
 // StateManager provides a way to manage the state of mods.

@@ -34,9 +34,9 @@ def run(
 
 def build_ldflags(distribution: str, git_tag: str, git_revision: str) -> str:
     return (
-        f"-X github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppDistribution={distribution} "
-        f"-X github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppVersion={git_tag} "
-        f"-X github.com/Qendolin/fabric-mod-bisect-tool/pkg/app.AppRevision={git_revision}"
+        f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppDistribution={distribution} "
+        f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppVersion={git_tag} "
+        f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppRevision={git_revision}"
     )
 
 
@@ -83,7 +83,11 @@ def build_linux(
     bin_dir = appdir / "usr" / "bin"
     bin_dir.mkdir(parents=True)
 
-    git_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir).decode().strip()
+    git_revision = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir)
+        .decode()
+        .strip()
+    )
     ldflags = build_ldflags("linux-appimage", git_tag, git_revision)
     run(
         "go",
@@ -155,7 +159,11 @@ def build_windows(
     # Windows is built pure-Go (CGO_ENABLED=0): no cross-compiler needed. gogio
     # embeds the icon and links with -H windowsgui.
     exe = project_dir / "mod-bisect-gui.exe"
-    git_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir).decode().strip()
+    git_revision = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir)
+        .decode()
+        .strip()
+    )
     gogio_build(
         "windows",
         goarch,
@@ -192,7 +200,11 @@ def build_darwin(
     # of the application ... with this version of macOS" error even though
     # the binary itself is otherwise fine.
     app = project_dir / "Mod-Bisect-Tool.app"
-    git_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir).decode().strip()
+    git_revision = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_dir)
+        .decode()
+        .strip()
+    )
     gogio_build(
         "macos",
         goarch,

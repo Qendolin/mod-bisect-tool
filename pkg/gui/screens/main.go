@@ -13,13 +13,13 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/bisect"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/imcs"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/theme"
-	exwidgets "github.com/Qendolin/fabric-mod-bisect-tool/pkg/gui/widgets"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/ui"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/bisect"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/gui/theme"
+	exwidgets "github.com/Qendolin/mod-bisect-tool/pkg/gui/widgets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 var colorWhite = color.NRGBA{R: 255, G: 255, B: 255, A: 255}

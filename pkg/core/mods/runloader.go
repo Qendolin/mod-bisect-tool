@@ -3,7 +3,7 @@ package mods
 import (
 	"fmt"
 
-	"github.com/Qendolin/fabric-mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
 // RunLoader identifies the mod loader the user runs Minecraft with. It decides
