@@ -173,7 +173,7 @@ def main():
     data_json = json.dumps(release_data, ensure_ascii=True, separators=(",", ":"))
     data_json = data_json.replace("<", "\\u003c").replace(">", "\\u003e")
     output = template.replace("{{ALL_RELEASES_TABLE}}", build_catalogue(releases))
-    output = output.replace("{{RELEASE_DATA}}", data_json)
+    output = output.replace("__RELEASE_DATA__", data_json)
     (DIST / "index.html").write_text(output, encoding="utf-8")
 
     for name in STATIC:

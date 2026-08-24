@@ -1,242 +1,417 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TUI User Guide &middot; Mod Bisect Tool</title>
-  <meta name="description" content="How to use the terminal version of the Mod Bisect Tool.">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img src="favicon.svg" alt="" width="25" height="25">
-        <span>Mod Bisect Tool</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href="GUI-User-Guide.html">GUI guide</a>
-        <a href="TUI-User-Guide.html">TUI guide</a>
-        <a href="https://github.com/Qendolin/mod-bisect-tool">Source</a>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme">
-          <svg class="theme-icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
-          <svg class="theme-icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 10 3.5a7 7 0 0 0 10.5 11Z"></path></svg>
-        </button>
-      </nav>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TUI User Guide &middot; Mod Bisect Tool</title>
+    <meta
+      name="description"
+      content="How to use the terminal version of the Mod Bisect Tool."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img src="favicon.svg" alt="" width="25" height="25" />
+          <span>Mod Bisect Tool</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="GUI-User-Guide.html">GUI guide</a>
+          <a href="TUI-User-Guide.html">TUI guide</a>
+          <a href="https://github.com/Qendolin/mod-bisect-tool">Source</a>
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-label="Switch color theme"
+            title="Switch color theme"
+          >
+            <svg
+              class="theme-icon icon-sun"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"
+              ></path>
+            </svg>
+            <svg
+              class="theme-icon icon-moon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.5 14.5A8.5 8.5 0 1 1 10 3.5a7 7 0 0 0 10.5 11Z"
+              ></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </header>
 
-  <main class="container">
-    <article class="guide">
-      <h1>TUI User Guide</h1>
+    <main class="container">
+      <article class="guide">
+        <h1>TUI User Guide</h1>
 
-      <p>This guide covers the <strong>terminal (TUI)</strong> version of the Mod Bisect Tool.
-      If you are using the graphical version, see the
-      <a href="GUI-User-Guide.html">GUI User Guide</a>.</p>
+        <p>
+          This guide covers the <strong>terminal (TUI)</strong> version of the
+          Mod Bisect Tool. If you are using the graphical version, see the
+          <a href="GUI-User-Guide.html">GUI User Guide</a>.
+        </p>
 
-      <h2>Installation</h2>
+        <h2>Installation</h2>
 
-      <ol>
-        <li>Open the <a href="index.html#downloads">download page</a>. It detects your operating system and recommends the appropriate architecture.</li>
-        <li>Choose <strong>Latest</strong> or <strong>Stable</strong>, select <strong>Terminal</strong>, then choose your operating system and architecture.</li>
-        <li>If you selected Linux or macOS, make the TUI binary runnable before starting it:
-          <pre><code>chmod +x ./mod-bisect-tui-*</code></pre>
-          This adds the execute bit so the operating system will allow the program to start.
-          Without it, the file may be saved but not run.
-        </li>
-      </ol>
+        <ol>
+          <li>
+            Open the <a href="index.html#downloads">download page</a>. It
+            detects your operating system and recommends the appropriate
+            architecture.
+          </li>
+          <li>
+            Choose <strong>Latest</strong> or <strong>Stable</strong>, select
+            <strong>Terminal</strong>, then choose your operating system and
+            architecture.
+          </li>
+          <li>
+            If you selected Linux or macOS, make the TUI binary runnable before
+            starting it:
+            <pre><code>chmod +x ./mod-bisect-tui-*</code></pre>
+            This adds the execute bit so the operating system will allow the
+            program to start. Without it, the file may be saved but not run.
+          </li>
+        </ol>
 
-      <h2>How to Use the Tool</h2>
+        <h2>How to Use the Tool</h2>
 
-      <p>Using the tool is a simple, guided process.</p>
+        <p>Using the tool is a simple, guided process.</p>
 
-      <h3>Step 1: Setup</h3>
+        <h3>Step 1: Setup</h3>
 
-      <p>When you first launch the tool, you'll see the setup screen.</p>
+        <p>When you first launch the tool, you'll see the setup screen.</p>
 
-      <h4>Action</h4>
+        <h4>Action</h4>
 
-      <ol>
-        <li>Enter or paste the full path to your Minecraft <code>mods</code> folder.</li>
-        <li>Press the <strong>Load Mods</strong> button.</li>
-      </ol>
+        <ol>
+          <li>
+            Enter or paste the full path to your Minecraft
+            <code>mods</code> folder.
+          </li>
+          <li>Press the <strong>Load Mods</strong> button.</li>
+        </ol>
 
-      <p>The tool will then analyze all your mods, which should only take a second.</p>
+        <p>
+          The tool will then analyze all your mods, which should only take a
+          second.
+        </p>
 
-      <p><img src="img/tui-setup-page.jpg" alt="Setup Page"></p>
+        <p><img src="img/tui-setup-page.jpg" alt="Setup Page" /></p>
 
-      <h3>Step 2: The Main Screen</h3>
+        <h3>Step 2: The Main Screen</h3>
 
-      <p>This is your mission control. You'll see several lists showing the status of your mods.
-      The most important one is <strong>&ldquo;Candidates,&rdquo;</strong> which are the mods currently being tested.</p>
+        <p>
+          This is your mission control. You'll see several lists showing the
+          status of your mods. The most important one is
+          <strong>&ldquo;Candidates,&rdquo;</strong> which are the mods
+          currently being tested.
+        </p>
 
-      <h4>Action</h4>
+        <h4>Action</h4>
 
-      <ul>
-        <li>Press the <strong>&ldquo;Start&rdquo;</strong> button (or the <code>S</code> key) to begin the first test.</li>
-      </ul>
+        <ul>
+          <li>
+            Press the <strong>&ldquo;Start&rdquo;</strong> button (or the
+            <code>S</code> key) to begin the first test.
+          </li>
+        </ul>
 
-      <blockquote>
-        <p><strong>Force-enable mods that are needed to see the problem.</strong><br>
-        If the issue you're trying to track down only happens when a specific mod is active, you
-        should <strong>force enable</strong> that mod.<br>
-        For example, if you're using Iris and something only breaks when shaders are turned on,
-        you'll need to force-enable Iris. Otherwise, the tool might disable it during testing, and
-        you wouldn't even be able to tell if the issue still happens.</p>
-      </blockquote>
+        <blockquote>
+          <p>
+            <strong
+              >Force-enable mods that are needed to see the problem.</strong
+            ><br />
+            If the issue you're trying to track down only happens when a
+            specific mod is active, you should
+            <strong>force enable</strong> that mod.<br />
+            For example, if you're using Iris and something only breaks when
+            shaders are turned on, you'll need to force-enable Iris. Otherwise,
+            the tool might disable it during testing, and you wouldn't even be
+            able to tell if the issue still happens.
+          </p>
+        </blockquote>
 
-      <p><strong>Back up worlds before testing if you will load them!</strong> This is not needed
-      for servers, new test worlds, or tests that do not load a world.</p>
+        <p>
+          <strong>Back up worlds before testing if you will load them!</strong>
+          This is not needed for servers, new test worlds, or tests that do not
+          load a world.
+        </p>
 
-      <p><img src="img/tui-main-page-start.jpg" alt="Main Page"></p>
+        <p><img src="img/tui-main-page-start.jpg" alt="Main Page" /></p>
 
-      <h3>Step 3: The Test</h3>
+        <h3>Step 3: The Test</h3>
 
-      <p>The tool will now show you a &ldquo;Test in Progress&rdquo; screen. It has just enabled a
-      specific set of mods in your folder.</p>
+        <p>
+          The tool will now show you a &ldquo;Test in Progress&rdquo; screen. It
+          has just enabled a specific set of mods in your folder.
+        </p>
 
-      <h4>Action</h4>
+        <h4>Action</h4>
 
-      <ol>
-        <li>Launch Minecraft using your normal mod loader (Fabric, Quilt or NeoForge).</li>
-        <li>Check if the problem still occurs. Does the game crash? Does the bug you're hunting still happen?</li>
-        <li>Return to the tool and click the button that matches the outcome:
-          <ul>
-            <li><strong>&#10003; Works:</strong> The problem did <em>not</em> happen. The game loaded and worked as expected.</li>
-            <li><strong>&#10007; Broken:</strong> The problem <em>did</em> happen, such as a crash or a visible bug.</li>
-            <li><strong>? Can't Tell:</strong> The result was unclear. For example, the game crashed before you could check, or something else prevented you from observing the issue.</li>
-          </ul>
-        </li>
-      </ol>
+        <ol>
+          <li>
+            Launch Minecraft using your normal mod loader (Fabric, Quilt or
+            NeoForge).
+          </li>
+          <li>
+            Check if the problem still occurs. Does the game crash? Does the bug
+            you're hunting still happen?
+          </li>
+          <li>
+            Return to the tool and click the button that matches the outcome:
+            <ul>
+              <li>
+                <strong>&#10003; Works:</strong> The problem did
+                <em>not</em> happen. The game loaded and worked as expected.
+              </li>
+              <li>
+                <strong>&#10007; Broken:</strong> The problem
+                <em>did</em> happen, such as a crash or a visible bug.
+              </li>
+              <li>
+                <strong>? Can't Tell:</strong> The result was unclear. For
+                example, the game crashed before you could check, or something
+                else prevented you from observing the issue.
+              </li>
+            </ul>
+          </li>
+        </ol>
 
-      <p>The tool will use your answer to narrow down the search and prepare the next test.
-      <strong>Repeat this process</strong> until a result is found.</p>
+        <p>
+          The tool will use your answer to narrow down the search and prepare
+          the next test.
+          <strong>Repeat this process</strong> until a result is found.
+        </p>
 
-      <p><img src="img/tui-test-page.jpg" alt="Test Page"></p>
+        <p><img src="img/tui-test-page.jpg" alt="Test Page" /></p>
 
-      <h3>Step 4: The Results</h3>
+        <h3>Step 4: The Results</h3>
 
-      <p>Once the tool has found a problematic mod (or set of mods), it will show you the
-      <strong>Result</strong> screen.</p>
+        <p>
+          Once the tool has found a problematic mod (or set of mods), it will
+          show you the
+          <strong>Result</strong> screen.
+        </p>
 
-      <h4>Action</h4>
+        <h4>Action</h4>
 
-      <ol>
-        <li>Take note of the problematic mods listed.</li>
-        <li>To fix the issue, disable <strong>at least one</strong> mod from each conflict set listed. The tool will also tell you if any other mods depend on the problematic ones; consider disabling them as well.</li>
-        <li>If you suspect there might be other unrelated issues, you can return to the main page and click <strong>&ldquo;Continue Search&rdquo;</strong> to start looking for the next problem among the remaining mods.</li>
-      </ol>
+        <ol>
+          <li>Take note of the problematic mods listed.</li>
+          <li>
+            To fix the issue, disable <strong>at least one</strong> mod from
+            each conflict set listed. The tool will also tell you if any other
+            mods depend on the problematic ones; consider disabling them as
+            well.
+          </li>
+          <li>
+            If you suspect there might be other unrelated issues, you can return
+            to the main page and click
+            <strong>&ldquo;Continue Search&rdquo;</strong> to start looking for
+            the next problem among the remaining mods.
+          </li>
+        </ol>
 
-      <p><img src="img/tui-result-page.jpg" alt="Result Page"></p>
+        <p><img src="img/tui-result-page.jpg" alt="Result Page" /></p>
 
-      <h2>Managing Mods</h2>
+        <h2>Managing Mods</h2>
 
-      <p>On the main screen, you can press <code>M</code> to go to the <strong>Manage Mods</strong>
-      page. This gives you fine-grained control over the search process.</p>
+        <p>
+          On the main screen, you can press <code>M</code> to go to the
+          <strong>Manage Mods</strong> page. This gives you fine-grained control
+          over the search process.
+        </p>
 
-      <ul>
-        <li><strong>Force Enabled:</strong> The mod will be <em>always on</em> for every test. Use this for essential libraries or APIs (like Fabric API) that you are certain are not the problem.</li>
-        <li><strong>Force Disabled:</strong> The mod is treated as if it were temporarily removed from the <code>mods</code> folder. It will be <em>always off</em> and cannot be activated as a dependency for another mod.</li>
-        <li><strong>Omitted:</strong> The mod is ignored and removed from the search pool (<code>Candidates</code>). However, if another mod being tested requires it as a dependency, the tool <strong>will still activate it</strong>. This is useful for performance mods or libraries you've already confirmed are safe but are needed for other mods to run.</li>
-        <li><strong>Pending:</strong> A temporary status indicating a mod will be added back into the search pool at the start of the next full search round. This is a safety measure to ensure the integrity of an in-progress bisection.</li>
-      </ul>
+        <ul>
+          <li>
+            <strong>Force Enabled:</strong> The mod will be
+            <em>always on</em> for every test. Use this for essential libraries
+            or APIs (like Fabric API) that you are certain are not the problem.
+          </li>
+          <li>
+            <strong>Force Disabled:</strong> The mod is treated as if it were
+            temporarily removed from the <code>mods</code> folder. It will be
+            <em>always off</em> and cannot be activated as a dependency for
+            another mod.
+          </li>
+          <li>
+            <strong>Omitted:</strong> The mod is ignored and removed from the
+            search pool (<code>Candidates</code>). However, if another mod being
+            tested requires it as a dependency, the tool
+            <strong>will still activate it</strong>. This is useful for
+            performance mods or libraries you've already confirmed are safe but
+            are needed for other mods to run.
+          </li>
+          <li>
+            <strong>Pending:</strong> A temporary status indicating a mod will
+            be added back into the search pool at the start of the next full
+            search round. This is a safety measure to ensure the integrity of an
+            in-progress bisection.
+          </li>
+        </ul>
 
-      <p><img src="img/tui-manage-page.jpg" alt="Manage Mods Page"></p>
+        <p><img src="img/tui-manage-page.jpg" alt="Manage Mods Page" /></p>
 
-      <blockquote>
-        <p><strong>Tip:</strong> If you already have an idea of which mods might be causing trouble,
-        you can speed up the search! Press <code>Shift+O</code> to set all mods to <strong>Omitted</strong>.
-        Then, simply go through the list and toggle <strong>Omitted</strong> off (by pressing <code>O</code>)
-        for only the mods you suspect are involved. This way, the tool will only search within that smaller group.</p>
-      </blockquote>
+        <blockquote>
+          <p>
+            <strong>Tip:</strong> If you already have an idea of which mods
+            might be causing trouble, you can speed up the search! Press
+            <code>Shift+O</code> to set all mods to <strong>Omitted</strong>.
+            Then, simply go through the list and toggle
+            <strong>Omitted</strong> off (by pressing <code>O</code>) for only
+            the mods you suspect are involved. This way, the tool will only
+            search within that smaller group.
+          </p>
+        </blockquote>
 
-      <h2>History Page</h2>
+        <h2>History Page</h2>
 
-      <p>You can press <code>Ctrl+H</code> to go to the <strong>History</strong> page. This page
-      provides a detailed log of all the tests performed during the current bisection session. For
-      each test, you'll see which mods were enabled and the outcome you reported (Works or Broken).
-      This is useful for reviewing your steps, understanding how the tool arrived at its conclusion,
-      or for debugging purposes if you believe there was an error in the process.</p>
+        <p>
+          You can press <code>Ctrl+H</code> to go to the
+          <strong>History</strong> page. This page provides a detailed log of
+          all the tests performed during the current bisection session. For each
+          test, you'll see which mods were enabled and the outcome you reported
+          (Works or Broken). This is useful for reviewing your steps,
+          understanding how the tool arrived at its conclusion, or for debugging
+          purposes if you believe there was an error in the process.
+        </p>
 
-      <p><img src="img/tui-history-page.jpg" alt="History Page"></p>
+        <p><img src="img/tui-history-page.jpg" alt="History Page" /></p>
 
-      <h2>Log Page</h2>
+        <h2>Log Page</h2>
 
-      <p>You can press <code>Ctrl+L</code> to go to the <strong>Log</strong> page. This page displays
-      the internal log of the tool in real-time. It's primarily useful for debugging purposes or for
-      providing information when reporting an issue to the developers. You can also find the full log
-      file saved as <code>bisect-tui-YYY-MM-DD_HH-MM-SS.log</code> in the same directory as the executable.</p>
+        <p>
+          You can press <code>Ctrl+L</code> to go to the
+          <strong>Log</strong> page. This page displays the internal log of the
+          tool in real-time. It's primarily useful for debugging purposes or for
+          providing information when reporting an issue to the developers. You
+          can also find the full log file saved as
+          <code>bisect-tui-YYY-MM-DD_HH-MM-SS.log</code> in the same directory
+          as the executable.
+        </p>
 
-      <h2>Command-Line Options</h2>
+        <h2>Command-Line Options</h2>
 
-      <p>You can launch the tool with these optional flags for more control.</p>
+        <p>
+          You can launch the tool with these optional flags for more control.
+        </p>
 
-      <ul>
-        <li><code>--no-embedded-overrides</code>: Disables the built-in list of fixes for mods that have known dependency issues. Use this if you think a built-in fix is causing problems.</li>
-        <li><code>--verbose</code>: Turns on detailed debug logging. The log file (<code>bisect-tool.log</code>) will contain much more information, which is useful for bug reports.</li>
-        <li><code>--loader &lt;loader&gt;</code>: Forces the mod loader to use: <code>fabric</code>, <code>neoforge</code>, <code>connector</code> ((Neo)Forge with Fabric via Sinytra Connector) or <code>kilt</code> (Fabric with (Neo)Forge). By default the loader is auto-detected from your mods folder.</li>
-        <li><code>--log-dir &lt;path&gt;</code>: Lets you specify a different folder to save the <code>bisect-tool.log</code> file. For example: <code>--log-dir "C:\my_logs"</code>.</li>
-      </ul>
+        <ul>
+          <li>
+            <code>--no-embedded-overrides</code>: Disables the built-in list of
+            fixes for mods that have known dependency issues. Use this if you
+            think a built-in fix is causing problems.
+          </li>
+          <li>
+            <code>--verbose</code>: Turns on detailed debug logging. The log
+            file (<code>bisect-tool.log</code>) will contain much more
+            information, which is useful for bug reports.
+          </li>
+          <li>
+            <code>--loader &lt;loader&gt;</code>: Forces the mod loader to use:
+            <code>fabric</code>, <code>neoforge</code>,
+            <code>connector</code> ((Neo)Forge with Fabric via Sinytra
+            Connector) or <code>kilt</code> (Fabric with (Neo)Forge). By default
+            the loader is auto-detected from your mods folder.
+          </li>
+          <li>
+            <code>--log-dir &lt;path&gt;</code>: Lets you specify a different
+            folder to save the <code>bisect-tool.log</code> file. For example:
+            <code>--log-dir "C:\my_logs"</code>.
+          </li>
+        </ul>
 
-      <h2>Dependency Overrides</h2>
+        <h2>Dependency Overrides</h2>
 
-      <p>Sometimes a mod author forgets to list a dependency in their metadata. This tool can add or
-      remove those entries with a file named <code>fabric_loader_dependencies.json</code>.<br>
-      This tool also extends the standard format with the ability to override the <code>provides</code>
-      field, which is useful for fixing complex library conflicts.</p>
+        <p>
+          Sometimes a mod author forgets to list a dependency in their metadata.
+          This tool can add or remove those entries with a file named
+          <code>fabric_loader_dependencies.json</code>.<br />
+          This tool also extends the standard format with the ability to
+          override the
+          <code>provides</code> field, which is useful for fixing complex
+          library conflicts.
+        </p>
 
-      <p>The GUI loads override files in this order:</p>
-      <ol>
-        <li>The current working directory</li>
-        <li>The Minecraft <code>config</code> folder next to your <code>mods</code> folder</li>
-        <li>The built-in overrides included with the tool</li>
-      </ol>
+        <p>The GUI loads override files in this order:</p>
+        <ol>
+          <li>The current working directory</li>
+          <li>
+            The Minecraft <code>config</code> folder next to your
+            <code>mods</code> folder
+          </li>
+          <li>The built-in overrides included with the tool</li>
+        </ol>
 
-      <h2>Log Files</h2>
+        <h2>Log Files</h2>
 
-      <p>The app creates its log file in the first folder that works, in this order:</p>
-      <ol>
-        <li>The current working directory</li>
-        <li>The OS log directory:
-          <ul>
-            <li>macOS: <code>~/Library/Logs/mod-bisect-tool</code></li>
-            <li>Windows: <code>%LOCALAPPDATA%/mod-bisect-tool/logs</code></li>
-            <li>Linux: <code>$XDG_STATE_HOME/mod-bisect-tool</code>, or <code>~/.local/state/mod-bisect-tool</code></li>
-          </ul>
-        </li>
-        <li>The OS temp directory, under <code>mod-bisect-tool</code></li>
-      </ol>
-    </article>
-  </main>
+        <p>
+          The app creates its log file in the first folder that works, in this
+          order:
+        </p>
+        <ol>
+          <li>The current working directory</li>
+          <li>
+            The OS log directory:
+            <ul>
+              <li>macOS: <code>~/Library/Logs/mod-bisect-tool</code></li>
+              <li>Windows: <code>%LOCALAPPDATA%/mod-bisect-tool/logs</code></li>
+              <li>
+                Linux: <code>$XDG_STATE_HOME/mod-bisect-tool</code>, or
+                <code>~/.local/state/mod-bisect-tool</code>
+              </li>
+            </ul>
+          </li>
+          <li>The OS temp directory, under <code>mod-bisect-tool</code></li>
+        </ol>
+      </article>
+    </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <a href="index.html">Back to downloads</a> &middot; Mod Bisect Tool on
-      <a href="https://github.com/Qendolin/mod-bisect-tool">GitHub</a>.
-    </div>
-  </footer>
-  <script>
-    (() => {
-      const toggle = document.querySelector("#theme-toggle");
-      const saved = localStorage.getItem("mod-bisect-theme");
-      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
-      const theme = () => document.documentElement.dataset.theme ||
-        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      const update = () => {
-        const dark = theme() === "dark";
-        toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-        toggle.title = dark ? "Switch to light mode" : "Switch to dark mode";
-        toggle.dataset.theme = dark ? "dark" : "light";
-      };
-      toggle.addEventListener("click", () => {
-        const next = theme() === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
-        localStorage.setItem("mod-bisect-theme", next);
+    <footer class="site-footer">
+      <div class="container">
+        <a href="index.html">Back to downloads</a> &middot; Mod Bisect Tool on
+        <a href="https://github.com/Qendolin/mod-bisect-tool">GitHub</a>.
+      </div>
+    </footer>
+    <script>
+      (() => {
+        const toggle = document.querySelector("#theme-toggle");
+        const saved = localStorage.getItem("mod-bisect-theme");
+        if (saved === "light" || saved === "dark")
+          document.documentElement.dataset.theme = saved;
+        const theme = () =>
+          document.documentElement.dataset.theme ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const update = () => {
+          const dark = theme() === "dark";
+          toggle.setAttribute(
+            "aria-label",
+            dark ? "Switch to light mode" : "Switch to dark mode",
+          );
+          toggle.title = dark ? "Switch to light mode" : "Switch to dark mode";
+          toggle.dataset.theme = dark ? "dark" : "light";
+        };
+        toggle.addEventListener("click", () => {
+          const next = theme() === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = next;
+          localStorage.setItem("mod-bisect-theme", next);
+          update();
+        });
         update();
-      });
-      update();
-    })();
-  </script>
-</body>
+      })();
+    </script>
+  </body>
 </html>

@@ -1,196 +1,271 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mod Bisect Tool</title>
-  <meta name="description" content="Find conflicting Fabric, Quilt and (Neo)Forge mods with the Mod Bisect Tool.">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img src="favicon.svg" alt="" width="25" height="25">
-        <span>Mod Bisect Tool</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href="GUI-User-Guide.html">GUI guide</a>
-        <a href="TUI-User-Guide.html">TUI guide</a>
-        <a href="https://github.com/Qendolin/mod-bisect-tool">Source</a>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme">
-          <svg class="theme-icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
-          <svg class="theme-icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 10 3.5a7 7 0 0 0 10.5 11Z"></path></svg>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="intro">
-      <h1>Mod Bisect Tool</h1>
-      <p>Find the mod or combination of mods causing a crash or in-game problem.
-      The tool methodically tests your mods instead of making you guess.</p>
-    </section>
-
-    <section class="downloads section-rule" id="downloads" aria-labelledby="downloads-heading">
-      <div class="section-heading">
-        <h2 id="downloads-heading">Downloads</h2>
-        <p class="section-description">Select the options that match your setup. The suggested choices are detected automatically.</p>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mod Bisect Tool</title>
+    <meta
+      name="description"
+      content="Find conflicting Fabric, Quilt and (Neo)Forge mods with the Mod Bisect Tool."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img src="favicon.svg" alt="" width="25" height="25" />
+          <span>Mod Bisect Tool</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="GUI-User-Guide.html">GUI guide</a>
+          <a href="TUI-User-Guide.html">TUI guide</a>
+          <a href="https://github.com/Qendolin/mod-bisect-tool">Source</a>
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-label="Switch color theme"
+            title="Switch color theme"
+          >
+            <svg
+              class="theme-icon icon-sun"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"
+              ></path>
+            </svg>
+            <svg
+              class="theme-icon icon-moon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.5 14.5A8.5 8.5 0 1 1 10 3.5a7 7 0 0 0 10.5 11Z"
+              ></path>
+            </svg>
+          </button>
+        </nav>
       </div>
+    </header>
 
-      <div class="download-panel">
-        <form class="wizard" id="download-wizard" aria-label="Download selector">
-        <div class="wizard-field">
-          <label for="release-choice">Release</label>
-          <select id="release-choice" name="release">
-            <option value="latest">Latest</option>
-            <option value="stable">Stable</option>
-          </select>
-        </div>
-        <div class="wizard-field">
-          <label for="interface-choice">Interface</label>
-          <select id="interface-choice" name="interface">
-            <option value="gui">Graphical</option>
-            <option value="tui">Terminal</option>
-          </select>
-        </div>
-        <div class="wizard-field">
-          <label for="os-choice">Operating system</label>
-          <select id="os-choice" name="os">
-            <option value="windows">Windows</option>
-            <option value="darwin">macOS</option>
-            <option value="linux">Linux</option>
-          </select>
-        </div>
-        <div class="wizard-field">
-          <label for="arch-choice">Architecture</label>
-          <select id="arch-choice" name="arch">
-            <option value="amd64">x86_64 / amd64</option>
-            <option value="arm64">arm64 / aarch64</option>
-          </select>
-        </div>
-        </form>
+    <main class="container">
+      <section class="intro">
+        <h1>Mod Bisect Tool</h1>
+        <p>
+          Find the mod or combination of mods causing a crash or in-game
+          problem. The tool methodically tests your mods instead of making you
+          guess.
+        </p>
+      </section>
 
-        <div class="wizard-result" id="wizard-result" aria-live="polite"></div>
-        <div class="chmod-note" id="chmod-note" hidden>
-          <strong id="chmod-title">After downloading the TUI binary:</strong>
-          <span>run this terminal command:</span>
-          <code id="chmod-command">chmod +x ./mod-bisect-tui-*</code>
+      <section
+        class="downloads section-rule"
+        id="downloads"
+        aria-labelledby="downloads-heading"
+      >
+        <div class="section-heading">
+          <h2 id="downloads-heading">Downloads</h2>
+          <p class="section-description">
+            Select the options that match your setup. The suggested choices are
+            detected automatically.
+          </p>
         </div>
+
+        <div class="download-panel">
+          <form
+            class="wizard"
+            id="download-wizard"
+            aria-label="Download selector"
+          >
+            <div class="wizard-field">
+              <label for="release-choice">Release</label>
+              <select id="release-choice" name="release">
+                <option value="latest">Latest</option>
+                <option value="stable">Stable</option>
+              </select>
+            </div>
+            <div class="wizard-field">
+              <label for="interface-choice">Interface</label>
+              <select id="interface-choice" name="interface">
+                <option value="gui">Graphical</option>
+                <option value="tui">Terminal</option>
+              </select>
+            </div>
+            <div class="wizard-field">
+              <label for="os-choice">Operating system</label>
+              <select id="os-choice" name="os">
+                <option value="windows">Windows</option>
+                <option value="darwin">macOS</option>
+                <option value="linux">Linux</option>
+              </select>
+            </div>
+            <div class="wizard-field">
+              <label for="arch-choice">Architecture</label>
+              <select id="arch-choice" name="arch">
+                <option value="amd64">x86_64 / amd64</option>
+                <option value="arm64">arm64 / aarch64</option>
+              </select>
+            </div>
+          </form>
+
+          <div
+            class="wizard-result"
+            id="wizard-result"
+            aria-live="polite"
+          ></div>
+          <div class="chmod-note" id="chmod-note" hidden>
+            <strong id="chmod-title">After downloading the TUI binary:</strong>
+            <span>run this terminal command:</span>
+            <code id="chmod-command">chmod +x ./mod-bisect-tui-*</code>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="all-downloads section-rule"
+        aria-labelledby="all-downloads-heading"
+      >
+        <div class="section-heading">
+          <h2 id="all-downloads-heading">All versions and builds</h2>
+        </div>
+        {{ALL_RELEASES_TABLE}}
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        Mod Bisect Tool &middot;
+        <a href="https://github.com/Qendolin/mod-bisect-tool/releases"
+          >all releases on GitHub</a
+        >
+        <p class="code-signing">
+          <strong>Code signing policy</strong><br />
+          Free code signing provided by
+          <a href="https://about.signpath.io/">SignPath.io</a>, certificate by
+          <a href="https://signpath.org/">SignPath Foundation</a>
+        </p>
       </div>
-    </section>
+    </footer>
 
-    <section class="all-downloads section-rule" aria-labelledby="all-downloads-heading">
-      <div class="section-heading">
-        <h2 id="all-downloads-heading">All versions and builds</h2>
-      </div>
-{{ALL_RELEASES_TABLE}}
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      Mod Bisect Tool &middot; <a href="https://github.com/Qendolin/mod-bisect-tool/releases">all releases on GitHub</a>
-      <p class="code-signing"><strong>Code signing policy</strong><br>
-        Free code signing provided by <a href="https://about.signpath.io/">SignPath.io</a>,
-        certificate by <a href="https://signpath.org/">SignPath Foundation</a>
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    (() => {
-      const themeToggle = document.querySelector("#theme-toggle");
-      const savedTheme = localStorage.getItem("mod-bisect-theme");
-      if (savedTheme === "light" || savedTheme === "dark") {
-        document.documentElement.dataset.theme = savedTheme;
-      }
-      const currentTheme = () => document.documentElement.dataset.theme ||
-        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      const updateThemeToggle = () => {
-        const dark = currentTheme() === "dark";
-        themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-        themeToggle.title = dark ? "Switch to light mode" : "Switch to dark mode";
-        themeToggle.dataset.theme = dark ? "dark" : "light";
-      };
-      themeToggle.addEventListener("click", () => {
-        const nextTheme = currentTheme() === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = nextTheme;
-        localStorage.setItem("mod-bisect-theme", nextTheme);
+    <script>
+      (() => {
+        const themeToggle = document.querySelector("#theme-toggle");
+        const savedTheme = localStorage.getItem("mod-bisect-theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.dataset.theme = savedTheme;
+        }
+        const currentTheme = () =>
+          document.documentElement.dataset.theme ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const updateThemeToggle = () => {
+          const dark = currentTheme() === "dark";
+          themeToggle.setAttribute(
+            "aria-label",
+            dark ? "Switch to light mode" : "Switch to dark mode",
+          );
+          themeToggle.title = dark
+            ? "Switch to light mode"
+            : "Switch to dark mode";
+          themeToggle.dataset.theme = dark ? "dark" : "light";
+        };
+        themeToggle.addEventListener("click", () => {
+          const nextTheme = currentTheme() === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = nextTheme;
+          localStorage.setItem("mod-bisect-theme", nextTheme);
+          updateThemeToggle();
+        });
         updateThemeToggle();
-      });
-      updateThemeToggle();
 
-      const releases = {{RELEASE_DATA}};
-      const selects = {
-        release: document.querySelector("#release-choice"),
-        interface: document.querySelector("#interface-choice"),
-        os: document.querySelector("#os-choice"),
-        arch: document.querySelector("#arch-choice")
-      };
-      const result = document.querySelector("#wizard-result");
-      const chmodNote = document.querySelector("#chmod-note");
-      const chmodTitle = document.querySelector("#chmod-title");
-      const chmodCommand = document.querySelector("#chmod-command");
+        const releases = __RELEASE_DATA__;
+        const selects = {
+          release: document.querySelector("#release-choice"),
+          interface: document.querySelector("#interface-choice"),
+          os: document.querySelector("#os-choice"),
+          arch: document.querySelector("#arch-choice"),
+        };
+        const result = document.querySelector("#wizard-result");
+        const chmodNote = document.querySelector("#chmod-note");
+        const chmodTitle = document.querySelector("#chmod-title");
+        const chmodCommand = document.querySelector("#chmod-command");
 
-      const detectOs = () => {
-        const platform = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent;
-        if (/win/i.test(platform)) return "windows";
-        if (/mac|darwin|iPhone|iPad/i.test(platform)) return "darwin";
-        if (/linux/i.test(platform)) return "linux";
-        return "windows";
-      };
+        const detectOs = () => {
+          const platform =
+            navigator.userAgentData?.platform ||
+            navigator.platform ||
+            navigator.userAgent;
+          if (/win/i.test(platform)) return "windows";
+          if (/mac|darwin|iPhone|iPad/i.test(platform)) return "darwin";
+          if (/linux/i.test(platform)) return "linux";
+          return "windows";
+        };
 
-      const detectArch = () => {
-        const details = `${navigator.userAgent} ${navigator.platform}`;
-        return /arm64|aarch64|apple silicon/i.test(details) ? "arm64" : "amd64";
-      };
+        const detectArch = () => {
+          const details = `${navigator.userAgent} ${navigator.platform}`;
+          return /arm64|aarch64|apple silicon/i.test(details)
+            ? "arm64"
+            : "amd64";
+        };
 
-      const detectedOs = detectOs();
-      selects.os.value = detectedOs;
-      selects.arch.value = detectedOs === "darwin" ? "arm64" : detectArch();
+        const detectedOs = detectOs();
+        selects.os.value = detectedOs;
+        selects.arch.value = detectedOs === "darwin" ? "arm64" : detectArch();
 
-      const updateArchitectureLabels = () => {
-        const macos = selects.os.value === "darwin";
-        selects.arch.options[0].textContent = macos ? "Intel" : "x86_64 / amd64";
-        selects.arch.options[1].textContent = macos ? "Apple Silicon" : "arm64 / aarch64";
-      };
+        const updateArchitectureLabels = () => {
+          const macos = selects.os.value === "darwin";
+          selects.arch.options[0].textContent = macos
+            ? "Intel"
+            : "x86_64 / amd64";
+          selects.arch.options[1].textContent = macos
+            ? "Apple Silicon"
+            : "arm64 / aarch64";
+        };
 
-      const selectedRelease = () => {
-        if (selects.release.value === "stable") return releases.find(({ prerelease }) => !prerelease);
-        return releases[0];
-      };
+        const selectedRelease = () => {
+          if (selects.release.value === "stable")
+            return releases.find(({ prerelease }) => !prerelease);
+          return releases[0];
+        };
 
-      const render = () => {
-        const release = selectedRelease();
-        const kind = selects.interface.value;
-        const os = selects.os.value;
-        const arch = selects.arch.value;
-        const asset = release?.assets.find(item => item.kind === kind && item.os === os && item.arch === arch);
+        const render = () => {
+          const release = selectedRelease();
+          const kind = selects.interface.value;
+          const os = selects.os.value;
+          const arch = selects.arch.value;
+          const asset = release?.assets.find(
+            (item) =>
+              item.kind === kind && item.os === os && item.arch === arch,
+          );
 
-        const needsChmod = (kind === "tui" && (os === "linux" || os === "darwin")) ||
-          (kind === "gui" && os === "linux");
-        chmodNote.hidden = !needsChmod || !asset;
-        if (kind === "gui" && os === "linux") {
-          chmodTitle.textContent = "After downloading the GUI AppImage:";
-          chmodCommand.textContent = "chmod +x ./mod-bisect-gui-*.AppImage";
-        } else {
-          chmodTitle.textContent = "After downloading the TUI binary:";
-          chmodCommand.textContent = "chmod +x ./mod-bisect-tui-*";
-        }
-        if (!release) {
-          result.innerHTML = "<p>No releases are available yet.</p>";
-          return;
-        }
-        if (!asset) {
-          result.innerHTML = `<p class="unavailable">There is no ${kind.toUpperCase()} ${os} ${arch} build in <strong>${release.tag}</strong>. Choose another combination or use the table below.</p>`;
-          return;
-        }
+          const needsChmod =
+            (kind === "tui" && (os === "linux" || os === "darwin")) ||
+            (kind === "gui" && os === "linux");
+          chmodNote.hidden = !needsChmod || !asset;
+          if (kind === "gui" && os === "linux") {
+            chmodTitle.textContent = "After downloading the GUI AppImage:";
+            chmodCommand.textContent = "chmod +x ./mod-bisect-gui-*.AppImage";
+          } else {
+            chmodTitle.textContent = "After downloading the TUI binary:";
+            chmodCommand.textContent = "chmod +x ./mod-bisect-tui-*";
+          }
+          if (!release) {
+            result.innerHTML = "<p>No releases are available yet.</p>";
+            return;
+          }
+          if (!asset) {
+            result.innerHTML = `<p class="unavailable">There is no ${kind.toUpperCase()} ${os} ${arch} build in <strong>${release.tag}</strong>. Choose another combination or use the table below.</p>`;
+            return;
+          }
 
-        const guideHref = kind === "gui" ? "GUI-User-Guide.html" : "TUI-User-Guide.html";
-        result.innerHTML = `
+          const guideHref =
+            kind === "gui" ? "GUI-User-Guide.html" : "TUI-User-Guide.html";
+          result.innerHTML = `
           <div class="selected-build">
             <div>
               <p class="selected-label">Selected download</p>
@@ -202,17 +277,20 @@
               <a class="download-link" href="${asset.url}">Download</a>
             </div>
           </div>`;
-      };
+        };
 
-      Object.values(selects).forEach(select => select.addEventListener("change", render));
-      selects.os.addEventListener("change", () => {
-        selects.arch.value = selects.os.value === "darwin" ? "arm64" : detectArch();
+        Object.values(selects).forEach((select) =>
+          select.addEventListener("change", render),
+        );
+        selects.os.addEventListener("change", () => {
+          selects.arch.value =
+            selects.os.value === "darwin" ? "arm64" : detectArch();
+          updateArchitectureLabels();
+          render();
+        });
         updateArchitectureLabels();
         render();
-      });
-      updateArchitectureLabels();
-      render();
-    })();
-  </script>
-</body>
+      })();
+    </script>
+  </body>
 </html>
