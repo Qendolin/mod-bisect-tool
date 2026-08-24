@@ -12,6 +12,7 @@ from pathlib import Path
 
 REPO = "Qendolin/mod-bisect-tool"
 API = f"https://api.github.com/repos/{REPO}/releases?per_page=100"
+LATEST_API = f"https://api.github.com/repos/{REPO}/releases/latest"
 DIST = Path("dist/www")
 STATIC = ("style.css", "favicon.svg", ".nojekyll", "GUI-User-Guide.html", "TUI-User-Guide.html")
 
@@ -134,7 +135,16 @@ def main():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
 
-    releases = [release for release in fetch_json(API) if not release.get("draft")]
+    all_releases = [release for release in fetch_json(API) if not release.get("draft")]
+    latest_release = fetch_json(LATEST_API)
+    latest_tag = latest_release.get("tag_name")
+    # GitHub's release list does not expose the manually selected "latest"
+    # flag. The /releases/latest endpoint identifies that release; prereleases
+    # are included by their explicit prerelease flag.
+    releases = [
+        release for release in all_releases
+        if release.get("prerelease") or release.get("tag_name") == latest_tag
+    ]
     release_data = []
     for release in releases:
         release_data.append({
