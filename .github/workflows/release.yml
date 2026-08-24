@@ -160,7 +160,7 @@ jobs:
 
           Please see the respective guide for instructions:
 
-          [GUI User Guide](docs/GUI-User-Guide.md) | [TUI User Guide](docs/TUI-User-Guide.md)
+          [GUI User Guide](https://Qendolin.github.io/mod-bisect-tool/GUI-User-Guide.html) | [TUI User Guide](https://Qendolin.github.io/mod-bisect-tool/TUI-User-Guide.html)
 
           ---
 
@@ -173,3 +173,27 @@ jobs:
 
           # Update the GitHub release description
           gh release edit "${TAG}" --repo "${REPO}" --notes-file new_release_notes.md
+
+  publish-www:
+    name: Deploy Website
+    runs-on: ubuntu-latest
+    needs: [update-release-notes]
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate website
+        run: python3 scripts/generate_www.py --www www
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/www
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

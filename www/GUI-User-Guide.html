@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GUI User Guide &middot; Mod Bisect Tool</title>
+  <meta name="description" content="How to use the graphical version of the Mod Bisect Tool.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="favicon.svg" alt="" width="25" height="25">
+        <span>Mod Bisect Tool</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="GUI-User-Guide.html">GUI guide</a>
+        <a href="TUI-User-Guide.html">TUI guide</a>
+        <a href="https://github.com/Qendolin/mod-bisect-tool">Source</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme">
+          <svg class="theme-icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+          <svg class="theme-icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 10 3.5a7 7 0 0 0 10.5 11Z"></path></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="guide">
+      <h1>GUI User Guide</h1>
+
+      <p>This guide covers the <strong>graphical</strong> version of the Mod Bisect Tool.
+      If you are using the terminal version, see the
+      <a href="TUI-User-Guide.html">TUI User Guide</a>.</p>
+
+      <p>The GUI follows the same bisection process as the TUI, but is driven by buttons,
+      a windowed interface, and native dialogs instead of keyboard shortcuts.</p>
+
+      <h2>Installation</h2>
+
+      <ol>
+        <li>Open the <a href="index.html#downloads">download page</a>. It detects your operating system and recommends the appropriate architecture.</li>
+        <li>Choose <strong>Latest</strong> or <strong>Stable</strong>, select <strong>Graphical</strong>, then choose your operating system and architecture.</li>
+        <li>Click <strong>Download</strong>. On macOS, extract the ZIP archive before opening the application.</li>
+        <li>For Linux AppImages, make the file executable after downloading:
+          <pre><code>chmod +x ./mod-bisect-gui-*.AppImage</code></pre>
+          This adds the execute permission bit required by Linux desktop environments.
+        </li>
+      </ol>
+
+      <h3>Language</h3>
+
+      <p>The GUI uses the operating system locale automatically. The setup screen includes a
+      language selector; English is currently the only available language. For testing or
+      scripting, the locale can also be selected with the <code>--locale</code> option:</p>
+
+      <pre><code>mod-bisect-gui --locale en</code></pre>
+
+      <h2>How to Use the Tool</h2>
+
+      <p>Using the tool is a simple, guided process.</p>
+
+      <h3>Step 1: Setup</h3>
+
+      <p>When you first launch the tool, you'll see the setup screen.</p>
+
+      <h4>Action</h4>
+
+      <ol>
+        <li>Enter the full path to your Minecraft <code>mods</code> folder in the text field, or click <strong>Browse...</strong> to pick it with your operating system's file picker.</li>
+        <li>Press the <strong>Start Bisection</strong> button.</li>
+      </ol>
+
+      <p>The tool will then analyze all your mods, which may take a few moments. It also detects
+      which mod loader your mods folder is set up for (Fabric, (Neo)Forge, (Neo)Forge with Fabric
+      via Sinytra Connector, or Fabric with (Neo)Forge via Kilt) and preselects it in the
+      <strong>Mod Loader</strong> dropdown. You can pick a different loader from the dropdown, or
+      force one from the command line with the <code>-loader</code> flag.</p>
+
+      <p><img src="img/gui-setup-screen.jpg" alt="Setup screen"></p>
+
+      <h3>Step 2: Choose Mods to Keep Enabled</h3>
+
+      <p>After the mods are loaded, you'll see a screen titled <strong>&ldquo;Select Mods to Keep Enabled.&rdquo;</strong></p>
+
+      <h4>Action</h4>
+
+      <ul>
+        <li>If you don't know what's causing the issue, leave everything unchecked and press <strong>Next Step &#9654;</strong>.</li>
+        <li>If you know the issue involves a specific mod (like a shaders mod), check it here. This ensures it stays turned on during all tests so the tool can find what is conflicting with it.</li>
+      </ul>
+
+      <p>You can use the <strong>Search mods...</strong> field to filter the list by mod name or ID.</p>
+
+      <blockquote>
+        <p><strong>Force-enable mods that are needed to see the problem.</strong><br>
+        If the issue you're trying to track down only happens when a specific mod is active, you
+        should <strong>check</strong> that mod here. For example, if you're using Iris and something
+        only breaks when shaders are turned on, you'll need to keep Iris enabled. Otherwise, the tool
+        might disable it during testing, and you wouldn't even be able to tell if the issue still happens.</p>
+      </blockquote>
+
+      <p><img src="img/gui-mod-select-screen.jpg" alt="Mod select screen"></p>
+
+      <h3>Step 3: The Main Screen</h3>
+
+      <p>This is your mission control. It shows a progress bar, the current step, and a list of the
+      <strong>remaining candidates</strong> (or the current <strong>conflict set</strong> when a set has been found).</p>
+
+      <h4>Action</h4>
+
+      <ul>
+        <li>Press the <strong>&#9654; Start Bisection</strong> button to begin the first test. On later steps the button reads <strong>&#9654; Next Step</strong>.</li>
+        <li>You can also press <strong>&#8617; Undo</strong> to step back to a previous test.</li>
+      </ul>
+
+      <p><strong>Back up worlds before testing if you will load them!</strong> This is not needed
+      for servers, new test worlds, or tests that do not load a world.</p>
+
+      <p><img src="img/gui-main-screen.jpg" alt="Main screen"></p>
+
+      <h3>Step 4: The Test Screen</h3>
+
+      <p>Once a test is prepared, the tool switches to a <strong>test prompt</strong> with the
+      <strong>Active Mod Set</strong> listed. It has just enabled a specific set of mods in your folder.</p>
+
+      <h4>Action</h4>
+
+      <ol>
+        <li>Launch Minecraft using your normal mod loader (Fabric, Quilt or NeoForge).</li>
+        <li>Check if the problem still occurs. Does the game crash? Does the bug you're hunting still happen?</li>
+        <li>Return to the tool and click the button that matches the outcome:
+          <ul>
+            <li><strong>&#10003; Works:</strong> The problem did <em>not</em> happen. The game loaded and worked as expected.</li>
+            <li><strong>&#10007; Broken:</strong> The problem <em>did</em> happen, such as a crash or a visible bug.</li>
+            <li><strong>? Can't Tell:</strong> The result was unclear. For example, the game crashed before you could check, or something else prevented you from observing the issue.</li>
+            <li><strong>Cancel Test:</strong> Aborts the current test and goes back.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <p>The tool will use your answer to narrow down the search and prepare the next test.
+      <strong>Repeat this process</strong> until a result is found.</p>
+
+      <p><img src="img/gui-test-screen.jpg" alt="Test prompt"></p>
+
+      <h3>Step 5: The Results</h3>
+
+      <p>Once the tool has found a problematic mod (or set of mods), it will show you the
+      <strong>Result</strong> screen.</p>
+
+      <h4>Action</h4>
+
+      <ol>
+        <li>Take note of the problematic mods listed.</li>
+        <li>To fix the issue, disable <strong>at least one</strong> mod from each conflict set listed. The tool will also tell you if any other mods depend on the problematic ones; consider disabling them as well.</li>
+        <li>The main button on this screen depends on whether the conflict set is complete:
+          <ul>
+            <li><strong>Next Step:</strong> shown while the set is not yet complete. Pressing it goes back to the main screen to continue searching for the remaining members of the conflict set. You don't have to continue, though: a single mod is already enough to fix the issue.</li>
+            <li><strong>Quit:</strong> shown once the set is complete. It closes the application.</li>
+          </ul>
+        </li>
+        <li>You can also use these buttons:
+          <ul>
+            <li><strong>Continue Search:</strong> start looking for the next, unrelated conflict among the remaining mods.</li>
+            <li><strong>Restart Bisection:</strong> begin the whole search over from scratch.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <p><img src="img/gui-result-screen.jpg" alt="Result screen"></p>
+
+      <h2>Dependency Overrides</h2>
+
+      <p>Sometimes a mod author forgets to list a dependency in their metadata. This tool can add or
+      remove those entries with a file named <code>fabric_loader_dependencies.json</code>.<br>
+      This tool also extends the standard format with the ability to override the <code>provides</code>
+      field, which is useful for fixing complex library conflicts.</p>
+
+      <p>The GUI loads override files in this order:</p>
+      <ol>
+        <li>The current working directory</li>
+        <li>The Minecraft <code>config</code> folder next to your <code>mods</code> folder</li>
+        <li>The built-in overrides included with the tool</li>
+      </ol>
+
+      <p>On macOS, the GUI app bundle does not use the current working directory for this file. It
+      looks in <code>~/Library/Application Support/mod-bisect-tool/fabric_loader_dependencies.json</code> instead.</p>
+
+      <h2>Log Files</h2>
+
+      <p>The app creates its log file in the first folder that works, in this order:</p>
+      <ol>
+        <li>The current working directory</li>
+        <li>The OS log directory:
+          <ul>
+            <li>macOS: <code>~/Library/Logs/mod-bisect-tool</code></li>
+            <li>Windows: <code>%LOCALAPPDATA%/mod-bisect-tool/logs</code></li>
+            <li>Linux: <code>$XDG_STATE_HOME/mod-bisect-tool</code>, or <code>~/.local/state/mod-bisect-tool</code></li>
+          </ul>
+        </li>
+        <li>The OS temp directory, under <code>mod-bisect-tool</code></li>
+      </ol>
+
+      <p>If you run the macOS <code>.app</code>, it will usually not create the log in the current
+      working directory because the app is launched from its bundle location.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <a href="index.html">Back to downloads</a> &middot; Mod Bisect Tool on
+      <a href="https://github.com/Qendolin/mod-bisect-tool">GitHub</a>.
+    </div>
+  </footer>
+  <script>
+    (() => {
+      const toggle = document.querySelector("#theme-toggle");
+      const saved = localStorage.getItem("mod-bisect-theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+      const theme = () => document.documentElement.dataset.theme ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const update = () => {
+        const dark = theme() === "dark";
+        toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+        toggle.title = dark ? "Switch to light mode" : "Switch to dark mode";
+        toggle.dataset.theme = dark ? "dark" : "light";
+      };
+      toggle.addEventListener("click", () => {
+        const next = theme() === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("mod-bisect-theme", next);
+        update();
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>

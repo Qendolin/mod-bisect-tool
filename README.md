@@ -26,33 +26,18 @@ This tool is like a smart detective for your mods folder. Instead of you having 
 
 ## Installation
 
-1.  Go to the [Releases page](https://github.com/Qendolin/fabric-mod-bisect-tool/releases).
-2.  Download the build for your operating system and architecture.
-    * **Windows:** `windows-amd64` (or `windows-arm64` if you have ARM64 hardware)
-    * **Linux:** `linux-amd64` (or `linux-arm64`)
-    * **macOS:** `darwin-arm64` for Apple Silicon, or `darwin-amd64` for Intel Macs
-3.  If you downloaded a raw Unix binary (for example a Linux or macOS TUI build), make it executable before launching it:
-    ```bash
-    chmod +x ./mod-bisect-*
-    ```
-    This is required because downloaded Unix executables are often saved without the executable permission bit set.
-4.  If macOS blocks the app or binary, remove the quarantine metadata before running it:
-    ```bash
-    xattr -dr com.apple.quarantine "Mod-Bisect-Tool.app"
-    ```
-    For a raw macOS binary, run the same command on the binary instead of the `.app` bundle.
-5.  Place the tool in a convenient location. You can run it from anywhere!
-
-On windows you'll likely get a blue warning that you need to dismiss. (*This warning means that the application has an unknown publisher. It doesn't mean that it is unsafe to run!*)
-<img width="1118" height="500" alt="image" src="https://github.com/user-attachments/assets/f4a3b6bc-492d-4b16-bcf4-d789b5bbb104" />
+Use the [Mod Bisect Tool download page](https://Qendolin.github.io/mod-bisect-tool/#downloads).
+It detects your operating system, lets you choose the graphical or terminal version,
+and recommends the appropriate architecture. The selected filename and any required
+launch instructions are shown alongside the download.
 
 
 ## User Guides
 
 The tool comes in two flavors, each with its own guide:
 
-* **[GUI User Guide](docs/GUI-User-Guide.md)** - a graphical application for Windows, Linux and macOS.
-* **[TUI User Guide](docs/TUI-User-Guide.md)** - a terminal application with keyboard-driven controls.
+* **[GUI User Guide](https://Qendolin.github.io/mod-bisect-tool/GUI-User-Guide.html)** - a graphical application for Windows, Linux and macOS.
+* **[TUI User Guide](https://Qendolin.github.io/mod-bisect-tool/TUI-User-Guide.html)** - a terminal application with keyboard-driven controls.
 
 ## Capabilities: What This Tool Can Handle
 
