@@ -226,6 +226,8 @@ pre { max-width: 460px; margin: 10px 0 0; padding: 11px 14px; overflow-x: auto; 
 .guide hr { margin: 28px 0; border: 0; border-top: 1px solid var(--line); }
 
 .site-footer { margin-top: 18px; padding: 28px 0 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+.code-signing { margin: 12px 0 0; font-size: .82rem; }
+.code-signing strong { color: var(--text); font-weight: 700; }
 
 @media (max-width: 760px) {
   .container { width: min(100% - 32px, 1040px); }
