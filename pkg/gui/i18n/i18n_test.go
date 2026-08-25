@@ -7,8 +7,8 @@ import (
 
 func TestTranslatorUsesEmbeddedEnglishAndFallback(t *testing.T) {
 	tr := New("en")
-	if got := tr.Text("locale_name", "fallback", nil); got != "English" {
-		t.Fatalf("embedded English message = %q, want %q", got, "English")
+	if got := tr.Text("locale_name", "fallback", nil); got != "English (en)" {
+		t.Fatalf("embedded English message = %q, want %q", got, "English (en)")
 	}
 	if got := tr.Text("missing", "fallback", nil); got != "fallback" {
 		t.Fatalf("missing message = %q, want %q", got, "fallback")
@@ -27,11 +27,11 @@ func TestTranslatorPluralFallback(t *testing.T) {
 
 func TestGermanTranslations(t *testing.T) {
 	tr := New("de")
-	if got := tr.TextIn("en", "locale_name", "en", nil); got != "English" {
-		t.Fatalf("German locale label for English = %q, want %q", got, "English")
+	if got := tr.TextIn("en", "locale_name", "en", nil); got != "English (en)" {
+		t.Fatalf("German locale label for English = %q, want %q", got, "English (en)")
 	}
-	if got := tr.Text("locale_name", "fallback", nil); got != "Deutsch" {
-		t.Fatalf("German locale name = %q, want %q", got, "Deutsch")
+	if got := tr.Text("locale_name", "fallback", nil); got != "Deutsch (de)" {
+		t.Fatalf("German locale name = %q, want %q", got, "Deutsch (de)")
 	}
 	if got := tr.Text("start_bisection", "fallback", nil); got != "Bisektion starten" {
 		t.Fatalf("German start button = %q, want %q", got, "Bisektion starten")
