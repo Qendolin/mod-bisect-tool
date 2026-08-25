@@ -1,0 +1,374 @@
+[locale_name]
+other = "繁體中文 (zh-TW)"
+
+[app_name]
+other = "Mod Bisect Tool"
+
+[quit]
+other = "結束"
+
+[quit_message]
+other = "確定要結束嗎？\n目前的搜尋進度將會遺失。"
+
+[details]
+other = "詳細資訊：{{.Error}}"
+
+[select_mods_folder]
+other = "選取模組資料夾"
+
+[error]
+other = "錯誤"
+
+[select_mods_folder_error]
+other = "請選取你的模組資料夾"
+
+[setup_description]
+other = "選取模組資料夾以開始。"
+
+[mods_folder]
+other = "模組資料夾"
+
+[mods_folder_hint]
+other = "輸入或瀏覽模組資料夾路徑..."
+
+[browse]
+other = "瀏覽..."
+
+[mod_loader]
+other = "模組載入器"
+
+[language_label]
+other = "語言"
+
+[start_bisection]
+other = "開始二分除錯"
+
+[by_author]
+other = "作者：Qendolin"
+
+[version]
+other = "版本：{{.Version}}"
+
+[loading_mods]
+other = "正在載入模組..."
+
+[loading_mods_description]
+other = "這通常只需要幾秒鐘。"
+
+[select_mods]
+other = "選取要維持啟用的模組"
+
+[select_mods_description]
+other = "若你不知道是什麼導致了問題，請保持全部取消勾選並點擊「下一步」。\n\n若你確定問題涉及某個特定模組（例如光影模組），請在此處勾選。\n\n這可確保該模組在所有測試中維持啟用，以便工具找出與其衝突的模組。"
+
+[next_step]
+other = "下一步 ▶"
+
+[available_mods]
+other = "可用的模組"
+
+[search_mods]
+other = "搜尋模組..."
+
+[unresolvable_lower]
+other = "無法解析"
+
+[unresolvable_mods]
+other = "無法解析的模組"
+
+[unresolvable_description]
+other = "部分模組因無法解析相依性而無法啟用。\n請為每個模組選擇要忽略失敗的相依性（維持啟用）還是將其停用。"
+
+[continue]
+other = "繼續"
+
+[unresolvable]
+other = "無法解析："
+
+[ignore]
+other = "忽略"
+
+[disable]
+other = "停用"
+
+[mod_loading_error]
+other = "模組載入錯誤"
+
+[failed_load_mods]
+other = "無法從「{{.Path}}」載入模組"
+
+[no_mods_found]
+other = "在「{{.Path}}」中未找到任何模組。\n請確認路徑輸入是否正確。"
+
+[initialization_error]
+other = "初始化錯誤"
+
+[failed_initialize]
+other = "二分除錯初始化失敗！"
+
+[bisection_error]
+other = "二分除錯錯誤"
+
+[cannot_continue]
+other = "無法繼續搜尋！"
+
+[prepare_error]
+other = "準備下一步時發生錯誤。\n若有其他程式（如 Minecraft）正在存取你的模組，請先將其關閉。\n\n請查看應用程式記錄檔以獲取詳細資訊。"
+
+[problematic_mods_removed]
+other = "已移除已知的問題模組"
+
+[problematic_mods_removed_message]
+other = "偵測到屬於已知衝突群組的以下模組遺失。這是預期情況。搜尋現在將使用更新後的模組清單繼續。"
+
+[disabled_mods]
+other = "已停用的模組"
+
+[disabled_mods_message]
+other = "由於相依性未滿足，以下模組已被自動停用："
+
+[missing_mod_files]
+other = "偵測到遺失的模組檔案"
+
+[missing_mod_files_message]
+other = "以下模組檔案意外遺失。你想要在缺少它們的情況下繼續搜尋嗎？"
+
+[mod_tag_dependency]
+other = "相依性"
+
+[mod_tag_always]
+other = "一律啟用"
+
+[undo_last_step]
+other = "復原上一步"
+
+[undo_confirm]
+other = "確定要復原上一步嗎？"
+
+[cannot_undo]
+other = "無法復原"
+
+[nothing_to_undo]
+other = "沒有可以復原的步驟了。"
+
+[undo_failed]
+other = "復原操作失敗。"
+
+[conflict_set]
+other = "衝突群組"
+
+[remaining_candidates]
+other = "剩餘候選 ({{.Count}})"
+
+[initializing]
+other = "正在初始化..."
+
+[start_bisection_button]
+other = "▶  開始二分除錯"
+
+[search_halted]
+other = "搜尋已暫停"
+
+[search_halted_description]
+other = "由於兩組模組似乎互相相依，搜尋已停止。\n暫停頁面顯示了這兩個群組；請解決其中涉及的模組並重新開始搜尋。"
+
+[view_halted_groups]
+other = "檢視已暫停的群組"
+
+[verifying_final_set]
+other = "正在驗證最終群組..."
+
+[verification_step_description]
+other = "接下來的測試將驗證找到的模組群組是否為問題的根源。若問題不再出現，將開始新一輪測試以尋找其他有問題的模組。"
+
+[verification_step]
+other = "▶  驗證步驟"
+
+[ready_to_begin]
+other = "準備就緒"
+
+[ready_to_begin_description]
+other = "此工具使用二分搜尋法來隔離有問題的模組。\n每次測試都會將候選群組減半，以高效找出衝突。\n若遊戲目前處於開啟狀態，請先將其關閉！\n並準備在收到提示時啟動遊戲。"
+
+[world_backup_prefix]
+other = "請務必為載入的世界建立"
+
+[world_backup_word]
+other = "備份"
+
+[world_backup_suffix]
+other = "！"
+
+[crash_assistant_detected]
+other = "偵測到 Crash Assistant"
+
+[crash_assistant_disable_question]
+other = "Crash Assistant 可能會拖慢搜尋速度。是否要將其停用？"
+
+[round_iteration]
+other = "第 {{.Round}} 輪 · 疊代 {{.Iteration}}"
+
+[estimated_tests]
+other = "第 {{.Step}} 步，預估共約 {{.Max}} 次測試。"
+
+[next_step_button]
+other = "▶  下一步"
+
+[undo]
+other = "↩  復原"
+
+[verification_test]
+other = "驗證測試"
+
+[verification_test_description]
+other = "使用目前啟用的模組群組啟動 Minecraft，並檢查問題是否依然存在。\n\n✗ 發生異常\n  問題依然存在（確認找到的衝突群組正確）。\n\n✓ 運作正常\n  問題已消失（表示群組可能不完整）。\n\n? 無法確定\n  遊戲當機或無法觀察問題是否存在。"
+
+[bisection_test]
+other = "二分測試"
+
+[bisection_test_description]
+other = "使用目前啟用的模組群組啟動 Minecraft，並檢查問題是否已解決。\n\n✓ 運作正常\n  遊戲運作正常且問題已消失。\n\n✗ 發生異常\n  遊戲中依然存在該問題。\n\n? 無法確定\n  遊戲當機或無法觀察問題是否存在。"
+
+[active_mods]
+other = "已啟用模組 ({{.Count}})"
+
+[works]
+other = "✓ 運作正常"
+
+[cant_tell]
+other = "? 無法確定"
+
+[broken]
+other = "✗ 發生異常"
+
+[cancel_test]
+other = "取消測試"
+
+[reset_search]
+other = "重設搜尋"
+
+[reset_search_confirm]
+other = "這將會捨棄所有搜尋進度並重新開始。是否繼續？"
+
+[back_to_main]
+other = "返回主畫面"
+
+[halt_description]
+other = "搜尋無法繼續，因為以下兩個群組透過未宣告的相依性互相依賴：每個群組中至少有一個模組隱式需要另一個群組的模組才能執行。這是極為罕見的情況，工具無法判定哪個群組是主因。\n\n若要繼續，請移除或修復其中涉及的模組，然後開始新的搜尋。"
+
+[group_a]
+other = "群組 A"
+
+[group_b]
+other = "群組 B"
+
+[continue_search]
+other = "繼續搜尋"
+
+[continue_search_confirm]
+other = "這將在剩餘的模組中開始搜尋下一個衝突群組。是否繼續？"
+
+[search_in_progress]
+other = "搜尋進行中"
+
+[bisection_complete]
+other = "二分除錯完成"
+
+[restart_bisection]
+other = "重新開始二分除錯"
+
+[next_step_plain]
+other = "下一步"
+
+[current_conflict]
+other = "目前衝突"
+
+[single_mod_resolves]
+other = "停用此群組中的任一單一模組即可解決問題："
+
+[independent_conflict_set]
+other = "獨立衝突群組 #{{.Number}}"
+
+[unresolved_dependencies]
+other = "含有未解決相依性的模組"
+
+[unresolved_dependencies_description]
+other = "這些模組有獨立的相依性問題，可能需要手動檢查："
+
+[no_conflicts]
+other = "未發現衝突"
+
+[no_conflicts_description]
+other = "二分除錯流程已完成，未隔離出具體的錯誤原因。問題可能與此資料夾中的模組無關。"
+
+[what_next]
+other = "接下來該做什麼"
+
+[result_complete_explanation]
+other = "若要修復每個衝突，請從相應的衝突清單中停用一個模組並重新啟動遊戲。\n\n確認之後，請考慮向相應的模組作者回報該不相容問題。"
+
+[result_verification_explanation]
+other = "找到了一個新的衝突模組，但目前尚不清楚是否還涉及其他模組。\n\n你已經可以透過停用上述模組之一來解決此衝突。\n\n或者繼續搜尋以驗證衝突群組是否完整。"
+
+[result_incomplete_explanation]
+other = "目前的衝突涉及的模組比目前找到的更多。\n\n你已經可以透過停用上述模組之一來解決此衝突。\n\n或者繼續搜尋以找出剩餘的模組。"
+
+[still_issues]
+other = "依然遇到問題？"
+
+[still_issues_description]
+other = "如果你停用了上述模組，但遊戲中依然存在該問題，可能還有其他衝突模組。你可以繼續二分除錯，在剩餘候選群組中尋找它們。"
+
+[show_cleared_mods]
+other = "顯示已排除的模組"
+
+[hide_cleared_mods]
+other = "隱藏已排除的模組"
+
+[cleared_mods_count]
+other = "{{.Label}} ({{.Count}})"
+
+[unknown_jar]
+other = "未知的 JAR 檔案"
+
+[cascade_disable]
+other = "停用此模組還需要停用："
+
+[at_least_one_more]
+other = "以及至少另外 1 個..."
+
+[possibly_more]
+other = "可能還有更多..."
+
+[cascade_all_disable]
+other = "若你停用此衝突中的所有模組，還必須停用："
+
+[unresolved_or_unmet]
+other = "未解決或未滿足的相依性："
+
+[cascade_disable_would]
+other = "停用此模組也將需要停用："
+
+[from_unknown]
+other = "來自未知來源"
+
+[from_jar]
+other = "「{{.File}}.jar」中的 {{.ID}}"
+
+[initial_mod_state]
+other = "搜尋前的模組狀態"
+
+[initial_mod_state_description]
+other = "維持已知已停用的模組處於停用狀態，或者若你已知某些模組運作正常、有問題或在測試時會造成干擾，可以將其從搜尋中排除。排除選項如下。"
+
+[all]
+other = "全部"
+
+[none]
+other = "無"
+
+[keep_mods_disabled]
+other = "維持模組停用"
+
+[omit_mods_from_search]
+other = "從搜尋中排除模組"

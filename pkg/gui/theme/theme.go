@@ -3,6 +3,7 @@ package theme
 import (
 	"image/color"
 
+	"gioui.org/font"
 	"gioui.org/widget/material"
 )
 
@@ -25,5 +26,18 @@ func NewTheme() *material.Theme {
 	th.Palette.Fg = FgColor
 	th.Palette.ContrastBg = PrimaryColor
 	th.Palette.ContrastFg = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
+
+	// Prioritizing Malgun Gothic ensures Korean text uses the real Korean font
+	// instead of Microsoft YaHei (msyh.ttc)
+	th.Face = font.Typeface(
+		"Segoe UI, " +
+			"Malgun Gothic, Gulim, " + // Windows Korean
+			"Apple SD Gothic Neo, " + // macOS Korean
+			"NanumGothic, Noto Sans CJK KR, " + // Linux Korean
+			"Microsoft YaHei, " + // Chinese fallback
+			"MS Gothic, " + // Japanese fallback
+			"sans-serif",
+	)
+
 	return th
 }

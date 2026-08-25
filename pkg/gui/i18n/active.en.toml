@@ -2,7 +2,7 @@
 # Keep message IDs stable. Preserve template variables such as {{.Count}} and
 # {{.Path}}, and preserve intentional \n paragraph breaks.
 [locale_name]
-other = "English"
+other = "English (en)"
 
 [app_name]
 other = "Mod Bisect Tool"

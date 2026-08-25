@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	goi18n "github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/pelletier/go-toml/v2"
 	"golang.org/x/text/language"
@@ -14,7 +15,23 @@ import (
 //go:embed active.*.toml
 var localeFiles embed.FS
 
-var supportedLocales = []language.Tag{language.English, language.German, language.Spanish, language.French, language.Italian, language.Portuguese}
+var supportedLocales = []language.Tag{
+	language.German,
+	language.English,
+	language.Spanish,
+	language.French,
+	language.Italian,
+	language.Japanese,
+	language.Korean,
+	language.Polish,
+	language.BrazilianPortuguese,
+	language.Portuguese,
+	language.Russian,
+	language.Turkish,
+	language.Ukrainian,
+	language.TraditionalChinese,
+	language.SimplifiedChinese,
+}
 
 // Translator is the GUI's locale-aware text provider. The fallback text is
 // kept beside the call site so English remains available if a resource is
@@ -50,6 +67,7 @@ func New(locale string) *Translator {
 // returned when the environment does not specify a usable locale.
 func DetectLocale() string {
 	if locale := platformLocale(); locale != "" {
+		logging.Infof("i18n: Using locale from platform implementation: %v", locale)
 		return locale
 	}
 	for _, key := range []string{"LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE"} {
@@ -61,7 +79,10 @@ func DetectLocale() string {
 		value = strings.Split(value, ".")[0]
 		value = strings.ReplaceAll(value, "_", "-")
 		if _, err := language.Parse(value); err == nil {
+			logging.Infof("i18n: Using locale from %v: %v", key, value)
 			return value
+		} else {
+			logging.Infof("i18n: Failed to parse locale from %v: %s", key, value)
 		}
 	}
 	return language.English.String()
@@ -78,6 +99,7 @@ func (t *Translator) SetLocale(locale string) {
 			requested = parsed
 		}
 	}
+	logging.Infof("i18n: Set locale: %s", requested)
 	t.mu.Lock()
 	t.locale = requested
 	t.localizer = goi18n.NewLocalizer(t.bundle, requested.String())

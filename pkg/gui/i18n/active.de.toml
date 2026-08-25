@@ -1,5 +1,5 @@
 [locale_name]
-other = "Deutsch"
+other = "Deutsch (de)"
 
 [app_name]
 other = "Mod Bisect Tool"
@@ -39,12 +39,6 @@ other = "Mod-Loader"
 
 [language_label]
 other = "Sprache"
-
-[locale_en]
-other = "Englisch"
-
-[locale_de]
-other = "Deutsch"
 
 [start_bisection]
 other = "Bisektion starten"
@@ -167,7 +161,7 @@ other = "▶  Bisektion starten"
 [search_halted]
 other = "Suche angehalten"
 [search_halted_description]
-other = "Die Suche wurde angehalten, weil zwei Mod-Gruppen voneinander abhängig zu sein scheinen.\nAuf der Anhalteseite werden die beiden Gruppen angezeigt. Behebe einen der beteiligten Mods und starte eine neue Suche."
+other = "Die Suche wurde angehalten, weil zwei Mod-Gruppen voneinander abhängig zu sein scheinen.\nAuf der Anhalteseite werden die beiden Gruppen angezeigt. Behebe eine der beteiligten Mods und starte eine neue Suche."
 [view_halted_groups]
 other = "Angehaltene Gruppen anzeigen"
 [verifying_final_set]
@@ -207,7 +201,7 @@ other = "Bisektionstest"
 [bisection_test_description]
 other = "Starte Minecraft mit der aktuell aktiven Mod-Gruppe und überprüfe, ob dein Problem behoben ist.\n\n✓ Funktioniert\n  Das Spiel läuft problemlos und das Problem ist verschwunden.\n\n✗ Fehlerhaft\n  Das Problem tritt im Spiel weiterhin auf.\n\n? Nicht sicher\n  Das Spiel ist abgestürzt oder du kannst nicht feststellen, ob das Problem auftritt."
 [active_mods]
-one = "Aktiver Mod ({{.Count}})"
+one = "Aktive Mod ({{.Count}})"
 other = "Aktive Mods ({{.Count}})"
 [works]
 other = "✓ Funktioniert"
@@ -225,7 +219,7 @@ other = "Dadurch wird der gesamte Suchfortschritt verworfen und neu begonnen. Fo
 [back_to_main]
 other = "Zurück zur Hauptseite"
 [halt_description]
-other = "Die Suche kann nicht fortgesetzt werden, weil die beiden Gruppen unten voneinander abhängig sind, obwohl diese Abhängigkeiten nicht angegeben wurden: Mindestens ein Mod in jeder Gruppe benötigt stillschweigend einen Mod aus der anderen Gruppe. Das ist eine sehr seltene und unglückliche Situation, und das Tool kann nicht feststellen, welche Gruppe die Ursache ist.\n\nEntferne oder repariere einen der beteiligten Mods und starte eine neue Suche."
+other = "Die Suche kann nicht fortgesetzt werden, weil die beiden Gruppen unten voneinander abhängig sind, obwohl diese Abhängigkeiten nicht angegeben wurden: Mindestens eine Mod in jeder Gruppe benötigt stillschweigend eine Mod aus der anderen Gruppe. Das ist eine sehr seltene und unglückliche Situation, und das Tool kann nicht feststellen, welche Gruppe die Ursache ist.\n\nEntferne oder repariere eine der beteiligten Mods und starte eine neue Suche."
 [group_a]
 other = "Gruppe A"
 [group_b]
@@ -245,7 +239,7 @@ other = "Nächster Schritt"
 [current_conflict]
 other = "Aktueller Konflikt"
 [single_mod_resolves]
-other = "Das Deaktivieren eines beliebigen Mods in dieser Gruppe behebt das Problem:"
+other = "Das Deaktivieren einer beliebigen Mod in dieser Gruppe behebt das Problem:"
 [independent_conflict_set]
 other = "Unabhängige Konfliktgruppe Nr. {{.Number}}"
 [unresolved_dependencies]
@@ -259,11 +253,11 @@ other = "Die Bisektion wurde abgeschlossen, ohne eine bestimmte Fehlerursache zu
 [what_next]
 other = "Was nun?"
 [result_complete_explanation]
-other = "Um jeden Konflikt zu beheben, deaktiviere einen Mod aus der jeweiligen Konfliktgruppe und starte das Spiel neu.\n\nNachdem du den Konflikt bestätigt hast, solltest du ihn den jeweiligen Mod-Autoren melden."
+other = "Um jeden Konflikt zu beheben, deaktiviere eine Mod aus der jeweiligen Konfliktgruppe und starte das Spiel neu.\n\nNachdem du den Konflikt bestätigt hast, solltest du ihn den jeweiligen Mod-Autoren melden."
 [result_verification_explanation]
-other = "Ein neuer Konflikt-Mod wurde gefunden, aber es ist noch nicht bekannt, ob weitere beteiligt sind.\n\nDu kannst diesen Konflikt bereits beheben, indem du einen der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um zu überprüfen, ob die Konfliktgruppe vollständig ist."
+other = "Eine neue Konflikt-Mod wurde gefunden, aber es ist noch nicht bekannt, ob weitere beteiligt sind.\n\nDu kannst diesen Konflikt bereits beheben, indem du eine der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um zu überprüfen, ob die Konfliktgruppe vollständig ist."
 [result_incomplete_explanation]
-other = "Der aktuelle Konflikt umfasst mehr Mods, als bisher gefunden wurden.\n\nDu kannst diesen Konflikt bereits beheben, indem du einen der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um die verbleibenden Mods zu finden."
+other = "Der aktuelle Konflikt umfasst mehr Mods, als bisher gefunden wurden.\n\nDu kannst diesen Konflikt bereits beheben, indem du eine der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um die verbleibenden Mods zu finden."
 [still_issues]
 other = "Bestehen die Probleme weiterhin?"
 [still_issues_description]
@@ -277,7 +271,7 @@ other = "{{.Label}} ({{.Count}})"
 [unknown_jar]
 other = "Unbekannte JAR-Datei"
 [cascade_disable]
-other = "Das Deaktivieren dieses Mods erfordert auch das Deaktivieren von:"
+other = "Das Deaktivieren dieser Mod erfordert auch das Deaktivieren von:"
 [at_least_one_more]
 other = "Und mindestens einen weiteren..."
 [possibly_more]
@@ -287,7 +281,7 @@ other = "Wenn du alle Mods in diesem Konflikt deaktivierst, musst du auch Folgen
 [unresolved_or_unmet]
 other = "Ungelöste oder nicht erfüllte Abhängigkeiten:"
 [cascade_disable_would]
-other = "Das Deaktivieren dieses Mods würde auch das Deaktivieren von Folgendem erfordern:"
+other = "Das Deaktivieren dieser Mod würde auch das Deaktivieren von Folgendem erfordern:"
 [from_unknown]
 other = "aus unbekannter Datei"
 [from_jar]

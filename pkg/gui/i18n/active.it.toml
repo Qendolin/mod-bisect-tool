@@ -1,5 +1,5 @@
 [locale_name]
-other = "Italiano"
+other = "Italiano (it)"
 
 [app_name]
 other = "Mod Bisect Tool"
@@ -357,7 +357,7 @@ other = "Stato delle mod prima della ricerca"
 other = "Mantieni disabilitate le mod già disabilitate oppure ometti altre mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Le opzioni per ometterle sono sotto."
 
 [keep_mods_disabled]
-other = "Lascia i mod disabilitati"
+other = "Mantieni le mod disabilitate"
 
 [omit_mods_from_search]
 other = "Escludi mod dalla ricerca"
@@ -365,6 +365,4 @@ other = "Escludi mod dalla ricerca"
 [all]
 other = "Tutte"
 [none]
-other = "Nessuna"
-[no_mods]
 other = "Nessuna"

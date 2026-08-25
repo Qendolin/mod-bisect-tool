@@ -1,5 +1,5 @@
 [locale_name]
-other = "Português"
+other = "Português (pt)"
 
 [app_name]
 other = "Mod Bisect Tool"
@@ -217,7 +217,7 @@ other = "↩  Desfazer"
 other = "Teste de verificação"
 
 [verification_test_description]
-other = "Inicia o Minecraft com o grupo atual de mods ativos e verifica se o teu problema ainda ocorre.\n\n✗ Com falhas\n  O problema ainda ocorre (confirma que o grupo de conflito encontrado está correto).\n\n✓ Funciona\n  O problema desapareceu (sugere que o grupo está incompleto).\n\n? Não tenho a certeza\n  O jogo encerrou inesperadamente ou não consegues determinar se o problema ocorre.."
+other = "Inicia o Minecraft com o grupo atual de mods ativos e verifica se o teu problema ainda ocorre.\n\n✗ Com falhas\n  O problema ainda ocorre (confirma que o grupo de conflito encontrado está correto).\n\n✓ Funciona\n  O problema desapareceu (sugere que o grupo está incompleto).\n\n? Não tenho a certeza\n  O jogo encerrou inesperadamente ou não consegues determinar se o problema ocorre."
 
 [bisection_test]
 other = "Teste de bisseção"

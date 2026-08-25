@@ -1,0 +1,376 @@
+[locale_name]
+other = "Português do Brasil (pt-BR)"
+
+[app_name]
+other = "Mod Bisect Tool"
+
+[quit]
+other = "Sair"
+
+[quit_message]
+other = "Tem certeza de que deseja sair?\nO progresso atual da busca será perdido."
+
+[details]
+other = "Detalhes: {{.Error}}"
+
+[select_mods_folder]
+other = "Selecionar pasta de mods"
+
+[error]
+other = "Erro"
+
+[select_mods_folder_error]
+other = "Por favor, selecione sua pasta de mods"
+
+[setup_description]
+other = "Selecione sua pasta de mods para começar."
+
+[mods_folder]
+other = "Pasta de mods"
+
+[mods_folder_hint]
+other = "Insira ou procure o caminho da pasta de mods..."
+
+[browse]
+other = "Procurar..."
+
+[mod_loader]
+other = "Carregador de mods"
+
+[language_label]
+other = "Idioma"
+
+[start_bisection]
+other = "Iniciar bisseção"
+
+[by_author]
+other = "por Qendolin"
+
+[version]
+other = "Versão: {{.Version}}"
+
+[loading_mods]
+other = "Carregando mods..."
+
+[loading_mods_description]
+other = "Isso deve levar apenas alguns segundos."
+
+[select_mods]
+other = "Selecionar mods para manter ativados"
+
+[select_mods_description]
+other = "Se você não sabe o que está causando o problema, deixe tudo desmarcado e clique em Próximo passo.\n\nSe você sabe que o problema envolve um mod específico (como um mod de shaders), marque-o aqui.\n\nIsso garante que ele permaneça ativado durante todos os testes para que a ferramenta possa encontrar com o que ele está em conflito."
+
+[next_step]
+other = "Próximo passo ▶"
+
+[available_mods]
+other = "Mods disponíveis"
+
+[search_mods]
+other = "Buscar mods..."
+
+[unresolvable_lower]
+other = "não solucionável"
+
+[unresolvable_mods]
+other = "Mods não solucionáveis"
+
+[unresolvable_description]
+other = "Alguns mods não puderam ser ativados porque suas dependências não puderam ser resolvidas.\nPara cada mod, escolha se deseja ignorar as dependências com falha (mantendo-o ativado) ou desativá-lo."
+
+[continue]
+other = "Continuar"
+
+[unresolvable]
+other = "Não solucionável:"
+
+[ignore]
+other = "Ignorar"
+
+[disable]
+other = "Desativar"
+
+[mod_loading_error]
+other = "Erro ao carregar mods"
+
+[failed_load_mods]
+other = "Falha ao carregar mods de '{{.Path}}'"
+
+[no_mods_found]
+other = "Nenhum mod foi encontrado em '{{.Path}}'.\nCertifique-se de ter inserido o caminho corretamente."
+
+[initialization_error]
+other = "Erro de inicialização"
+
+[failed_initialize]
+other = "Falha ao inicializar a bisseção!"
+
+[bisection_error]
+other = "Erro de bisseção"
+
+[cannot_continue]
+other = "Não é possível continuar a busca!"
+
+[prepare_error]
+other = "Ocorreu um erro e o próximo passo não pôde ser preparado.\nSe outro programa, como o Minecraft, estiver acessando seus mods no momento, feche-o.\n\nConsulte o registro do aplicativo para mais detalhes."
+
+[problematic_mods_removed]
+other = "Mod(s) problemático(s) conhecido(s) removido(s)"
+
+[problematic_mods_removed_message]
+other = "Os seguintes mods, que faziam parte de um conflito conhecido, foram detectados como ausentes. Isso é esperado. A busca continuará agora com a lista de mods atualizada."
+
+[disabled_mods]
+other = "Mods desativados"
+
+[disabled_mods_message]
+other = "Os seguintes mods foram desativados automaticamente devido a dependências não atendidas:"
+
+[missing_mod_files]
+other = "Arquivos de mod ausentes detectados"
+
+[missing_mod_files_message]
+other = "Os seguintes arquivos de mod estão inesperadamente ausentes. Deseja continuar a busca sem eles?"
+
+[mod_tag_dependency]
+other = "dependência"
+
+[mod_tag_always]
+other = "sempre ativo"
+
+[undo_last_step]
+other = "Desfazer último passo"
+
+[undo_confirm]
+other = "Tem certeza de que deseja desfazer o último passo?"
+
+[cannot_undo]
+other = "Não é possível desfazer"
+
+[nothing_to_undo]
+other = "Nada mais a desfazer."
+
+[undo_failed]
+other = "A operação de desfazer falhou."
+
+[conflict_set]
+other = "Grupo de conflito"
+
+[remaining_candidates]
+one = "Candidato restante ({{.Count}})"
+other = "Candidatos restantes ({{.Count}})"
+
+[initializing]
+other = "Inicializando..."
+
+[start_bisection_button]
+other = "▶  Iniciar bisseção"
+
+[search_halted]
+other = "Busca interrompida"
+
+[search_halted_description]
+other = "A busca parou porque dois grupos de mods parecem depender um do outro.\nA página de interrupção mostra os dois grupos; resolva um dos mods envolvidos e inicie uma nova busca."
+
+[view_halted_groups]
+other = "Ver grupos interrompidos"
+
+[verifying_final_set]
+other = "Verificando grupo final..."
+
+[verification_step_description]
+other = "O próximo teste verifica se o grupo de mods encontrado é a causa do problema. Se o problema NÃO persistir, uma nova rodada de testes será iniciada para encontrar outros mods problemáticos."
+
+[verification_step]
+other = "▶  Passo de verificação"
+
+[ready_to_begin]
+other = "Pronto para começar"
+
+[ready_to_begin_description]
+other = "Esta ferramenta usa busca binária para isolar mods problemáticos.\nCada teste reduz o conjunto de candidatos pela metade, encontrando conflitos de forma eficiente.\nFeche o jogo se ele estiver aberto!\nEsteja pronto para iniciar o jogo quando solicitado."
+
+[world_backup_prefix]
+other = "Faça um "
+
+[world_backup_word]
+other = "backup"
+
+[world_backup_suffix]
+other = " dos mundos que carregar!"
+
+[crash_assistant_detected]
+other = "Crash Assistant detectado"
+
+[crash_assistant_disable_question]
+other = "O Crash Assistant pode deixar a busca mais lenta. Deseja desativá-lo?"
+
+[round_iteration]
+other = "Rodada {{.Round}} · Iteração {{.Iteration}}"
+
+[estimated_tests]
+other = "Passo {{.Step}} de cerca de {{.Max}} testes estimados."
+
+[next_step_button]
+other = "▶  Próximo passo"
+
+[undo]
+other = "↩  Desfazer"
+
+[verification_test]
+other = "Teste de verificação"
+
+[verification_test_description]
+other = "Inicie o Minecraft com o grupo atual de mods ativos e verifique se o problema ainda ocorre.\n\n✗ Com falhas\n  O problema ainda ocorre (confirma que o grupo de conflito encontrado está correto).\n\n✓ Funciona\n  O problema desapareceu (sugere que o grupo está incompleto).\n\n? Não sei dizer\n  O jogo travou ou você não consegue determinar se o problema está presente."
+
+[bisection_test]
+other = "Teste de bisseção"
+
+[bisection_test_description]
+other = "Inicie o Minecraft com o grupo atual de mods ativos e verifique se o problema foi resolvido.\n\n✓ Funciona\n  O jogo roda perfeitamente e o problema desapareceu.\n\n✗ Com falhas\n  O problema ainda está presente no jogo.\n\n? Não sei dizer\n  O jogo travou ou você não consegue determinar se o problema está presente."
+
+[active_mods]
+one = "Mod ativo ({{.Count}})"
+other = "Mods ativos ({{.Count}})"
+
+[works]
+other = "✓ Funciona"
+
+[cant_tell]
+other = "? Não sei dizer"
+
+[broken]
+other = "✗ Com falhas"
+
+[cancel_test]
+other = "Cancelar teste"
+
+[reset_search]
+other = "Redefinir busca"
+
+[reset_search_confirm]
+other = "Isso descartará todo o progresso da busca e começará do zero. Continuar?"
+
+[back_to_main]
+other = "Voltar ao início"
+
+[halt_description]
+other = "A busca não pode continuar porque os dois grupos abaixo dependem um do outro por meio de dependências não declaradas: pelo menos um mod em cada grupo precisa secretamente de um mod do outro grupo para rodar. Esta é uma situação muito rara e infeliz, e a ferramenta não consegue determinar qual grupo é o causador do problema.\n\nPara continuar, remova ou corrija um dos mods envolvidos e inicie uma nova busca."
+
+[group_a]
+other = "Grupo A"
+
+[group_b]
+other = "Grupo B"
+
+[continue_search]
+other = "Continuar busca"
+
+[continue_search_confirm]
+other = "Isso iniciará uma nova busca pelo próximo grupo de conflito entre os mods restantes. Continuar?"
+
+[search_in_progress]
+other = "Busca em andamento"
+
+[bisection_complete]
+other = "Bisseção concluída"
+
+[restart_bisection]
+other = "Reiniciar bisseção"
+
+[next_step_plain]
+other = "Próximo passo"
+
+[current_conflict]
+other = "Conflito atual"
+
+[single_mod_resolves]
+other = "Desativar qualquer mod individual deste grupo resolverá o problema:"
+
+[independent_conflict_set]
+other = "Grupo de conflito independente nº {{.Number}}"
+
+[unresolved_dependencies]
+other = "Mods com dependências não resolvidas"
+
+[unresolved_dependencies_description]
+other = "Estes mods têm problemas de dependência separados que podem exigir revisão manual:"
+
+[no_conflicts]
+other = "Nenhum conflito encontrado"
+
+[no_conflicts_description]
+other = "O processo de bisseção foi concluído sem isolar uma causa específica para a falha. O problema pode ser externo aos mods nesta pasta."
+
+[what_next]
+other = "O que fazer a seguir"
+
+[result_complete_explanation]
+other = "Para corrigir cada conflito, desative um mod da lista desse conflito e reinicie o jogo.\n\nDepois de confirmado, considere relatar a incompatibilidade aos respectivos autores dos mods."
+
+[result_verification_explanation]
+other = "Um novo mod conflitante foi encontrado, mas ainda não se sabe se há mais envolvidos.\n\nVocê já pode resolver este conflito desativando um dos mods acima.\n\nOu continue a busca para verificar se o grupo de conflito está completo."
+
+[result_incomplete_explanation]
+other = "O conflito atual envolve mais mods do que os encontrados até agora.\n\nVocê já pode resolver este conflito desativando um dos mods acima.\n\nOu continue a busca para encontrar os mods restantes."
+
+[still_issues]
+other = "Ainda com problemas?"
+
+[still_issues_description]
+other = "Se você desativou os mods acima, mas o jogo ainda apresenta o problema, pode haver outros mods em conflito. Você pode continuar o processo de bisseção para encontrá-los entre os candidatos restantes."
+
+[show_cleared_mods]
+other = "Mostrar mods descartados"
+
+[hide_cleared_mods]
+other = "Ocultar mods descartados"
+
+[cleared_mods_count]
+other = "{{.Label}} ({{.Count}})"
+
+[unknown_jar]
+other = "Arquivo JAR desconhecido"
+
+[cascade_disable]
+other = "Desativar este mod também requer desativar:"
+
+[at_least_one_more]
+other = "E pelo menos mais um..."
+
+[possibly_more]
+other = "E possivelmente outros..."
+
+[cascade_all_disable]
+other = "Se você desativar todos os mods deste conflito, também precisará desativar:"
+
+[unresolved_or_unmet]
+other = "Dependências não resolvidas ou não atendidas:"
+
+[cascade_disable_would]
+other = "Desativar este mod também exigiria desativar:"
+
+[from_unknown]
+other = "de origem desconhecida"
+
+[from_jar]
+other = "{{.ID}} de '{{.File}}.jar'"
+
+[initial_mod_state]
+other = "Estado dos mods antes da busca"
+
+[initial_mod_state_description]
+other = "Mantenha desativados os mods que já estavam desativados ou omita outros mods da busca se você já souber que eles são bons, ruins ou que atrapalham durante os testes. As opções de omissão estão abaixo."
+
+[all]
+other = "Todos"
+
+[none]
+other = "Nenhum"
+
+[keep_mods_disabled]
+other = "Manter mods desativados"
+
+[omit_mods_from_search]
+other = "Omitir mods da busca"

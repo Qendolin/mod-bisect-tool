@@ -1,0 +1,374 @@
+[locale_name]
+other = "日本語 (ja)"
+
+[app_name]
+other = "Mod Bisect Tool"
+
+[quit]
+other = "終了"
+
+[quit_message]
+other = "本当に終了しますか？\n現在の検索の進行状況は失われます。"
+
+[details]
+other = "詳細: {{.Error}}"
+
+[select_mods_folder]
+other = "MODフォルダーを選択"
+
+[error]
+other = "エラー"
+
+[select_mods_folder_error]
+other = "MODフォルダーを選択してください"
+
+[setup_description]
+other = "MODフォルダーを選択して開始してください。"
+
+[mods_folder]
+other = "MODフォルダー"
+
+[mods_folder_hint]
+other = "MODフォルダーのパスを入力または参照..."
+
+[browse]
+other = "参照..."
+
+[mod_loader]
+other = "MODローダー"
+
+[language_label]
+other = "言語"
+
+[start_bisection]
+other = "二分探索を開始"
+
+[by_author]
+other = "Qendolin 作"
+
+[version]
+other = "バージョン: {{.Version}}"
+
+[loading_mods]
+other = "MODを読み込み中..."
+
+[loading_mods_description]
+other = "これには数秒しかかかりません。"
+
+[select_mods]
+other = "有効のままにするMODを選択"
+
+[select_mods_description]
+other = "何が原因かわからない場合は、すべて未選択のまま「次のステップ」をクリックしてください。\n\n特定の問題に関係しているMOD（シェーダーMODなど）が分かっている場合は、ここで選択してください。\n\nこれにより、すべてのテスト中にそのMODが有効のままになり、ツールが競合相手を特定できます。"
+
+[next_step]
+other = "次のステップ ▶"
+
+[available_mods]
+other = "利用可能なMOD"
+
+[search_mods]
+other = "MODを検索..."
+
+[unresolvable_lower]
+other = "解決不可"
+
+[unresolvable_mods]
+other = "解決できないMOD"
+
+[unresolvable_description]
+other = "依存関係を解決できなかったため、一部のMODを有効にできませんでした。\n各MODについて、失敗した依存関係を無視して有効のままにするか、無効にするかを選択してください。"
+
+[continue]
+other = "続行"
+
+[unresolvable]
+other = "解決不可:"
+
+[ignore]
+other = "無視"
+
+[disable]
+other = "無効化"
+
+[mod_loading_error]
+other = "MOD読み込みエラー"
+
+[failed_load_mods]
+other = "'{{.Path}}' からMODを読み込めませんでした"
+
+[no_mods_found]
+other = "'{{.Path}}' にMODが見つかりませんでした。\nパスが正しく入力されているか確認してください。"
+
+[initialization_error]
+other = "初期化エラー"
+
+[failed_initialize]
+other = "二分探索の初期化に失敗しました！"
+
+[bisection_error]
+other = "二分探索エラー"
+
+[cannot_continue]
+other = "検索を続行できません！"
+
+[prepare_error]
+other = "エラーが発生したため、次のステップを準備できませんでした。\nMinecraftなどの他のプログラムが現在MODにアクセスしている場合は、終了してください。\n\n詳細はアプリケーションログを確認してください。"
+
+[problematic_mods_removed]
+other = "既知の問題のあるMODが削除されました"
+
+[problematic_mods_removed_message]
+other = "既知の競合グループに含まれていた以下のMODが見つかりませんでした。これは予期された動作です。更新されたMODリストで検索を続行します。"
+
+[disabled_mods]
+other = "無効化されたMOD"
+
+[disabled_mods_message]
+other = "満たされていない依存関係のため、以下のMODが自動的に無効化されました:"
+
+[missing_mod_files]
+other = "欠落しているMODファイルを検出"
+
+[missing_mod_files_message]
+other = "以下のMODファイルが予期せず欠落しています。これらを除外して検索を続行しますか？"
+
+[mod_tag_dependency]
+other = "依存関係"
+
+[mod_tag_always]
+other = "常に有効"
+
+[undo_last_step]
+other = "最後のステップを元に戻す"
+
+[undo_confirm]
+other = "本当に最後のステップを元に戻しますか？"
+
+[cannot_undo]
+other = "元に戻せません"
+
+[nothing_to_undo]
+other = "元に戻すステップはありません。"
+
+[undo_failed]
+other = "元に戻す操作に失敗しました。"
+
+[conflict_set]
+other = "競合グループ"
+
+[remaining_candidates]
+other = "残りの候補 ({{.Count}})"
+
+[initializing]
+other = "初期化中..."
+
+[start_bisection_button]
+other = "▶  二分探索を開始"
+
+[search_halted]
+other = "検索停止"
+
+[search_halted_description]
+other = "2つのMODグループが互いに依存しているため、検索が停止しました。\n停止ページに2つのグループが表示されます。関連するMODのいずれかを修正して、新しい検索を開始してください。"
+
+[view_halted_groups]
+other = "停止したグループを表示"
+
+[verifying_final_set]
+other = "最終グループを検証中..."
+
+[verification_step_description]
+other = "次のテストでは、見つかったMODグループが問題の原因であるかを検証します。問題が再発しない場合、他の問題のあるMODを見つけるために新しいテストラウンドが開始されます。"
+
+[verification_step]
+other = "▶  検証ステップ"
+
+[ready_to_begin]
+other = "開始準備完了"
+
+[ready_to_begin_description]
+other = "このツールは二分探索を使用して問題のあるMODを特定します。\n各テストで候補を半分に絞り込み、効率的に競合を発見します。\nゲームが開いている場合は閉じてください！\n指示されたらゲームを起動できるように準備してください。"
+
+[world_backup_prefix]
+other = "読み込むワールドの"
+
+[world_backup_word]
+other = "バックアップ"
+
+[world_backup_suffix]
+other = "を作成してください！"
+
+[crash_assistant_detected]
+other = "Crash Assistant を検出"
+
+[crash_assistant_disable_question]
+other = "Crash Assistant は検索を遅くする可能性があります。無効にしますか？"
+
+[round_iteration]
+other = "ラウンド {{.Round}} · イテレーション {{.Iteration}}"
+
+[estimated_tests]
+other = "ステップ {{.Step}} / 推定約 {{.Max}} テスト"
+
+[next_step_button]
+other = "▶  次のステップ"
+
+[undo]
+other = "↩  元に戻す"
+
+[verification_test]
+other = "検証テスト"
+
+[verification_test_description]
+other = "現在有効なMODグループでMinecraftを起動し、問題が引き続き発生するか確認してください。\n\n✗ 発生する\n  問題がまだ発生している（見つかった競合グループが正しいことを確認）。\n\n✓ 動作する\n  問題が解消された（グループが不完全である可能性を示唆）。\n\n? 判断不能\n  ゲームがクラッシュした、または問題が発生しているか確認できない。"
+
+[bisection_test]
+other = "二分探索テスト"
+
+[bisection_test_description]
+other = "現在有効なMODグループでMinecraftを起動し、問題が解決したか確認してください。\n\n✓ 動作する\n  ゲームが正常に動作し、問題が解消された。\n\n✗ 発生する\n  ゲーム内で問題がまだ発生している。\n\n? 判断不能\n  ゲームがクラッシュした、または問題が発生しているか確認できない。"
+
+[active_mods]
+other = "有効なMOD ({{.Count}})"
+
+[works]
+other = "✓ 動作する"
+
+[cant_tell]
+other = "? 判断不能"
+
+[broken]
+other = "✗ 発生する"
+
+[cancel_test]
+other = "テストをキャンセル"
+
+[reset_search]
+other = "検索をリセット"
+
+[reset_search_confirm]
+other = "すべての検索進行状況が破棄され、最初からやり直します。続行しますか？"
+
+[back_to_main]
+other = "メイン画面に戻る"
+
+[halt_description]
+other = "宣言されていない依存関係により、以下の2つのグループが互いに依存しているため、検索を続行できません。各グループの少なくとも1つのMODが、動作するために密かにもう一方のグループのMODを必要としています。これは非常に稀な状況であり、ツールはどちらのグループが原因かを判別できません。\n\n続行するには、関連するMODの1つを削除または修正して、新しい検索を開始してください。"
+
+[group_a]
+other = "グループ A"
+
+[group_b]
+other = "グループ B"
+
+[continue_search]
+other = "検索を続行"
+
+[continue_search_confirm]
+other = "残りのMODの中から次の競合グループを検索します。続行しますか？"
+
+[search_in_progress]
+other = "検索実行中"
+
+[bisection_complete]
+other = "二分探索完了"
+
+[restart_bisection]
+other = "二分探索を再起動"
+
+[next_step_plain]
+other = "次のステップ"
+
+[current_conflict]
+other = "現在の競合"
+
+[single_mod_resolves]
+other = "このグループ内のいずれか1つのMODを無効にすると問題が解決します:"
+
+[independent_conflict_set]
+other = "独立した競合グループ #{{.Number}}"
+
+[unresolved_dependencies]
+other = "未解決の依存関係があるMOD"
+
+[unresolved_dependencies_description]
+other = "これらのMODには個別の依存関係の問題があり、手動での確認が必要な場合があります:"
+
+[no_conflicts]
+other = "競合は見つかりませんでした"
+
+[no_conflicts_description]
+other = "特定のエラー原因を特定することなく二分探索が完了しました。問題はこのフォルダー内のMOD以外にある可能性があります。"
+
+[what_next]
+other = "次の手順"
+
+[result_complete_explanation]
+other = "各競合を解決するには、該当する競合リストからMODを1つ無効にしてゲームを再起動してください。\n\n確認後、それぞれのMOD作者に非互換性の報告をご検討ください。"
+
+[result_verification_explanation]
+other = "新しい競合MODが見つかりましたが、他に関連するものがあるかはまだ不明です。\n\n上記のMODのいずれかを無効にすることで、すでにこの競合を解決できます。\n\nまたは検索を続行して、競合グループが完全かどうかを検証できます。"
+
+[result_incomplete_explanation]
+other = "現在の競合には、これまでに発見されたものよりも多くのMODが関与しています。\n\n上記のMODのいずれかを無効にすることで、すでにこの競合を解決できます。\n\nまたは検索を続行して、残りのMODを特定できます。"
+
+[still_issues]
+other = "まだ問題が発生しますか？"
+
+[still_issues_description]
+other = "上記のMODを無効にしてもゲームで問題が発生し続ける場合は、さらに別の競合MODが存在する可能性があります。二分探索を続行して、残りの候補から検索できます。"
+
+[show_cleared_mods]
+other = "除外されたMODを表示"
+
+[hide_cleared_mods]
+other = "除外されたMODを非表示"
+
+[cleared_mods_count]
+other = "{{.Label}} ({{.Count}})"
+
+[unknown_jar]
+other = "不明なJARファイル"
+
+[cascade_disable]
+other = "このMODを無効にすると、以下も無効にする必要があります:"
+
+[at_least_one_more]
+other = "さらに少なくとも1つ..."
+
+[possibly_more]
+other = "さらに他にも存在する可能性があります..."
+
+[cascade_all_disable]
+other = "この競合内のすべてのMODを無効にする場合、以下も無効にする必要があります:"
+
+[unresolved_or_unmet]
+other = "未解決または満たされていない依存関係:"
+
+[cascade_disable_would]
+other = "このMODを無効にした場合、以下も無効にする必要があります:"
+
+[from_unknown]
+other = "不明なファイルから"
+
+[from_jar]
+other = "'{{.File}}.jar' 内の {{.ID}}"
+
+[initial_mod_state]
+other = "検索前のMOD状態"
+
+[initial_mod_state_description]
+other = "あらかじめ無効化されていたMODを無効のままにするか、正常・不良・テストの邪魔になると分かっているMODを検索から除外します。除外設定は以下で行えます。"
+
+[all]
+other = "すべて"
+
+[none]
+other = "なし"
+
+[keep_mods_disabled]
+other = "MODを無効のままにする"
+
+[omit_mods_from_search]
+other = "MODを検索から除外"

@@ -1,0 +1,374 @@
+[locale_name]
+other = "简体中文 (zh)"
+
+[app_name]
+other = "Mod Bisect Tool"
+
+[quit]
+other = "退出"
+
+[quit_message]
+other = "确定要退出吗？\n当前的搜索进度将会丢失。"
+
+[details]
+other = "详细信息：{{.Error}}"
+
+[select_mods_folder]
+other = "选择模组文件夹"
+
+[error]
+other = "错误"
+
+[select_mods_folder_error]
+other = "请选择你的模组文件夹"
+
+[setup_description]
+other = "选择模组文件夹以开始。"
+
+[mods_folder]
+other = "模组文件夹"
+
+[mods_folder_hint]
+other = "输入或浏览模组文件夹路径..."
+
+[browse]
+other = "浏览..."
+
+[mod_loader]
+other = "模组加载器"
+
+[language_label]
+other = "语言"
+
+[start_bisection]
+other = "开始二分排查"
+
+[by_author]
+other = "作者：Qendolin"
+
+[version]
+other = "版本：{{.Version}}"
+
+[loading_mods]
+other = "正在加载模组..."
+
+[loading_mods_description]
+other = "这通常只需几秒钟。"
+
+[select_mods]
+other = "选择要保持启用的模组"
+
+[select_mods_description]
+other = "如果你不知道是什么导致了问题，请保持全部未勾选并点击“下一步”。\n\n如果你确定问题涉及某个特定模组（例如光影模组），请在此处勾选它。\n\n这可确保它在所有测试中保持启用，以便工具找出与其冲突的模组。"
+
+[next_step]
+other = "下一步 ▶"
+
+[available_mods]
+other = "可用模组"
+
+[search_mods]
+other = "搜索模组..."
+
+[unresolvable_lower]
+other = "无法解析"
+
+[unresolvable_mods]
+other = "无法解析的模组"
+
+[unresolvable_description]
+other = "部分模组由于无法解析依赖项而无法启用。\n请为每个模组选择是忽略失败的依赖项（保持启用）还是将其禁用。"
+
+[continue]
+other = "继续"
+
+[unresolvable]
+other = "无法解析："
+
+[ignore]
+other = "忽略"
+
+[disable]
+other = "禁用"
+
+[mod_loading_error]
+other = "模组加载错误"
+
+[failed_load_mods]
+other = "无法从“{{.Path}}”加载模组"
+
+[no_mods_found]
+other = "在“{{.Path}}”中未找到任何模组。\n请检查路径是否输入正确。"
+
+[initialization_error]
+other = "初始化错误"
+
+[failed_initialize]
+other = "二分排查初始化失败！"
+
+[bisection_error]
+other = "二分排查错误"
+
+[cannot_continue]
+other = "无法继续搜索！"
+
+[prepare_error]
+other = "准备下一步时出错。\n如果有其他程序（如 Minecraft）正在访问你的模组，请先将其关闭。\n\n请查看应用程序日志获取详细信息。"
+
+[problematic_mods_removed]
+other = "已移除已知的冲突模组"
+
+[problematic_mods_removed_message]
+other = "检测到属于已知冲突组的以下模组缺失。这是预期情况。搜索现在将使用更新后的模组列表继续。"
+
+[disabled_mods]
+other = "已禁用的模组"
+
+[disabled_mods_message]
+other = "由于依赖项未满足，以下模组已被自动禁用："
+
+[missing_mod_files]
+other = "检测到缺失的模组文件"
+
+[missing_mod_files_message]
+other = "以下模组文件意外缺失。是否要在缺少它们的情况下继续搜索？"
+
+[mod_tag_dependency]
+other = "依赖项"
+
+[mod_tag_always]
+other = "始终启用"
+
+[undo_last_step]
+other = "撤销上一步"
+
+[undo_confirm]
+other = "确定要撤销上一步吗？"
+
+[cannot_undo]
+other = "无法撤销"
+
+[nothing_to_undo]
+other = "没有可以撤销的步骤了。"
+
+[undo_failed]
+other = "撤销操作失败。"
+
+[conflict_set]
+other = "冲突组"
+
+[remaining_candidates]
+other = "剩余候选 ({{.Count}})"
+
+[initializing]
+other = "正在初始化..."
+
+[start_bisection_button]
+other = "▶  开始二分排查"
+
+[search_halted]
+other = "搜索已暂停"
+
+[search_halted_description]
+other = "由于两组模组似乎相互依赖，搜索已停止。\n暂停页面显示了这两个组；请解决其中相关的模组并重新开始搜索。"
+
+[view_halted_groups]
+other = "查看已暂停的组"
+
+[verifying_final_set]
+other = "正在验证最终结果..."
+
+[verification_step_description]
+other = "接下来的测试将验证找到的模组组是否为问题的根源。如果问题不再出现，将开始新一轮测试以查找其他有问题的模组。"
+
+[verification_step]
+other = "▶  验证步骤"
+
+[ready_to_begin]
+other = "准备就绪"
+
+[ready_to_begin_description]
+other = "此工具使用二分搜索来定位有问题的模组。\n每次测试都会将候选集减半，从而高效找出冲突。\n如果游戏当前处于打开状态，请将其关闭！\n并在收到提示时准备启动游戏。"
+
+[world_backup_prefix]
+other = "请务必为加载的世界创建"
+
+[world_backup_word]
+other = "备份"
+
+[world_backup_suffix]
+other = "！"
+
+[crash_assistant_detected]
+other = "检测到 Crash Assistant"
+
+[crash_assistant_disable_question]
+other = "Crash Assistant 可能会拖慢搜索速度。是否要将其禁用？"
+
+[round_iteration]
+other = "第 {{.Round}} 轮 · 迭代 {{.Iteration}}"
+
+[estimated_tests]
+other = "第 {{.Step}} 步，预计共约 {{.Max}} 次测试。"
+
+[next_step_button]
+other = "▶  下一步"
+
+[undo]
+other = "↩  撤销"
+
+[verification_test]
+other = "验证测试"
+
+[verification_test_description]
+other = "使用当前启用的模组组启动 Minecraft，并检查问题是否仍然存在。\n\n✗ 存在故障\n  问题仍然存在（确认找到的冲突组是正确的）。\n\n✓ 运行正常\n  问题已消失（表明冲突组可能不完整）。\n\n? 无法确定\n  游戏崩溃或无法观察到问题是否存在。"
+
+[bisection_test]
+other = "二分测试"
+
+[bisection_test_description]
+other = "使用当前启用的模组组启动 Minecraft，并检查问题是否已解决。\n\n✓ 运行正常\n  游戏运行正常且问题已消失。\n\n✗ 存在故障\n  游戏中仍然存在该问题。\n\n? 无法确定\n  游戏崩溃或无法观察到问题是否存在。"
+
+[active_mods]
+other = "已启用模组 ({{.Count}})"
+
+[works]
+other = "✓ 运行正常"
+
+[cant_tell]
+other = "? 无法确定"
+
+[broken]
+other = "✗ 存在故障"
+
+[cancel_test]
+other = "取消测试"
+
+[reset_search]
+other = "重置搜索"
+
+[reset_search_confirm]
+other = "这将放弃所有搜索进度并重新开始。是否继续？"
+
+[back_to_main]
+other = "返回主页"
+
+[halt_description]
+other = "搜索无法继续，因为以下两个组通过未声明的依赖项相互依赖：每个组中至少有一个模组隐式需要另一个组中的模组才能运行。这是极罕见的情况，工具无法确定哪个组是根本原因。\n\n若要继续，请移除或修复其中相关的模组，然后开始新的搜索。"
+
+[group_a]
+other = "组 A"
+
+[group_b]
+other = "组 B"
+
+[continue_search]
+other = "继续搜索"
+
+[continue_search_confirm]
+other = "这将在剩余的模组中开始搜索下一个冲突组。是否继续？"
+
+[search_in_progress]
+other = "搜索进行中"
+
+[bisection_complete]
+other = "二分排查完成"
+
+[restart_bisection]
+other = "重新开始二分排查"
+
+[next_step_plain]
+other = "下一步"
+
+[current_conflict]
+other = "当前冲突"
+
+[single_mod_resolves]
+other = "禁用该组中的任意单个模组即可解决问题："
+
+[independent_conflict_set]
+other = "独立冲突组 #{{.Number}}"
+
+[unresolved_dependencies]
+other = "存在未解决依赖项的模组"
+
+[unresolved_dependencies_description]
+other = "这些模组具有单独的依赖问题，可能需要手动检查："
+
+[no_conflicts]
+other = "未发现冲突"
+
+[no_conflicts_description]
+other = "二分排查流程已完成，未定位到具体的故障原因。问题可能与此文件夹中的模组无关。"
+
+[what_next]
+other = "接下来该做什么"
+
+[result_complete_explanation]
+other = "要解决每个冲突，请从相应冲突列表中禁用一个模组并重新启动游戏。\n\n确认后，请考虑向相应的模组作者报告该不兼容问题。"
+
+[result_verification_explanation]
+other = "找到了一个新的冲突模组，但尚不清楚是否还涉及其他模组。\n\n你已经可以通过禁用上述模组之一来解决此冲突。\n\n或者继续搜索以验证冲突组是否完整。"
+
+[result_incomplete_explanation]
+other = "当前冲突涉及的模组比目前找到的更多。\n\n你已经可以通过禁用上述模组之一来解决此冲突。\n\n或者继续搜索以找出剩余的模组。"
+
+[still_issues]
+other = "仍然遇到问题？"
+
+[still_issues_description]
+other = "如果你禁用了上述模组但游戏中问题仍然存在，可能存在其他冲突模组。你可以继续二分排查以在剩余候选者中查找它们。"
+
+[show_cleared_mods]
+other = "显示已排除的模组"
+
+[hide_cleared_mods]
+other = "隐藏已排除的模组"
+
+[cleared_mods_count]
+other = "{{.Label}} ({{.Count}})"
+
+[unknown_jar]
+other = "未知 JAR 文件"
+
+[cascade_disable]
+other = "禁用此模组还需要禁用："
+
+[at_least_one_more]
+other = "以及至少另外 1 个..."
+
+[possibly_more]
+other = "可能还有更多..."
+
+[cascade_all_disable]
+other = "如果你禁用此冲突中的所有模组，还必须禁用："
+
+[unresolved_or_unmet]
+other = "未解决或未满足的依赖项："
+
+[cascade_disable_would]
+other = "禁用此模组也将需要禁用："
+
+[from_unknown]
+other = "来自未知来源"
+
+[from_jar]
+other = "“{{.File}}.jar” 中的 {{.ID}}"
+
+[initial_mod_state]
+other = "搜索前的模组状态"
+
+[initial_mod_state_description]
+other = "保持已知已禁用的模组处于禁用状态，或者如果你已知某些模组是正常的、有问题的或在测试中会产生干扰，可以将其从搜索中排除。排除选项如下。"
+
+[all]
+other = "全部"
+
+[none]
+other = "无"
+
+[keep_mods_disabled]
+other = "保持模组禁用"
+
+[omit_mods_from_search]
+other = "从搜索中排除模组"

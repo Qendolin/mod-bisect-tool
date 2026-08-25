@@ -1,0 +1,374 @@
+[locale_name]
+other = "Türkçe (tr)"
+
+[app_name]
+other = "Mod Bisect Tool"
+
+[quit]
+other = "Çıkış"
+
+[quit_message]
+other = "Çıkmak istediğinden emin misin?\nGeçerli arama ilerlemesi kaybolacak."
+
+[details]
+other = "Ayrıntılar: {{.Error}}"
+
+[select_mods_folder]
+other = "Mod Klasörünü Seç"
+
+[error]
+other = "Hata"
+
+[select_mods_folder_error]
+other = "Lütfen mod klasörünü seç"
+
+[setup_description]
+other = "Başlamak için mod klasörünü seç."
+
+[mods_folder]
+other = "Mod Klasörü"
+
+[mods_folder_hint]
+other = "Mod klasörü yolunu gir veya gözat..."
+
+[browse]
+other = "Gözat..."
+
+[mod_loader]
+other = "Mod Yükleyici"
+
+[language_label]
+other = "Dil"
+
+[start_bisection]
+other = "İkiye Bölmeyi Başlat"
+
+[by_author]
+other = "Geliştirici: Qendolin"
+
+[version]
+other = "Sürüm: {{.Version}}"
+
+[loading_mods]
+other = "Modlar yükleniyor..."
+
+[loading_mods_description]
+other = "Bu işlem yalnızca birkaç saniye sürmelidir."
+
+[select_mods]
+other = "Etkin Kalacak Modları Seç"
+
+[select_mods_description]
+other = "Soruna neyin sebep olduğunu bilmiyorsan her şeyi işaretsiz bırakıp İleri'ye tıkla.\n\nSorunun belirli bir modla (örneğin gölgelendirici modu) ilgili olduğunu biliyorsan buradan seç.\n\nBu, tüm testler boyunca etkin kalmasını sağlar, böylece araç neyle çakıştığını bulabilir."
+
+[next_step]
+other = "Sonraki Adım ▶"
+
+[available_mods]
+other = "Mevcut Modlar"
+
+[search_mods]
+other = "Modları ara..."
+
+[unresolvable_lower]
+other = "çözülemez"
+
+[unresolvable_mods]
+other = "Çözülemeyen Modlar"
+
+[unresolvable_description]
+other = "Bağımlılıkları çözülemediği için bazı modlar etkinleştirilemedi.\nHer mod için, başarısız bağımlılıkları yoksayıp etkin mi bırakacağını yoksa devre dışı mı bırakacağını seç."
+
+[continue]
+other = "Devam Et"
+
+[unresolvable]
+other = "Çözülemez:"
+
+[ignore]
+other = "Yoksay"
+
+[disable]
+other = "Devre Dışı Bırak"
+
+[mod_loading_error]
+other = "Mod Yükleme Hatası"
+
+[failed_load_mods]
+other = "'{{.Path}}' konumundan modlar yüklenemedi"
+
+[no_mods_found]
+other = "'{{.Path}}' konumunda mod bulunamadı.\nLütfen yolu doğru girdiğinden emin ol."
+
+[initialization_error]
+other = "Başlatma Hatası"
+
+[failed_initialize]
+other = "İkiye bölme başlatılamadı!"
+
+[bisection_error]
+other = "İkiye Bölme Hatası"
+
+[cannot_continue]
+other = "Aramaya devam edilemiyor!"
+
+[prepare_error]
+other = "Bir hata oluştu ve sonraki adım hazırlanamadı.\nMinecraft gibi başka bir program şu anda modlarına erişiyorsa lütfen kapat.\n\nAyrıntılar için lütfen uygulama günlüğünü kontrol et."
+
+[problematic_mods_removed]
+other = "Bilinen Sorunlu Mod(lar) Kaldırıldı"
+
+[problematic_mods_removed_message]
+other = "Bilinen bir çakışma grubunun parçası olan aşağıdaki modların eksik olduğu tespit edildi. Bu beklenen bir durumdur. Arama şimdi güncellenmiş mod listesiyle devam edecek."
+
+[disabled_mods]
+other = "Devre Dışı Bırakılan Modlar"
+
+[disabled_mods_message]
+other = "Karşılanmayan bağımlılıklar nedeniyle aşağıdaki modlar otomatik olarak devre dışı bırakıldı:"
+
+[missing_mod_files]
+other = "Eksik Mod Dosyaları Tespit Edildi"
+
+[missing_mod_files_message]
+other = "Aşağıdaki mod dosyaları beklenmedik şekilde eksik. Arama işlemine onlar olmadan devam etmek istiyor musun?"
+
+[mod_tag_dependency]
+other = "bağımlılık"
+
+[mod_tag_always]
+other = "her zaman açık"
+
+[undo_last_step]
+other = "Son Adımı Geri Al"
+
+[undo_confirm]
+other = "Son adımı geri almak istediğinden emin misin?"
+
+[cannot_undo]
+other = "Geri Alınamaz"
+
+[nothing_to_undo]
+other = "Geri alınacak bir şey kalmadı."
+
+[undo_failed]
+other = "Geri alma işlemi başarısız oldu."
+
+[conflict_set]
+other = "Çakışma Grubu"
+
+[remaining_candidates]
+other = "Kalan Adaylar ({{.Count}})"
+
+[initializing]
+other = "Başlatılıyor..."
+
+[start_bisection_button]
+other = "▶  İkiye Bölmeyi Başlat"
+
+[search_halted]
+other = "Arama Durduruldu"
+
+[search_halted_description]
+other = "İki mod grubu birbirine bağımlı göründüğü için arama durduruldu.\nDurdurma sayfası bu iki grubu gösterir; ilgili modlardan birini çöz ve yeni bir arama başlat."
+
+[view_halted_groups]
+other = "Durdurulan Grupları Görüntüle"
+
+[verifying_final_set]
+other = "Son grup doğrulanıyor..."
+
+[verification_step_description]
+other = "Sonraki test, bulunan mod grubunun sorunun nedeni olup olmadığını doğrular. Sorun devam ETMEZSE, diğer sorunlu modları bulmak için yeni bir test turu başlatılır."
+
+[verification_step]
+other = "▶  Doğrulama Adımı"
+
+[ready_to_begin]
+other = "Başlamaya hazır"
+
+[ready_to_begin_description]
+other = "Bu araç, sorunlu modları izole etmek için ikili arama (bisection) kullanır.\nHer test aday kümesini yarıya indirerek çakışmaları verimli şekilde bulur.\nOyun açıksa lütfen kapat!\nİstendiğinde oyunu başlatmaya hazır ol."
+
+[world_backup_prefix]
+other = "Yüklediğin dünyaların "
+
+[world_backup_word]
+other = "yedeğini"
+
+[world_backup_suffix]
+other = " al!"
+
+[crash_assistant_detected]
+other = "Crash Assistant Tespit Edildi"
+
+[crash_assistant_disable_question]
+other = "Crash Assistant aramayı yavaşlatabilir. Devre dışı bırakmak ister misin?"
+
+[round_iteration]
+other = "Tur {{.Round}} · Yineleme {{.Iteration}}"
+
+[estimated_tests]
+other = "Tahmini ~{{.Max}} testten {{.Step}}. adım."
+
+[next_step_button]
+other = "▶  Sonraki Adım"
+
+[undo]
+other = "↩  Geri Al"
+
+[verification_test]
+other = "Doğrulama Testi"
+
+[verification_test_description]
+other = "Minecraft'ı mevcut aktif mod grubuyla başlat ve sorunun devam edip etmediğini kontrol et.\n\n✗ Bozuk\n  Sorun devam ediyor (bulunan çakışma grubunun doğru olduğunu onaylar).\n\n✓ Çalışıyor\n  Sorun kayboldu (grubun eksik olduğunu gösterir).\n\n? Belirsiz\n  Oyun çöktü veya sorunun mevcut olup olmadığını belirleyemiyorsun."
+
+[bisection_test]
+other = "İkiye Bölme Testi"
+
+[bisection_test_description]
+other = "Minecraft'ı mevcut aktif mod grubuyla başlat ve sorunun çözülüp çözülmediğini kontrol et.\n\n✓ Çalışıyor\n  Oyun sorunsuz çalışıyor ve sorun çözüldü.\n\n✗ Bozuk\n  Sorun oyunda hala mevcut.\n\n? Belirsiz\n  Oyun çöktü veya sorunun mevcut olup olmadığını belirleyemiyorsun."
+
+[active_mods]
+other = "Aktif Modlar ({{.Count}})"
+
+[works]
+other = "✓ Çalışıyor"
+
+[cant_tell]
+other = "? Belirsiz"
+
+[broken]
+other = "✗ Bozuk"
+
+[cancel_test]
+other = "Testi İptal Et"
+
+[reset_search]
+other = "Aramayı Sıfırla"
+
+[reset_search_confirm]
+other = "Bu işlem tüm arama ilerlemesini iptal edecek ve baştan başlayacaktır. Devam edilsin mi?"
+
+[back_to_main]
+other = "Ana Sayfaya Dön"
+
+[halt_description]
+other = "Aşağıdaki iki grup bildirilmemiş bağımlılıklar yoluyla birbirine bağımlı olduğu için arama devam edemiyor: Her gruptaki en az bir mod, çalışmak için diğer gruptan bir moda örtülü olarak ihtiyaç duyuyor. Bu çok nadir ve talihsiz bir durumdur ve araç hangi grubun soruna neden olduğunu belirleyemez.\n\nDevam etmek için ilgili modlardan birini kaldır veya düzelt ve yeni bir arama başlat."
+
+[group_a]
+other = "Grup A"
+
+[group_b]
+other = "Grup B"
+
+[continue_search]
+other = "Aramaya Devam Et"
+
+[continue_search_confirm]
+other = "Bu, kalan modlar içinde bir sonraki çakışma grubu için yeni bir arama başlatacaktır. Devam edilsin mi?"
+
+[search_in_progress]
+other = "Arama Sürüyor"
+
+[bisection_complete]
+other = "İkiye Bölme Tamamlandı"
+
+[restart_bisection]
+other = "İkiye Bölmeyi Yeniden Başlat"
+
+[next_step_plain]
+other = "Sonraki Adım"
+
+[current_conflict]
+other = "Mevcut Çakışma"
+
+[single_mod_resolves]
+other = "Bu gruptaki herhangi bir modu devre dışı bırakmak sorunu çözecektir:"
+
+[independent_conflict_set]
+other = "Bağımsız Çakışma Grubu #{{.Number}}"
+
+[unresolved_dependencies]
+other = "Çözülmemiş Bağımlılıkları Olan Modlar"
+
+[unresolved_dependencies_description]
+other = "Bu modların manuel inceleme gerektirebilecek ayrı bağımlılık sorunları var:"
+
+[no_conflicts]
+other = "Çakışma Bulunamadı"
+
+[no_conflicts_description]
+other = "İkiye bölme işlemi belirli bir hata nedenini izole etmeden tamamlandı. Sorun bu klasördeki modların dışında olabilir."
+
+[what_next]
+other = "Sırada ne var?"
+
+[result_complete_explanation]
+other = "Her çakışmayı düzeltmek için ilgili çakışma listesinden bir modu devre dışı bırak ve oyunu yeniden başlat.\n\nOnaylandıktan sonra lütfen uyumsuzluğu ilgili mod geliştiricilerine bildirmeyi düşün."
+
+[result_verification_explanation]
+other = "Yeni bir çakışan mod bulundu, ancak daha fazlasının dahil olup olmadığı henüz bilinmiyor.\n\nYukarıdaki modlardan birini devre dışı bırakarak bu çakışmayı şimdiden çözebilirsin.\n\nVeya çakışma grubunun tam olup olmadığını doğrulamak için aramaya devam edebilirsin."
+
+[result_incomplete_explanation]
+other = "Mevcut çakışma, şimdiye kadar bulunanlardan daha fazla modu içeriyor.\n\nYukarıdaki modlardan birini devre dışı bırakarak bu çakışmayı şimdiden çözebilirsin.\n\nVeya kalan modları bulmak için aramaya devam edebilirsin."
+
+[still_issues]
+other = "Hala sorun mu yaşıyorsun?"
+
+[still_issues_description]
+other = "Yukarıdaki modları devre dışı bırakmana rağmen oyununda sorun devam ediyorsa ek çakışan modlar olabilir. Kalan adaylar arasında onları bulmak için ikiye bölme işlemine devam edebilirsin."
+
+[show_cleared_mods]
+other = "Hariç Tutulan Modları Göster"
+
+[hide_cleared_mods]
+other = "Hariç Tutulan Modları Gizle"
+
+[cleared_mods_count]
+other = "{{.Label}} ({{.Count}})"
+
+[unknown_jar]
+other = "Bilinmeyen JAR Dosyası"
+
+[cascade_disable]
+other = "Bu modu devre dışı bırakmak şunların da devre dışı bırakılmasını gerektirir:"
+
+[at_least_one_more]
+other = "Ve en az bir tane daha..."
+
+[possibly_more]
+other = "Ve muhtemelen daha fazlası..."
+
+[cascade_all_disable]
+other = "Bu çakışmadaki tüm modları devre dışı bırakırsan şunları da devre dışı bırakmalısın:"
+
+[unresolved_or_unmet]
+other = "Çözülmemiş veya karşılanmamış bağımlılıklar:"
+
+[cascade_disable_would]
+other = "Bu modu devre dışı bırakmak şunların da devre dışı bırakılmasını gerektirirdi:"
+
+[from_unknown]
+other = "bilinmeyen kaynaktan"
+
+[from_jar]
+other = "'{{.File}}.jar' içinden {{.ID}}"
+
+[initial_mod_state]
+other = "Arama Öncesi Mod Durumu"
+
+[initial_mod_state_description]
+other = "Önceden devre dışı bırakılmış modları devre dışı tut veya sorunsuz, sorunlu veya test sırasında dikkat dağıtıcı olduğunu bildiğin diğer modları aramadan hariç tut. Hariç tutma seçenekleri aşağıdadır."
+
+[all]
+other = "Tümü"
+
+[none]
+other = "Hiçbiri"
+
+[keep_mods_disabled]
+other = "Modları Devre Dışı Bırakılmış Tut"
+
+[omit_mods_from_search]
+other = "Modları Aramadan Hariç Tut"
