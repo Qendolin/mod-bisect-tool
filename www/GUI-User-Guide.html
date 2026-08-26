@@ -94,17 +94,6 @@
           </li>
         </ol>
 
-        <h3>Language</h3>
-
-        <p>
-          The GUI uses the operating system locale automatically. The setup
-          screen includes a language selector; English is currently the only
-          available language. For testing or scripting, the locale can also be
-          selected with the <code>--locale</code> option:
-        </p>
-
-        <pre><code>mod-bisect-gui --locale en</code></pre>
-
         <h2>How to Use the Tool</h2>
 
         <p>Using the tool is a simple, guided process.</p>
@@ -136,7 +125,51 @@
 
         <p><img src="img/gui-setup-screen.jpg" alt="Setup screen" /></p>
 
-        <h3>Step 2: Choose Mods to Keep Enabled</h3>
+        <h3>Step 2: Mod State Before Search</h3>
+
+        <p>
+          After analyzing your mods directory[cite: 1], the tool displays the
+          <strong>Mod State Before Search</strong> screen to configure mod
+          exclusions before testing begins.
+        </p>
+
+        <h4>Action</h4>
+
+        <ul>
+          <li>
+            <strong>Keep Mods Disabled:</strong> Displays mods found in your
+            <code>mods</code> directory that currently have a
+            <code>.jar.disabled</code> file extension. Use this list to keep
+            mods disabled during the search, whether they were temporarily
+            disabled and forgotten, or intended to stay permanently off. Any
+            checked mods will remain disabled throughout the bisection process.
+            <em
+              >Note: This section is only visible if disabled mods are present
+              in your folder.</em
+            >
+          </li>
+          <li>
+            <strong>Omit Mods from Search:</strong> Select active mods you want
+            to exclude from the bisection testing. This is useful for leaving
+            out disruptive mods or mods you are already certain are not causing
+            the issue.
+          </li>
+          <li>Click <strong>Continue</strong> to proceed.</li>
+        </ul>
+
+        <p>
+          You can use the <strong>Search mods...</strong> field above the list
+          to quickly filter mods by name or mod ID.
+        </p>
+
+        <p>
+          <img
+            src="img/gui-mod-omit-screen.jpg"
+            alt="Mod state before search screen"
+          />
+        </p>
+
+        <h3>Step 3: Choose Mods to Keep Enabled</h3>
 
         <p>
           After the mods are loaded, you'll see a screen titled
@@ -149,7 +182,7 @@
           <li>
             If you don't know what's causing the issue, leave everything
             unchecked and press
-            <strong>Next Step &#9654;</strong>.
+            <strong>Continue</strong>.
           </li>
           <li>
             If you know the issue involves a specific mod (like a shaders mod),
@@ -182,7 +215,7 @@
           <img src="img/gui-mod-select-screen.jpg" alt="Mod select screen" />
         </p>
 
-        <h3>Step 3: The Main Screen</h3>
+        <h3>Step 4: The Main Screen</h3>
 
         <p>
           This is your mission control. It shows a progress bar, the current
@@ -213,7 +246,7 @@
 
         <p><img src="img/gui-main-screen.jpg" alt="Main screen" /></p>
 
-        <h3>Step 4: The Test Screen</h3>
+        <h3>Step 5: The Test Screen</h3>
 
         <p>
           Once a test is prepared, the tool switches to a
@@ -265,7 +298,7 @@
 
         <p><img src="img/gui-test-screen.jpg" alt="Test prompt" /></p>
 
-        <h3>Step 5: The Results</h3>
+        <h3>Step 6: The Results</h3>
 
         <p>
           Once the tool has found a problematic mod (or set of mods), it will
