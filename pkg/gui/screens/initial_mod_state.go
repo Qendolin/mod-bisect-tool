@@ -17,14 +17,16 @@ import (
 )
 
 type InitialModStateScreen struct {
-	app                                App
-	vm                                 ui.BisectionViewModel
-	initial, additional                []string
-	keep, omit                         map[string]*widget.Bool
-	keepClick, omitClick               map[string]*widget.Clickable
-	allClick, noneClick, continueClick widget.Clickable
-	initialList, omitList              widget.List
-	searchEditor                       widget.Editor
+	app                         App
+	vm                          ui.BisectionViewModel
+	initial, additional         []string
+	keep, omit                  map[string]*widget.Bool
+	keepClick, omitClick        map[string]*widget.Clickable
+	keepAllClick, keepNoneClick widget.Clickable
+	omitAllClick, omitNoneClick widget.Clickable
+	continueClick               widget.Clickable
+	initialList, omitList       widget.List
+	searchEditor                widget.Editor
 }
 
 func NewInitialModStateScreen(app App, initiallyDisabled []string) *InitialModStateScreen {
@@ -76,14 +78,24 @@ func (s *InitialModStateScreen) Layout(gtx layout.Context, th *material.Theme) l
 			s.omit[id].Value = !s.omit[id].Value
 		}
 	}
-	if s.allClick.Clicked(gtx) {
+	if s.keepAllClick.Clicked(gtx) {
 		for _, id := range s.initial {
 			s.keep[id].Value = true
 		}
 	}
-	if s.noneClick.Clicked(gtx) {
+	if s.keepNoneClick.Clicked(gtx) {
 		for _, id := range s.initial {
 			s.keep[id].Value = false
+		}
+	}
+	if s.omitAllClick.Clicked(gtx) {
+		for _, id := range s.additional {
+			s.omit[id].Value = true
+		}
+	}
+	if s.omitNoneClick.Clicked(gtx) {
+		for _, id := range s.additional {
+			s.omit[id].Value = false
 		}
 	}
 	if s.continueClick.Clicked(gtx) {
@@ -140,7 +152,7 @@ func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget
 		if len(s.initial) > 0 {
 			children = append(children,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-					return s.layoutFrameHeading(gtx, th, s.app.Text("keep_mods_disabled", "Keep Mods Disabled", nil), true)
+					return s.layoutFrameHeading(gtx, th, s.app.Text("keep_mods_disabled", "Keep Mods Disabled", nil), &s.keepAllClick, &s.keepNoneClick)
 				}),
 				layout.Rigid(layout.Spacer{Height: unit.Dp(8)}.Layout),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
@@ -153,7 +165,7 @@ func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget
 		// Omit Mods from Search section.
 		children = append(children,
 			layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-				return s.layoutFrameHeading(gtx, th, s.app.Text("omit_mods_from_search", "Omit Mods from Search", nil), false)
+				return s.layoutFrameHeading(gtx, th, s.app.Text("omit_mods_from_search", "Omit Mods from Search", nil), &s.omitAllClick, &s.omitNoneClick)
 			}),
 			layout.Rigid(func(gtx layout.Context) layout.Dimensions { return s.layoutSearch(gtx, th) }),
 			layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
@@ -169,7 +181,7 @@ func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget
 	}
 }
 
-func (s *InitialModStateScreen) layoutFrameHeading(gtx layout.Context, th *material.Theme, title string, bulk bool) layout.Dimensions {
+func (s *InitialModStateScreen) layoutFrameHeading(gtx layout.Context, th *material.Theme, title string, allClick, noneClick *widget.Clickable) layout.Dimensions {
 	return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			l := material.Body1(th, title)
@@ -179,15 +191,12 @@ func (s *InitialModStateScreen) layoutFrameHeading(gtx layout.Context, th *mater
 		}),
 		layout.Flexed(1, layout.Spacer{}.Layout),
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			if !bulk {
-				return layout.Dimensions{}
-			}
-			all := material.Button(th, &s.allClick, s.app.Text("all", "All", nil))
+			all := material.Button(th, allClick, s.app.Text("all", "All", nil))
 			all.Background = theme.CardBgColor
 			all.Color = theme.FgColor
 			all.Inset = layout.Inset{Top: unit.Dp(3), Bottom: unit.Dp(3), Left: unit.Dp(8), Right: unit.Dp(8)}
 			all.TextSize = unit.Sp(12)
-			none := material.Button(th, &s.noneClick, s.app.Text("none", "None", nil))
+			none := material.Button(th, noneClick, s.app.Text("none", "None", nil))
 			none.Background = theme.CardBgColor
 			none.Color = theme.FgColor
 			none.Inset = layout.Inset{Top: unit.Dp(3), Bottom: unit.Dp(3), Left: unit.Dp(8), Right: unit.Dp(8)}
