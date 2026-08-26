@@ -141,160 +141,236 @@ other = "immer aktiviert"
 
 [undo_last_step]
 other = "Letzten Schritt rückgängig machen"
+
 [undo_confirm]
 other = "Möchtest du den letzten Schritt wirklich rückgängig machen?"
+
 [cannot_undo]
 other = "Rückgängigmachen nicht möglich"
+
 [nothing_to_undo]
 other = "Nichts mehr rückgängig zu machen."
+
 [undo_failed]
 other = "Der Vorgang zum Rückgängigmachen ist fehlgeschlagen."
+
 [conflict_set]
 other = "Konfliktgruppe"
+
 [remaining_candidates]
 one = "Verbleibender Kandidat ({{.Count}})"
 other = "Verbleibende Kandidaten ({{.Count}})"
+
 [initializing]
 other = "Wird initialisiert..."
+
 [start_bisection_button]
 other = "▶  Bisektion starten"
+
 [search_halted]
 other = "Suche angehalten"
+
 [search_halted_description]
 other = "Die Suche wurde angehalten, weil zwei Mod-Gruppen voneinander abhängig zu sein scheinen.\nAuf der Anhalteseite werden die beiden Gruppen angezeigt. Behebe eine der beteiligten Mods und starte eine neue Suche."
+
 [view_halted_groups]
 other = "Angehaltene Gruppen anzeigen"
+
 [verifying_final_set]
 other = "Gefundene Gruppe wird überprüft..."
+
 [verification_step_description]
 other = "Der nächste Test überprüft, ob die gefundene Mod-Gruppe die Ursache des Problems ist. Wenn das Problem NICHT mehr auftritt, wird eine neue Testrunde gestartet, um weitere problematische Mods zu finden."
+
 [verification_step]
 other = "▶  Überprüfungsschritt"
+
 [ready_to_begin]
 other = "Bereit zum Start"
+
 [ready_to_begin_description]
 other = "Dieses Tool verwendet eine binäre Suche, um problematische Mods zu isolieren.\nJeder Test halbiert die Kandidatenmenge und findet Konflikte effizient.\nSchließe das Spiel, falls es gerade geöffnet ist!\nSei bereit, das Spiel zu starten, sobald du dazu aufgefordert wirst."
+
 [world_backup_prefix]
 other = "Erstelle ein "
+
 [world_backup_word]
 other = "Backup"
+
 [world_backup_suffix]
 other = " für geladene Welten!"
+
 [crash_assistant_detected]
 other = "Crash Assistant erkannt"
+
 [crash_assistant_disable_question]
 other = "Crash Assistant kann die Suche verlangsamen. Möchtest du ihn deaktivieren?"
+
 [round_iteration]
 other = "Runde {{.Round}} · Iteration {{.Iteration}}"
+
 [estimated_tests]
 other = "Schritt {{.Step}} von ungefähr {{.Max}} geschätzten Tests."
+
 [next_step_button]
 other = "▶  Nächster Schritt"
+
 [undo]
 other = "↩  Rückgängig"
+
 [verification_test]
 other = "Überprüfungstest"
+
 [verification_test_description]
 other = "Starte Minecraft mit der aktuell aktiven Mod-Gruppe und überprüfe, ob dein Problem weiterhin auftritt.\n\n✗ Fehlerhaft\n  Das Problem besteht weiterhin (bestätigt, dass die gefundene Konfliktgruppe korrekt ist).\n\n✓ Funktioniert\n  Das Problem ist verschwunden (die Gruppe ist vermutlich unvollständig).\n\n? Nicht sicher\n  Das Spiel ist abgestürzt oder du kannst nicht feststellen, ob das Problem auftritt."
+
 [bisection_test]
 other = "Bisektionstest"
+
 [bisection_test_description]
 other = "Starte Minecraft mit der aktuell aktiven Mod-Gruppe und überprüfe, ob dein Problem behoben ist.\n\n✓ Funktioniert\n  Das Spiel läuft problemlos und das Problem ist verschwunden.\n\n✗ Fehlerhaft\n  Das Problem tritt im Spiel weiterhin auf.\n\n? Nicht sicher\n  Das Spiel ist abgestürzt oder du kannst nicht feststellen, ob das Problem auftritt."
+
 [active_mods]
 one = "Aktive Mod ({{.Count}})"
 other = "Aktive Mods ({{.Count}})"
+
 [works]
 other = "✓ Funktioniert"
+
 [cant_tell]
 other = "? Nicht sicher"
+
 [broken]
 other = "✗ Fehlerhaft"
+
 [cancel_test]
 other = "Test abbrechen"
 
 [reset_search]
 other = "Suche zurücksetzen"
+
 [reset_search_confirm]
 other = "Dadurch wird der gesamte Suchfortschritt verworfen und neu begonnen. Fortfahren?"
+
 [back_to_main]
 other = "Zurück zur Hauptseite"
+
 [halt_description]
 other = "Die Suche kann nicht fortgesetzt werden, weil die beiden Gruppen unten voneinander abhängig sind, obwohl diese Abhängigkeiten nicht angegeben wurden: Mindestens eine Mod in jeder Gruppe benötigt stillschweigend eine Mod aus der anderen Gruppe. Das ist eine sehr seltene und unglückliche Situation, und das Tool kann nicht feststellen, welche Gruppe die Ursache ist.\n\nEntferne oder repariere eine der beteiligten Mods und starte eine neue Suche."
+
 [group_a]
 other = "Gruppe A"
+
 [group_b]
 other = "Gruppe B"
+
 [continue_search]
 other = "Suche fortsetzen"
+
 [continue_search_confirm]
 other = "Dadurch wird eine neue Suche nach der nächsten Konfliktgruppe in den verbleibenden Mods gestartet. Fortfahren?"
+
 [search_in_progress]
 other = "Suche läuft"
+
 [bisection_complete]
 other = "Bisektion abgeschlossen"
+
 [restart_bisection]
 other = "Bisektion neu starten"
+
 [next_step_plain]
 other = "Nächster Schritt"
+
 [current_conflict]
 other = "Aktueller Konflikt"
+
 [single_mod_resolves]
 other = "Das Deaktivieren einer beliebigen Mod in dieser Gruppe behebt das Problem:"
+
 [independent_conflict_set]
 other = "Unabhängige Konfliktgruppe Nr. {{.Number}}"
+
 [unresolved_dependencies]
 other = "Mods mit ungelösten Abhängigkeiten"
+
 [unresolved_dependencies_description]
 other = "Diese Mods haben separate Abhängigkeitsprobleme, die möglicherweise manuell überprüft werden müssen:"
+
 [no_conflicts]
 other = "Keine Konflikte gefunden"
+
 [no_conflicts_description]
 other = "Die Bisektion wurde abgeschlossen, ohne eine bestimmte Fehlerursache zu isolieren. Das Problem könnte außerhalb der Mods in diesem Ordner liegen."
+
 [what_next]
 other = "Was nun?"
+
 [result_complete_explanation]
 other = "Um jeden Konflikt zu beheben, deaktiviere eine Mod aus der jeweiligen Konfliktgruppe und starte das Spiel neu.\n\nNachdem du den Konflikt bestätigt hast, solltest du ihn den jeweiligen Mod-Autoren melden."
+
 [result_verification_explanation]
 other = "Eine neue Konflikt-Mod wurde gefunden, aber es ist noch nicht bekannt, ob weitere beteiligt sind.\n\nDu kannst diesen Konflikt bereits beheben, indem du eine der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um zu überprüfen, ob die Konfliktgruppe vollständig ist."
+
 [result_incomplete_explanation]
 other = "Der aktuelle Konflikt umfasst mehr Mods, als bisher gefunden wurden.\n\nDu kannst diesen Konflikt bereits beheben, indem du eine der oben genannten Mods deaktivierst.\n\nOder setze die Suche fort, um die verbleibenden Mods zu finden."
+
 [still_issues]
 other = "Bestehen die Probleme weiterhin?"
+
 [still_issues_description]
 other = "Wenn dein Spiel trotz der Deaktivierung der oben genannten Mods weiterhin das Problem zeigt, gibt es möglicherweise weitere Konflikt-Mods. Du kannst die Bisektion fortsetzen, um sie unter den verbleibenden Kandidaten zu finden."
+
 [show_cleared_mods]
 other = "Entfernte Mods anzeigen"
+
 [hide_cleared_mods]
 other = "Entfernte Mods ausblenden"
+
 [cleared_mods_count]
 other = "{{.Label}} ({{.Count}})"
+
 [unknown_jar]
 other = "Unbekannte JAR-Datei"
+
 [cascade_disable]
 other = "Das Deaktivieren dieser Mod erfordert auch das Deaktivieren von:"
+
 [at_least_one_more]
 other = "Und mindestens einen weiteren..."
+
 [possibly_more]
 other = "Und möglicherweise weitere..."
+
 [cascade_all_disable]
 other = "Wenn du alle Mods in diesem Konflikt deaktivierst, musst du auch Folgendes deaktivieren:"
+
 [unresolved_or_unmet]
 other = "Ungelöste oder nicht erfüllte Abhängigkeiten:"
+
 [cascade_disable_would]
 other = "Das Deaktivieren dieser Mod würde auch das Deaktivieren von Folgendem erfordern:"
+
 [from_unknown]
 other = "aus unbekannter Datei"
+
 [from_jar]
 other = "{{.ID}} aus '{{.File}}.jar'"
+
 [initial_mod_state]
 other = "Mod-Status vor der Suche"
+
 [initial_mod_state_description]
 other = "Behalte bekannte deaktivierte Mods deaktiviert oder lasse andere Mods aus der Suche aus, wenn du bereits weißt, dass sie gut, schlecht oder beim Testen störend sind. Die Auswahl zum Auslassen findest du unten."
+
 [all]
 other = "Alle"
+
 [none]
 other = "Keine"
+
 [keep_mods_disabled]
 other = "Mods deaktiviert lassen"
+
 [omit_mods_from_search]
 other = "Mods von der Suche ausschließen"

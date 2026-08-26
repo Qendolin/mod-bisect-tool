@@ -59,7 +59,7 @@ other = "Esto solo debería tardar unos segundos."
 other = "Seleccionar mods para mantener activados"
 
 [select_mods_description]
-other = "Si no sabes qué causa el problema, déjalo todo desmarcado y haz clic en Siguiente.\n\nSi sabes que el problema involucra un mod específico (como un mod de shaders), selecciónalo aquí.\n\nEsto garantiza que permanezca activado durante todas las pruebas para que la herramienta pueda encontrar con qué entra en conflicto."
+other = "Si no sabes qué causa el problema, déjalo todo desmarcado y haz clic en Continuar.\n\nSi sabes que el problema involucra un mod específico (como un mod de shaders), selecciónalo aquí.\n\nEsto garantiza que permanezca activado durante todas las pruebas para que la herramienta pueda encontrar con qué entra en conflicto."
 
 [next_step]
 other = "Siguiente paso ▶"
@@ -190,14 +190,19 @@ other = "Listo para comenzar"
 
 [ready_to_begin_description]
 other = "Esta herramienta utiliza una búsqueda binaria para aislar los mods problemáticos.\nCada prueba reduce a la mitad el conjunto de candidatos, encontrando conflictos de forma eficiente.\n¡Cierra el juego si está abierto!\nPrepárate para iniciar el juego cuando se te solicite."
+
 [world_backup_prefix]
 other = "Haz una "
+
 [world_backup_word]
 other = "copia de seguridad"
+
 [world_backup_suffix]
 other = " de los mundos que cargues!"
+
 [crash_assistant_detected]
 other = "Crash Assistant detectado"
+
 [crash_assistant_disable_question]
 other = "Crash Assistant puede ralentizar la búsqueda. ¿Quieres desactivarlo?"
 
@@ -351,15 +356,21 @@ other = "de origen desconocido"
 
 [from_jar]
 other = "{{.ID}} de '{{.File}}.jar'"
+
 [initial_mod_state]
 other = "Estado de los mods antes de la búsqueda"
+
 [initial_mod_state_description]
 other = "Mantén desactivados los mods que ya estaban desactivados u omite otros mods de la búsqueda si ya sabes que son buenos, malos o molestos durante las pruebas. Las opciones para omitirlos están abajo."
+
 [all]
 other = "Todos"
+
 [none]
 other = "Ninguno"
+
 [keep_mods_disabled]
 other = "Mantener los mods deshabilitados"
+
 [omit_mods_from_search]
 other = "Excluir mods de la búsqueda"

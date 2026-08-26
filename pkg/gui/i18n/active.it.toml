@@ -59,7 +59,7 @@ other = "Dovrebbe richiedere solo pochi secondi."
 other = "Seleziona le mod da mantenere attive"
 
 [select_mods_description]
-other = "Se non sai cosa causa il problema, lascia tutto deselezionato e clicca su Avanti.\n\nSe sai che il problema riguarda una mod specifica (come una mod per gli shader), selezionala qui.\n\nQuesto garantirà che rimanga attiva durante tutti i test, permettendo allo strumento di trovare con cosa va in conflitto."
+other = "Se non sai cosa causa il problema, lascia tutto deselezionato e clicca su Continua.\n\nSe sai che il problema riguarda una mod specifica (come una mod per gli shader), selezionala qui.\n\nQuesto garantirà che rimanga attiva durante tutti i test, permettendo allo strumento di trovare con cosa va in conflitto."
 
 [next_step]
 other = "Passo successivo ▶"
@@ -190,14 +190,19 @@ other = "Pronto per iniziare"
 
 [ready_to_begin_description]
 other = "Questo strumento utilizza una ricerca binaria per isolare le mod problematiche.\nOgni test dimezza il gruppo di candidati, trovando i conflitti in modo efficiente.\nChiudi il gioco se è attualmente aperto!\nTieniti pronto ad avviare il gioco quando richiesto."
+
 [world_backup_prefix]
 other = "Fai un "
+
 [world_backup_word]
 other = "backup"
+
 [world_backup_suffix]
 other = " dei mondi che carichi!"
+
 [crash_assistant_detected]
 other = "Crash Assistant rilevato"
+
 [crash_assistant_disable_question]
 other = "Crash Assistant può rallentare la ricerca. Vuoi disabilitarlo?"
 
@@ -351,8 +356,10 @@ other = "da origine sconosciuta"
 
 [from_jar]
 other = "{{.ID}} da '{{.File}}.jar'"
+
 [initial_mod_state]
 other = "Stato delle mod prima della ricerca"
+
 [initial_mod_state_description]
 other = "Mantieni disabilitate le mod già disabilitate oppure ometti altre mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Le opzioni per ometterle sono sotto."
 
@@ -364,5 +371,6 @@ other = "Escludi mod dalla ricerca"
 
 [all]
 other = "Tutte"
+
 [none]
 other = "Nessuna"

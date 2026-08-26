@@ -59,7 +59,7 @@ other = "Isso deve levar apenas alguns segundos."
 other = "Selecionar mods para manter ativados"
 
 [select_mods_description]
-other = "Se você não sabe o que está causando o problema, deixe tudo desmarcado e clique em Próximo passo.\n\nSe você sabe que o problema envolve um mod específico (como um mod de shaders), marque-o aqui.\n\nIsso garante que ele permaneça ativado durante todos os testes para que a ferramenta possa encontrar com o que ele está em conflito."
+other = "Se você não sabe o que está causando o problema, deixe tudo desmarcado e clique em Continuar.\n\nSe você sabe que o problema envolve um mod específico (como um mod de shaders), marque-o aqui.\n\nIsso garante que ele permaneça ativado durante todos os testes para que a ferramenta possa encontrar com o que ele está em conflito."
 
 [next_step]
 other = "Próximo passo ▶"

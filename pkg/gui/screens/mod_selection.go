@@ -18,9 +18,9 @@ import (
 type ModSelectionScreen struct {
 	app App
 
-	searchEditor widget.Editor
-	nextClick    widget.Clickable
-	listState    widget.List
+	searchEditor  widget.Editor
+	continueClick widget.Clickable
+	listState     widget.List
 
 	// checkboxStates tracks the selection state of every mod persistently
 	// across frames. The widget.Bool.Value is the source of truth.
@@ -66,7 +66,7 @@ func (s *ModSelectionScreen) Layout(gtx layout.Context, th *material.Theme) layo
 		s.statesInitialized = true
 	}
 
-	if s.nextClick.Clicked(gtx) {
+	if s.continueClick.Clicked(gtx) {
 		// Collect the selection on the frame, then commit off the frame.
 		var forceEnabled []string
 		for mod, boolState := range s.checkboxStates {
@@ -105,7 +105,7 @@ func (s *ModSelectionScreen) Layout(gtx layout.Context, th *material.Theme) layo
 
 func (s *ModSelectionScreen) layoutLeftPanel(gtx layout.Context, th *material.Theme) layout.Dimensions {
 	headerText := s.app.Text("select_mods", "Select Mods to Keep Enabled", nil)
-	descText := s.app.Text("select_mods_description", "If you don't know what's causing the issue, leave everything unchecked and click Next.\n\n"+
+	descText := s.app.Text("select_mods_description", "If you don't know what's causing the issue, leave everything unchecked and click Continue.\n\n"+
 		"If you know the issue involves a specific mod (like a shaders mod), check it here.\n\n"+
 		"This ensures it stays turned on during all tests so the tool can find what is conflicting with it.", nil)
 
@@ -126,7 +126,7 @@ func (s *ModSelectionScreen) layoutLeftPanel(gtx layout.Context, th *material.Th
 			return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
 				layout.Flexed(1, layout.Spacer{}.Layout), // Pushes button to bottom right
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-					btn := material.Button(th, &s.nextClick, s.app.Text("next_step", "Next Step ▶", nil))
+					btn := material.Button(th, &s.continueClick, s.app.Text("continue", "Continue", nil))
 					btn.Background = theme.PrimaryColor
 					btn.Color = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
 					return btn.Layout(gtx)

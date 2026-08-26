@@ -1,259 +1,374 @@
-# English source catalog for translators.
-# Keep message IDs stable. Preserve template variables such as {{.Count}} and
-# {{.Path}}, and preserve intentional \n paragraph breaks.
 [locale_name]
 other = "English (en)"
 
 [app_name]
 other = "Mod Bisect Tool"
+
 [quit]
 other = "Quit"
+
 [quit_message]
 other = "Are you sure you want to quit?\nThe current search progress will be lost."
+
 [details]
 other = "Details: {{.Error}}"
+
 [select_mods_folder]
 other = "Select Mods Folder"
+
 [error]
 other = "Error"
+
 [select_mods_folder_error]
 other = "Please select a mods folder"
+
 [setup_description]
 other = "Select your mods folder to begin."
+
 [mods_folder]
 other = "Mods Folder"
+
 [mods_folder_hint]
 other = "Enter or browse mods folder path..."
+
 [browse]
 other = "Browse..."
+
 [mod_loader]
 other = "Mod Loader"
+
 [language_label]
 other = "Language"
+
 [start_bisection]
 other = "Start Bisection"
+
 [by_author]
 other = "by Qendolin"
+
 [version]
 other = "Version: {{.Version}}"
 
 [loading_mods]
 other = "Loading Mods..."
+
 [loading_mods_description]
 other = "This should only take a few seconds."
+
 [select_mods]
 other = "Select Mods to Keep Enabled"
+
 [select_mods_description]
-other = "If you don't know what's causing the issue, leave everything unchecked and click Next.\n\nIf you know the issue involves a specific mod (like a shaders mod), check it here.\n\nThis ensures it stays turned on during all tests so the tool can find what is conflicting with it."
+other = "If you don't know what's causing the issue, leave everything unchecked and click Continue.\n\nIf you know the issue involves a specific mod (like a shaders mod), check it here.\n\nThis ensures it stays turned on during all tests so the tool can find what is conflicting with it."
+
 [next_step]
 other = "Next Step ▶"
+
 [available_mods]
 other = "Available Mods"
+
 [search_mods]
 other = "Search mods..."
+
 [unresolvable_lower]
 other = "unresolvable"
+
 [unresolvable_mods]
 other = "Unresolvable Mods"
+
 [unresolvable_description]
 other = "Some mods could not be enabled because their dependencies could not be resolved.\nFor each mod, choose whether to ignore the failing dependencies (keeping it enabled) or disable it."
+
 [continue]
 other = "Continue"
+
 [unresolvable]
 other = "Unresolvable:"
+
 [ignore]
 other = "Ignore"
+
 [disable]
 other = "Disable"
 
 [mod_loading_error]
 other = "Mod Loading Error"
+
 [failed_load_mods]
 other = "Failed to load mods from '{{.Path}}'"
+
 [no_mods_found]
 other = "No mods were found at '{{.Path}}'.\nPlease ensure that you've entered the path correctly."
+
 [initialization_error]
 other = "Initialization Error"
+
 [failed_initialize]
 other = "Failed to initialize the bisection!"
+
 [bisection_error]
 other = "Bisection Error"
+
 [cannot_continue]
 other = "Cannot continue the search!"
+
 [prepare_error]
 other = "An error occurred and the next step could not be prepared.\nIf another program, like Minecraft, is currently accessing your mods, please close it.\n\nPlease check the application log for details."
+
 [problematic_mods_removed]
 other = "Known Problematic Mod(s) Removed"
+
 [problematic_mods_removed_message]
 other = "The following mod(s), which were part of a known conflict set, have been detected as missing. This is expected. The search will now proceed with the updated mod list."
+
 [disabled_mods]
 other = "Disabled Mods"
+
 [disabled_mods_message]
 other = "The following mods were automatically disabled due to unmet dependencies:"
+
 [missing_mod_files]
 other = "Missing Mod Files Detected"
+
 [missing_mod_files_message]
 other = "The following mod files were unexpectedly missing. Do you want to continue the search without them?"
+
 [mod_tag_dependency]
 other = "dependency"
+
 [mod_tag_always]
 other = "always"
 
 [undo_last_step]
 other = "Undo Last Step"
+
 [undo_confirm]
 other = "Are you sure you want to undo the last step?"
+
 [cannot_undo]
 other = "Cannot Undo"
+
 [nothing_to_undo]
 other = "Nothing left to undo."
+
 [undo_failed]
 other = "The undo operation failed."
+
 [conflict_set]
 other = "Conflict Set"
+
 [remaining_candidates]
 one = "Remaining Candidate ({{.Count}})"
 other = "Remaining Candidates ({{.Count}})"
+
 [initializing]
 other = "Initializing..."
+
 [start_bisection_button]
 other = "▶  Start Bisection"
+
 [search_halted]
 other = "Search Halted"
+
 [search_halted_description]
 other = "The search stopped because two groups of mods appear to depend on each other.\nThe halt page shows the two groups; resolve one of the involved mods and start a new search."
+
 [view_halted_groups]
 other = "View Halted Groups"
+
 [verifying_final_set]
 other = "Verifying final set..."
+
 [verification_step_description]
 other = "The next test verifies that the found set of mods is the cause of the issue. If the issue DOES NOT persist, a new round of tests is started to find other problematic mods."
+
 [verification_step]
 other = "▶  Verification Step"
+
 [ready_to_begin]
 other = "Ready to begin"
+
 [ready_to_begin_description]
 other = "This tool uses binary search to isolate problematic mods.\nEach test halves the candidate set, finding conflicts efficiently.\nClose the game if it is currently open!\nBe ready to start the game when prompted."
+
 [world_backup_prefix]
 other = "Make a "
+
 [world_backup_word]
 other = "backup"
+
 [world_backup_suffix]
 other = " of worlds you load!"
+
 [crash_assistant_detected]
 other = "Crash Assistant Detected"
+
 [crash_assistant_disable_question]
 other = "Crash Assistant can slow down the search. Do you want to disable it?"
+
 [round_iteration]
 other = "Round {{.Round}} · Iteration {{.Iteration}}"
+
 [estimated_tests]
 other = "Step {{.Step}} of ~{{.Max}} estimated tests."
+
 [next_step_button]
 other = "▶  Next Step"
+
 [undo]
 other = "↩  Undo"
+
 [verification_test]
 other = "Verification Test"
+
 [verification_test_description]
 other = "Start Minecraft with the current active mod set and verify whether your issue is still present.\n\n✗ Broken\n  The issue is still there (confirms the found conflict set is correct).\n\n✓ Works\n  The issue is gone (suggests the set is incomplete).\n\n? Can't Tell\n  The game crashed or you cannot observe whether the issue is present."
+
 [bisection_test]
 other = "Bisection Test"
+
 [bisection_test_description]
 other = "Start Minecraft with the current active mod set and verify whether your issue is resolved.\n\n✓ Works\n  The game runs fine and the issue is gone.\n\n✗ Broken\n  The issue is still present in the game.\n\n? Can't Tell\n  The game crashed or you cannot observe whether the issue is present."
+
 [active_mods]
 one = "Active mod ({{.Count}})"
 other = "Active mods ({{.Count}})"
+
 [works]
 other = "✓ Works"
+
 [cant_tell]
 other = "? Can't Tell"
+
 [broken]
 other = "✗ Broken"
+
 [cancel_test]
 other = "Cancel Test"
 
 [reset_search]
 other = "Reset Search"
+
 [reset_search_confirm]
 other = "This will discard all search progress and start over. Continue?"
+
 [back_to_main]
 other = "Back to Main"
+
 [halt_description]
 other = "The search cannot continue because the two groups below depend on each other through undeclared dependencies: at least one mod in each group silently needs a mod from the other group to run. This is a very rare and unfortunate situation, and the tool cannot tell which group causes the problem.\n\nTo proceed, remove or fix one of the involved mods and start a new search."
+
 [group_a]
 other = "Group A"
+
 [group_b]
 other = "Group B"
+
 [continue_search]
 other = "Continue Search"
+
 [continue_search_confirm]
 other = "This will start a new search for the next conflict set within the remaining mods. Continue?"
+
 [search_in_progress]
 other = "Search In Progress"
+
 [bisection_complete]
 other = "Bisection Complete"
+
 [restart_bisection]
 other = "Restart Bisection"
+
 [next_step_plain]
 other = "Next Step"
+
 [current_conflict]
 other = "Current Conflict"
+
 [single_mod_resolves]
 other = "Disabling any single mod in this group will resolve the issue:"
+
 [independent_conflict_set]
 other = "Independent Conflict Set #{{.Number}}"
+
 [unresolved_dependencies]
 other = "Mods with Unresolved Dependencies"
+
 [unresolved_dependencies_description]
 other = "These mods have separate dependency issues that may require manual review:"
+
 [no_conflicts]
 other = "No Conflicts Found"
+
 [no_conflicts_description]
 other = "The bisection process completed without isolating a specific cause for failure. The issue might be external to the mods in this folder."
+
 [what_next]
 other = "What to do next"
+
 [result_complete_explanation]
 other = "To fix each conflict, disable one mod from that conflict's list and relaunch the game.\n\nOnce confirmed, please consider reporting the incompatibility to the respective mod authors."
+
 [result_verification_explanation]
 other = "A new conflicting mod was found, but it is not yet known if more are involved.\n\nYou can already fix this conflict by disabling one of the mods above.\n\nOr continue the search to verify whether the conflict set is complete."
+
 [result_incomplete_explanation]
 other = "The current conflict involves more mods than found so far.\n\nYou can already fix this conflict by disabling one of the mods above.\n\nOr continue the search to find the remaining mods."
+
 [still_issues]
 other = "Still having issues?"
+
 [still_issues_description]
 other = "If you disabled the mods above but your game still has the issue, there might be additional conflicting mods. You can continue the bisection process to find them among the remaining candidates."
+
 [show_cleared_mods]
 other = "Show Cleared Mods"
+
 [hide_cleared_mods]
 other = "Hide Cleared Mods"
+
 [cleared_mods_count]
 other = "{{.Label}} ({{.Count}})"
+
 [unknown_jar]
 other = "Unknown Jar File"
+
 [cascade_disable]
 other = "Disabling this mod also requires disabling:"
+
 [at_least_one_more]
 other = "And at least one more..."
+
 [possibly_more]
 other = "And possibly more..."
+
 [cascade_all_disable]
 other = "If you disable all mods in this conflict, you must also disable:"
+
 [unresolved_or_unmet]
 other = "Unresolved or unmet dependencies:"
+
 [cascade_disable_would]
 other = "Disabling this mod would also require disabling:"
+
 [from_unknown]
 other = "from unknown"
+
 [from_jar]
 other = "{{.ID}} from '{{.File}}.jar'"
+
 [initial_mod_state]
 other = "Mod State Before Search"
+
 [initial_mod_state_description]
 other = "Keep known-disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing. The omission choices are below."
+
 [all]
 other = "All"
+
 [none]
 other = "None"
+
 [keep_mods_disabled]
 other = "Keep Mods Disabled"
 

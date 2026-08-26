@@ -59,7 +59,7 @@ other = "Bu işlem yalnızca birkaç saniye sürmelidir."
 other = "Etkin Kalacak Modları Seç"
 
 [select_mods_description]
-other = "Soruna neyin sebep olduğunu bilmiyorsan her şeyi işaretsiz bırakıp İleri'ye tıkla.\n\nSorunun belirli bir modla (örneğin gölgelendirici modu) ilgili olduğunu biliyorsan buradan seç.\n\nBu, tüm testler boyunca etkin kalmasını sağlar, böylece araç neyle çakıştığını bulabilir."
+other = "Soruna neyin sebep olduğunu bilmiyorsan her şeyi işaretsiz bırakıp Devam Et'e tıkla.\n\nSorunun belirli bir modla (örneğin gölgelendirici modu) ilgili olduğunu biliyorsan buradan seç.\n\nBu, tüm testler boyunca etkin kalmasını sağlar, böylece araç neyle çakıştığını bulabilir."
 
 [next_step]
 other = "Sonraki Adım ▶"

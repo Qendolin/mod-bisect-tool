@@ -59,7 +59,7 @@ other = "Powinno to zająć tylko kilka sekund."
 other = "Wybierz mody, które mają pozostać włączone"
 
 [select_mods_description]
-other = "Jeśli nie wiesz, co powoduje problem, pozostaw wszystko odznaczone i kliknij Dalej.\n\nJeśli wiesz, że problem dotyczy konkretnego modu (np. modu na shadery), zaznacz go tutaj.\n\nDzięki temu pozostanie włączony podczas wszystkich testów, a narzędzie znajdzie, z czym powoduje konflikt."
+other = "Jeśli nie wiesz, co powoduje problem, pozostaw wszystko odznaczone i kliknij Kontynuuj.\n\nJeśli wiesz, że problem dotyczy konkretnego modu (np. modu na shadery), zaznacz go tutaj.\n\nDzięki temu pozostanie włączony podczas wszystkich testów, a narzędzie znajdzie, z czym powoduje konflikt."
 
 [next_step]
 other = "Następny krok ▶"

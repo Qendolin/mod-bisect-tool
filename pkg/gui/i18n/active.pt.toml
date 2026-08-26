@@ -59,7 +59,7 @@ other = "Isto só deve demorar alguns segundos."
 other = "Selecionar mods a manter ativados"
 
 [select_mods_description]
-other = "Se não sabes o que está a causar o problema, deixa tudo desmarcado e clica em Seguinte.\n\nSe sabes que o problema envolve um mod específico (como um mod de shaders), marca-o aqui.\n\nIsto garante que ele permaneça ativado durante todos os testes para que a ferramenta possa encontrar com o que está em conflito."
+other = "Se não sabes o que está a causar o problema, deixa tudo desmarcado e clica em Continuar.\n\nSe sabes que o problema envolve um mod específico (como um mod de shaders), marca-o aqui.\n\nIsto garante que ele permaneça ativado durante todos os testes para que a ferramenta possa encontrar com o que está em conflito."
 
 [next_step]
 other = "Próximo passo ▶"
@@ -190,14 +190,19 @@ other = "Pronto para começar"
 
 [ready_to_begin_description]
 other = "Esta ferramenta utiliza uma pesquisa binária para isolar mods problemáticos.\nCada teste divide o grupo de candidatos ao meio, encontrando conflitos de forma eficiente.\nFecha o jogo se estiver aberto!\nPrepara-te para iniciar o jogo quando solicitado."
+
 [world_backup_prefix]
 other = "Faz um "
+
 [world_backup_word]
 other = "backup"
+
 [world_backup_suffix]
 other = " dos mundos que carregares!"
+
 [crash_assistant_detected]
 other = "Crash Assistant detetado"
+
 [crash_assistant_disable_question]
 other = "O Crash Assistant pode tornar a pesquisa mais lenta. Queres desativá-lo?"
 
@@ -351,8 +356,10 @@ other = "de origem desconhecida"
 
 [from_jar]
 other = "{{.ID}} de '{{.File}}.jar'"
+
 [initial_mod_state]
 other = "Estado dos mods antes da pesquisa"
+
 [initial_mod_state_description]
 other = "Mantém desativados os mods que já estavam desativados ou omite outros mods da pesquisa se já souberes que são bons, maus ou perturbadores durante os testes. As opções para os omitir estão abaixo."
 
@@ -364,5 +371,6 @@ other = "Omitir mods da pesquisa"
 
 [all]
 other = "Todos"
+
 [none]
 other = "Nenhum"
