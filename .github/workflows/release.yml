@@ -11,6 +11,8 @@ jobs:
   releases-matrix-tui:
     name: Release Go TUI Binary
     runs-on: ubuntu-latest
+    env:
+      GOFLAGS: -trimpath
     strategy:
       matrix:
         goos: [linux, windows, darwin]
@@ -30,6 +32,7 @@ jobs:
             -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppDistribution=${{ matrix.goos }}-binary'
             -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppVersion=${{ github.event.release.tag_name }}'
             -X 'github.com/Qendolin/mod-bisect-tool/pkg/app.AppRevision=${{ github.sha }}'
+            -s -w
 
   # --- JOB 2: Build Standalone GUI Binaries ---
   releases-matrix-gui:

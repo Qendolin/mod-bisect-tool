@@ -40,6 +40,7 @@ def run(
 
 def build_ldflags(distribution: str, git_tag: str, git_revision: str) -> str:
     return (
+        "-s -w "
         f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppDistribution={distribution} "
         f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppVersion={git_tag} "
         f"-X github.com/Qendolin/mod-bisect-tool/pkg/app.AppRevision={git_revision}"
@@ -180,6 +181,7 @@ def build_linux(
         "-o",
         str(bin_dir / "mod-bisect-gui"),
         ".",
+        extra_env={"GOFLAGS": "-trimpath"},
         cwd=project_dir,
     )
 
@@ -255,6 +257,7 @@ def build_windows(
         project_dir,
         app_id,
         ldflags=f"-H windowsgui {build_ldflags('windows-binary', git_tag, git_revision)}",
+        extra_env={"GOFLAGS": "-trimpath"},
     )
     certificate_password = os.environ.get("WINDOWS_SIGNING_CERTIFICATE_PASSWORD")
     with windows_signing_certificate() as certificate:
@@ -327,7 +330,10 @@ def build_darwin(
         project_dir,
         app_id,
         ldflags=build_ldflags("darwin-app", git_tag, git_revision),
-        extra_env={"MACOSX_DEPLOYMENT_TARGET": MACOS_MIN_VERSION},
+        extra_env={
+            "GOFLAGS": "-trimpath",
+            "MACOSX_DEPLOYMENT_TARGET": MACOS_MIN_VERSION,
+        },
     )
     if not app.exists():
         raise FileNotFoundError(f"gogio did not produce the expected .app {app}")
