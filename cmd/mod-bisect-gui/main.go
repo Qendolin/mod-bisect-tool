@@ -36,19 +36,16 @@ func main() {
 
 		cliArgs := app.ParseCLIArgs()
 
-		mainLogger := logging.NewLogger()
-
-		logFile, logPath, err := logging.OpenLogFile(app.AppCommonName, app.AppGuiName, cliArgs.LogDir)
+		mainLogger, logFile, logPath, err := logging.ConfigureLogger(app.AppCommonName, app.AppGuiName, cliArgs.LogDir, cliArgs.NoLogFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Fatal: could not open a log file: %v\n", err)
 			zenity.Error(err.Error(), zenity.Title("Failed to create log file"))
 			os.Exit(1)
 		}
-		defer logFile.Close()
-		fmt.Fprintf(os.Stderr, "Logging to %s\n", logPath)
-
-		mainLogger.SetWriter(logFile)
-		logging.SetDefault(mainLogger)
+		if logFile != nil {
+			defer logFile.Close()
+			fmt.Fprintf(os.Stderr, "Logging to %s\n", logPath)
+		}
 
 		if cliArgs.Verbose {
 			mainLogger.SetDebug(true)

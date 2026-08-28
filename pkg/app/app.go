@@ -1,10 +1,7 @@
 package app
 
 import (
-	"bytes"
 	"fmt"
-	"os"
-	"path/filepath"
 	"slices"
 	"sort"
 	"strings"
@@ -12,7 +9,6 @@ import (
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/bisect"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
-	"github.com/Qendolin/mod-bisect-tool/pkg/embeds"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
@@ -63,7 +59,7 @@ func (a *App) StartLoadingProcess(modsPath string, loader mods.RunLoader) {
 
 	go func() {
 		defer logging.HandlePanic()
-		overrides := a.loadAndMergeOverrides(modsPath)
+		overrides := loadAndMergeOverrides(modsPath, a.cliArgs)
 
 		modLoader := mods.ModLoader{ModParser: mods.ModParser{RunLoader: loader}, Adapter: a.adapter}
 		logging.Infof("App: Loading mods from '%s', Loader: %s", modsPath, loader.String())
@@ -237,52 +233,4 @@ func (a *App) showReconciliationReport(report *bisect.ActionReport) {
 		return
 	}
 	logging.Info("App: Reconciliation report has no 'Unresolvable Mods' changes. This is odd.")
-}
-
-// loadAndMergeOverrides handles the layered loading and merging of dependency overrides.
-func (a *App) loadAndMergeOverrides(modsPath string) *mods.DependencyOverrides {
-	var allOverrides []*mods.DependencyOverrides
-
-	cwd, _ := os.Getwd()
-	cwdPath := filepath.Join(cwd, "fabric_loader_dependencies.json")
-
-	if AppDistribution == AppDistributionDarwinApp {
-		// Reading from the cwd for an installed app doesn't make sense.
-		home, err := os.UserHomeDir()
-		if err != nil {
-			logging.Warnf("App: Could not determine user home directory: %v", err)
-		} else {
-			cwdPath = filepath.Join(home, "Library", "Application Support", AppCommonName, "fabric_loader_dependencies.json")
-		}
-	}
-
-	if cwdOverrides, err := mods.LoadDependencyOverridesFromPath(cwdPath, mods.OverrideSourceUserProvided); err != nil {
-		if !os.IsNotExist(err) {
-			logging.Warnf("App: Could not load dependency overrides from '%s': %v", cwdPath, err)
-		}
-	} else {
-		logging.Infof("App: Loaded dependency overrides from current directory.")
-		allOverrides = append(allOverrides, cwdOverrides)
-	}
-
-	configPath := filepath.Join(modsPath, "..", "config", "fabric_loader_dependencies.json")
-	if configOverrides, err := mods.LoadDependencyOverridesFromPath(configPath, mods.OverrideSourceUserProvided); err != nil {
-		if !os.IsNotExist(err) {
-			logging.Warnf("App: Could not load dependency overrides from '%s': %v", configPath, err)
-		}
-	} else {
-		logging.Infof("App: Loaded dependency overrides from config directory.")
-		allOverrides = append(allOverrides, configOverrides)
-	}
-
-	if !a.cliArgs.NoEmbeddedOverrides {
-		if embedded, err := mods.LoadDependencyOverrides(bytes.NewReader(embeds.GetEmbeddedOverrides()), mods.OverrideSourceBuiltin); err != nil {
-			logging.Errorf("App: Failed to load embedded dependency overrides: %v", err)
-		} else {
-			logging.Infof("App: Loaded embedded dependency overrides.")
-			allOverrides = append(allOverrides, embedded)
-		}
-	}
-
-	return mods.MergeDependencyOverrides(allOverrides...)
 }

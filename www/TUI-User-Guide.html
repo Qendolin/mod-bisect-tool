@@ -314,6 +314,15 @@
             think a built-in fix is causing problems.
           </li>
           <li>
+            <code>--dependency-overrides &lt;path&gt;</code>: Loads one extra
+            dependency override file in addition to the built-in and per-folder
+            defaults. This is useful for custom project-specific fixes.
+          </li>
+          <li>
+            <code>--no-log-file</code>: Skips creating a persistent log file and
+            keeps logging in memory only.
+          </li>
+          <li>
             <code>--verbose</code>: Turns on detailed debug logging. The log
             file (<code>bisect-tool.log</code>) will contain much more
             information, which is useful for bug reports.
@@ -337,7 +346,7 @@
         <p>
           Sometimes a mod author forgets to list a dependency in their metadata.
           This tool can add or remove those entries with a file named
-          <code>fabric_loader_dependencies.json</code>.<br />
+          <code>dependency_overrides.json</code>.<br />
           This tool also extends the standard format with the ability to
           override the
           <code>provides</code> field, which is useful for fixing complex

@@ -35,8 +35,15 @@ func main() {
 	cliArgs := app.ParseCLIArgs()
 
 	// 1. Setup logging first.
-	mainLogger, logFile := setupLogging(cliArgs)
-	defer logFile.Close()
+	mainLogger, logFile, logPath, err := logging.ConfigureLogger(app.AppCommonName, app.AppTuiName, cliArgs.LogDir, cliArgs.NoLogFile)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Fatal: could not open a log file: %v\n", err)
+		os.Exit(1)
+	}
+	if logFile != nil {
+		defer logFile.Close()
+		fmt.Fprintf(os.Stderr, "Logging to %s\n", logPath)
+	}
 	if cliArgs.Verbose {
 		mainLogger.SetDebug(true)
 		logging.Infof("Main: Verbose logging enabled.")
@@ -95,23 +102,6 @@ func handleShutdown(a *app.App, tuiApp *tuiapp.App, shutdownCh chan os.Signal, c
 			})
 		}
 	}
-}
-
-// setupLogging configures the main logger, creating the log directory and a
-// timestamped log file. The returned file must be closed by the caller.
-func setupLogging(cliArgs *app.CLIArgs) (*logging.Logger, *os.File) {
-	mainLogger := logging.NewLogger()
-
-	logFile, logPath, err := logging.OpenLogFile(app.AppCommonName, app.AppTuiName, cliArgs.LogDir)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal: could not open a log file: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Fprintf(os.Stderr, "Logging to %s\n", logPath)
-
-	mainLogger.SetWriter(logFile)
-	logging.SetDefault(mainLogger)
-	return mainLogger, logFile
 }
 
 // logStartupInfo writes diagnostics about the current environment to the log.

@@ -267,7 +267,7 @@ func (a OverrideAction) String() string {
 type OverrideSource int
 
 const (
-	// OverrideSourceBuiltin indicates an override from the embedded fabric_loader_dependencies.json
+	// OverrideSourceBuiltin indicates an override from the embedded dependency_overrides.json
 	OverrideSourceBuiltin OverrideSource = iota
 	// OverrideSourceUserProvided indicates an override from a user-provided config file
 	OverrideSourceUserProvided

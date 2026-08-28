@@ -9,6 +9,24 @@ import (
 	"time"
 )
 
+// ConfigureLogger creates a logger and optionally opens a file-based sink.
+// When disableFile is true, the logger stays in-memory only and no file is opened.
+func ConfigureLogger(appName string, prefix string, preferredDir string, disableFile bool) (*Logger, *os.File, string, error) {
+	logger := NewLogger()
+	if disableFile {
+		SetDefault(logger)
+		return logger, nil, "", nil
+	}
+
+	logFile, logPath, err := OpenLogFile(appName, prefix, preferredDir)
+	if err != nil {
+		return nil, nil, "", err
+	}
+	logger.SetWriter(logFile)
+	SetDefault(logger)
+	return logger, logFile, logPath, nil
+}
+
 // userLogDir returns the conventional per-user log directory for the
 // current OS. It does not create the directory.
 func userLogDir(appName string) (string, error) {
