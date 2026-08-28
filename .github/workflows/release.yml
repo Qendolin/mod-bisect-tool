@@ -41,9 +41,10 @@ jobs:
           # Linux: native runners per arch (CGO required)
           - { goos: linux, goarch: amd64, runner: ubuntu-latest }
           - { goos: linux, goarch: arm64, runner: ubuntu-24.04-arm }
-          # Windows: pure-Go cross-compilation (CGO disabled), packaged via gogio
-          - { goos: windows, goarch: amd64, runner: ubuntu-latest }
-          - { goos: windows, goarch: arm64, runner: ubuntu-latest }
+          # Windows: pure-Go builds (CGO disabled), packaged and optionally signed
+          # via signtool on a native runner.
+          - { goos: windows, goarch: amd64, runner: windows-latest }
+          - { goos: windows, goarch: arm64, runner: windows-latest }
           # macOS: native runners — cross-compiling macOS/CGO from Linux requires
           # a full osxcross setup that is fragile and SDK-license-constrained.
           # macos-15-intel = last Intel runner; macos-latest = Apple Silicon (arm64).
@@ -97,8 +98,16 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           # Windows is pure-Go; Linux and macOS require CGO.
           CGO_ENABLED: ${{ matrix.goos == 'windows' && '0' || '1' }}
+          WINDOWS_SIGNING_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_SIGNING_CERTIFICATE_BASE64 }}
+          WINDOWS_SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERTIFICATE_PASSWORD }}
+          MACOS_SIGNING_CERTIFICATE_BASE64: ${{ secrets.MACOS_SIGNING_CERTIFICATE_BASE64 }}
+          MACOS_SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_SIGNING_CERTIFICATE_PASSWORD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
         run: >
-          python3 scripts/build_gui.py
+          python scripts/build_gui.py
           --goos    ${{ matrix.goos }}
           --goarch  ${{ matrix.goarch }}
           --tag     ${{ github.event.release.tag_name }}

@@ -3,7 +3,8 @@
 
 Uses the gogio tool for Windows (icon embedding, GUI subsystem) and macOS (.app
 bundle + zip), and a plain `go build` for Linux (CGO), which is packaged as an
-AppImage.
+AppImage. Windows Authenticode signing and macOS Developer ID signing are
+enabled by environment variables when credentials are available.
 
 Usage:
     python3 scripts/build_gui.py --goos linux --goarch amd64 --tag v1.2.0
@@ -12,10 +13,15 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import base64
+import contextlib
 import os
 import shutil
 import stat
 import subprocess
+import tempfile
+import uuid
+from collections.abc import Generator
 from pathlib import Path
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -68,6 +74,83 @@ def gogio_build(
         args.extend(["-ldflags", ldflags])
     args.append(".")
     run(*args, extra_env=extra_env, cwd=project_dir)
+
+
+@contextlib.contextmanager
+def windows_signing_certificate() -> Generator[str, None, None]:
+    """Decode the optional PFX secret into a temporary file."""
+    encoded = os.environ.get("WINDOWS_SIGNING_CERTIFICATE_BASE64")
+    if not encoded:
+        yield ""
+        return
+
+    try:
+        certificate = base64.b64decode(encoded, validate=True)
+    except ValueError as exc:
+        raise RuntimeError(
+            "WINDOWS_SIGNING_CERTIFICATE_BASE64 is not valid base64"
+        ) from exc
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        path = Path(temp_dir) / "mod-bisect-signing.pfx"
+        path.write_bytes(certificate)
+        yield str(path)
+
+
+@contextlib.contextmanager
+def macos_signing_keychain() -> Generator[None, None, None]:
+    """Import the optional PKCS#12 secret into an ephemeral macOS keychain."""
+    encoded = os.environ.get("MACOS_SIGNING_CERTIFICATE_BASE64")
+    if not encoded:
+        yield
+        return
+
+    password = os.environ.get("MACOS_SIGNING_CERTIFICATE_PASSWORD")
+    identity = os.environ.get("MACOS_SIGNING_IDENTITY")
+    if not password or not identity:
+        raise RuntimeError(
+            "MACOS_SIGNING_CERTIFICATE_PASSWORD and MACOS_SIGNING_IDENTITY "
+            "are required when MACOS_SIGNING_CERTIFICATE_BASE64 is set"
+        )
+    try:
+        certificate = base64.b64decode(encoded, validate=True)
+    except ValueError as exc:
+        raise RuntimeError(
+            "MACOS_SIGNING_CERTIFICATE_BASE64 is not valid base64"
+        ) from exc
+
+    keychain = Path(tempfile.gettempdir()) / f"mod-bisect-{uuid.uuid4()}.keychain-db"
+    keychain_password = uuid.uuid4().hex
+    certificate_path = keychain.with_suffix(".p12")
+    certificate_path.write_bytes(certificate)
+    try:
+        run("security", "create-keychain", "-p", keychain_password, str(keychain))
+        run("security", "set-keychain-settings", "-lut", "21600", str(keychain))
+        run("security", "unlock-keychain", "-p", keychain_password, str(keychain))
+        run(
+            "security",
+            "import",
+            str(certificate_path),
+            "-P",
+            password,
+            "-A",
+            "-t",
+            "cert",
+            "-f",
+            "pkcs12",
+            str(keychain),
+        )
+        run("security", "list-keychains", "-d", "user", "-s", str(keychain))
+        run("security", "default-keychain", "-s", str(keychain))
+        yield
+    finally:
+        subprocess.run(
+            ["security", "delete-keychain", str(keychain)],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        certificate_path.unlink(missing_ok=True)
 
 
 # ── Linux ─────────────────────────────────────────────────────────────────────
@@ -173,6 +256,37 @@ def build_windows(
         app_id,
         ldflags=f"-H windowsgui {build_ldflags('windows-binary', git_tag, git_revision)}",
     )
+    certificate_password = os.environ.get("WINDOWS_SIGNING_CERTIFICATE_PASSWORD")
+    with windows_signing_certificate() as certificate:
+        if certificate and not certificate_password:
+            raise RuntimeError(
+                "WINDOWS_SIGNING_CERTIFICATE_PASSWORD is required when "
+                "WINDOWS_SIGNING_CERTIFICATE_BASE64 is set"
+            )
+        if certificate:
+            run(
+                os.environ.get("WINDOWS_SIGNTOOL", "signtool"),
+                "sign",
+                "/fd",
+                "SHA256",
+                "/f",
+                certificate,
+                "/p",
+                certificate_password,
+                "/tr",
+                os.environ.get(
+                    "WINDOWS_TIMESTAMP_URL", "http://timestamp.digicert.com"
+                ),
+                "/td",
+                "SHA256",
+                str(exe),
+            )
+        else:
+            print(
+                "WINDOWS_SIGNING_CERTIFICATE_BASE64 is not set; "
+                "leaving executable unsigned"
+            )
+
     shutil.move(exe, dist / f"mod-bisect-gui-{git_tag}-windows-{goarch}.exe")
 
 
@@ -245,11 +359,54 @@ def build_darwin(
     for key, value in plist_fields.items():
         run("plutil", "-replace", key, "-string", value, str(plist_path))
 
-    # Sign the bundle ad-hoc before zipping
-    run("codesign", "--force", "--deep", "--sign", "-", str(app))
+    signing_identity = os.environ.get("MACOS_SIGNING_IDENTITY")
+    with macos_signing_keychain():
+        if signing_identity:
+            run(
+                "codesign",
+                "--force",
+                "--deep",
+                "--options",
+                "runtime",
+                "--timestamp",
+                "--sign",
+                signing_identity,
+                str(app),
+            )
+        else:
+            # Ad-hoc signing keeps local and unsigned CI builds launchable for testing.
+            print("MACOS_SIGNING_IDENTITY is not set; using an ad-hoc signature")
+            run("codesign", "--force", "--deep", "--sign", "-", str(app))
 
     output = dist / f"mod-bisect-gui-{git_tag}-darwin-{goarch}.zip"
     run("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", str(app), str(output))
+
+    apple_id = os.environ.get("APPLE_ID")
+    team_id = os.environ.get("APPLE_TEAM_ID")
+    app_password = os.environ.get("APPLE_APP_SPECIFIC_PASSWORD")
+    if any((apple_id, team_id, app_password)):
+        if not all((apple_id, team_id, app_password)):
+            raise RuntimeError(
+                "APPLE_ID, APPLE_TEAM_ID, and APPLE_APP_SPECIFIC_PASSWORD "
+                "must all be set for notarization"
+            )
+        run(
+            "xcrun",
+            "notarytool",
+            "submit",
+            str(output),
+            "--apple-id",
+            apple_id,
+            "--team-id",
+            team_id,
+            "--password",
+            app_password,
+            "--wait",
+        )
+        run("xcrun", "stapler", "staple", str(app))
+        run("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", str(app), str(output))
+    elif signing_identity:
+        print("Notarization credentials are not set; leaving the signed app unstapled")
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────
