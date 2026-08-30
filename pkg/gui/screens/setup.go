@@ -304,11 +304,11 @@ func (s *SetupScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dime
 // probeLoader queues a probe of the given path, updating the recommended loader
 // unless the user has made a manual selection. Probes run one at a time.
 func (s *SetupScreen) probeLoader(path string, after func()) {
-	path = probe.ResolveModsDir(path)
-	if !probe.IsValidDir(path) {
+	resolved := probe.ResolveModsDir(path)
+	if !probe.IsValidDir(resolved) {
 		return
 	}
-	s.probeWorker.Request(path, func(res probe.ProbeResult) {
+	s.probeWorker.Request(resolved, func(res probe.ProbeResult) {
 		s.app.Run(func() {
 			if path != s.pathEditor.Text() {
 				return
