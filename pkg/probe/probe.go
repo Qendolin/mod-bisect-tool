@@ -22,6 +22,47 @@ func IsValidDir(path string) bool {
 	return err == nil && info.IsDir()
 }
 
+// ResolveModsDir returns the actual mods directory for a user-supplied path.
+// Users sometimes enter the path to the Minecraft instance directory instead of
+// the mods folder itself. If path itself contains mod jars it is returned
+// unchanged; otherwise common instance layouts are checked in order:
+// <path>/mods and <path>/.minecraft/mods. If neither contains mod jars, the
+// original path is returned unchanged so callers report errors normally.
+func ResolveModsDir(path string) string {
+	if !IsValidDir(path) {
+		return path
+	}
+	if containsModJars(path) {
+		return path
+	}
+	for _, sub := range []string{"mods", filepath.Join(".minecraft", "mods")} {
+		candidate := filepath.Join(path, sub)
+		if containsModJars(candidate) {
+			return candidate
+		}
+	}
+	return path
+}
+
+// containsModJars reports whether dir contains any mod files (.jar or
+// .jar.disabled), matching the loader's filterJarFiles behavior.
+func containsModJars(dir string) bool {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return false
+	}
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+		name := entry.Name()
+		if strings.HasSuffix(name, ".jar") || strings.HasSuffix(name, ".jar.disabled") {
+			return true
+		}
+	}
+	return false
+}
+
 // ProbeResult contains the findings of the directory probe.
 type ProbeResult struct {
 	// PrimaryLoader is the loader the probe recommends based on the detected

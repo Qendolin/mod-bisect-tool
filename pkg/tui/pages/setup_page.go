@@ -102,7 +102,7 @@ func NewSetupPage(app tui.TUIApp) *SetupPage {
 			return
 		}
 		loader := p.selectedLoader()
-		app.StartLoadingProcess(filepath.Clean(cleaned), loader)
+		app.StartLoadingProcess(probe.ResolveModsDir(filepath.Clean(cleaned)), loader)
 	})
 	widgets.DefaultStyleButton(p.loadButton)
 
@@ -194,6 +194,7 @@ func (p *SetupPage) selectedLoader() mods.RunLoader {
 // probeLoader queues a probe of the given path, updating the recommended loader
 // unless the user has made a manual selection. Probes run one at a time.
 func (p *SetupPage) probeLoader(path string) {
+	path = probe.ResolveModsDir(path)
 	p.probeWorker.Request(path, func(res probe.ProbeResult) {
 		p.app.ExecuteAndDraw(func() {
 			if !p.userSelectedLoader && res.PrimaryLoader != "" {

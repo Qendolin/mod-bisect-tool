@@ -158,3 +158,101 @@ func TestProbeModsDirectory(t *testing.T) {
 		})
 	}
 }
+
+func TestResolveModsDir(t *testing.T) {
+	tests := []struct {
+		name     string
+		setup    func(t *testing.T, root string)
+		input    func(t *testing.T, root string) string
+		expected func(t *testing.T, root string) string
+	}{
+		{
+			name: "Path_with_jars_is_unchanged",
+			setup: func(t *testing.T, root string) {
+				fabricJar(t, root, "a.jar", "mod_a")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return root },
+		},
+		{
+			name: "Path_with_only_disabled_jars_is_unchanged",
+			setup: func(t *testing.T, root string) {
+				fabricJar(t, root, "a.jar.disabled", "mod_a")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return root },
+		},
+		{
+			name: "Mods_subdirectory",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				fabricJar(t, filepath.Join(root, "mods"), "a.jar", "mod_a")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, "mods") },
+		},
+		{
+			name: "Minecraft_mods_subdirectory",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, ".minecraft", "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				fabricJar(t, filepath.Join(root, ".minecraft", "mods"), "a.jar", "mod_a")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, ".minecraft", "mods") },
+		},
+		{
+			name: "Mods_subdirectory_wins_over_minecraft_mods",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				if err := os.MkdirAll(filepath.Join(root, ".minecraft", "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				fabricJar(t, filepath.Join(root, "mods"), "a.jar", "mod_a")
+				fabricJar(t, filepath.Join(root, ".minecraft", "mods"), "b.jar", "mod_b")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, "mods") },
+		},
+		{
+			name:     "Empty_directory_is_unchanged",
+			setup:    func(t *testing.T, _ string) {},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return root },
+		},
+		{
+			name: "Empty_mods_subdirectory_is_unchanged",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return root },
+		},
+		{
+			name:     "Non_existent_path_is_unchanged",
+			setup:    func(*testing.T, string) {},
+			input:    func(_ *testing.T, root string) string { return filepath.Join(root, "does-not-exist") },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, "does-not-exist") },
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			tc.setup(t, root)
+
+			got := ResolveModsDir(tc.input(t, root))
+			want := tc.expected(t, root)
+			if got != want {
+				t.Errorf("expected %s, got %s", want, got)
+			}
+		})
+	}
+}

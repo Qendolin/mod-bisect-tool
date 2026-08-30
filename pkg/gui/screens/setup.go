@@ -304,6 +304,7 @@ func (s *SetupScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dime
 // probeLoader queues a probe of the given path, updating the recommended loader
 // unless the user has made a manual selection. Probes run one at a time.
 func (s *SetupScreen) probeLoader(path string, after func()) {
+	path = probe.ResolveModsDir(path)
 	if !probe.IsValidDir(path) {
 		return
 	}
@@ -329,7 +330,7 @@ func (s *SetupScreen) startLoading(path string) {
 	// dropdown can update it concurrently, so reading it here avoids a data race.
 	s.app.Run(func() {
 		defer logging.HandlePanic()
-		s.app.StartLoadingProcess(path, s.selectedLoader())
+		s.app.StartLoadingProcess(probe.ResolveModsDir(path), s.selectedLoader())
 	})
 }
 
