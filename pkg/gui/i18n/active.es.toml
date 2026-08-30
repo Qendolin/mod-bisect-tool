@@ -361,7 +361,7 @@ other = "{{.ID}} de '{{.File}}.jar'"
 other = "Estado de los mods antes de la búsqueda"
 
 [initial_mod_state_description]
-other = "Mantén desactivados los mods que ya estaban desactivados u omite otros mods de la búsqueda si ya sabes que son buenos, malos o molestos durante las pruebas. Las opciones para omitirlos están abajo."
+other = "Mantén desactivados los mods que ya estaban desactivados u omite otros mods de la búsqueda si ya sabes que son buenos, malos o molestos durante las pruebas. Si no estás seguro, déjalo todo desmarcado y haz clic en Continuar."
 
 [all]
 other = "Todos"

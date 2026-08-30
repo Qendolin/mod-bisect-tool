@@ -359,7 +359,7 @@ other = "'{{.File}}.jar' içinden {{.ID}}"
 other = "Arama Öncesi Mod Durumu"
 
 [initial_mod_state_description]
-other = "Önceden devre dışı bırakılmış modları devre dışı tut veya sorunsuz, sorunlu veya test sırasında dikkat dağıtıcı olduğunu bildiğin diğer modları aramadan hariç tut. Hariç tutma seçenekleri aşağıdadır."
+other = "Önceden devre dışı bırakılmış modları devre dışı tut veya sorunsuz, sorunlu veya test sırasında dikkat dağıtıcı olduğunu bildiğin diğer modları aramadan hariç tut. Emin değilsen her şeyi işaretsiz bırakıp Devam Et'e tıkla."
 
 [all]
 other = "Tümü"

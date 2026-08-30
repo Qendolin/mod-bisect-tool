@@ -361,7 +361,7 @@ other = "{{.ID}} de '{{.File}}.jar'"
 other = "Estado dos mods antes da pesquisa"
 
 [initial_mod_state_description]
-other = "Mantém desativados os mods que já estavam desativados ou omite outros mods da pesquisa se já souberes que são bons, maus ou perturbadores durante os testes. As opções para os omitir estão abaixo."
+other = "Mantém desativados os mods que já estavam desativados ou omite outros mods da pesquisa se já souberes que são bons, maus ou perturbadores durante os testes. Se não tens a certeza, deixa tudo desmarcado e clica em Continuar."
 
 [keep_mods_disabled]
 other = "Manter os mods desativados"

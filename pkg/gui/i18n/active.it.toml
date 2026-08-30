@@ -361,7 +361,7 @@ other = "{{.ID}} da '{{.File}}.jar'"
 other = "Stato delle mod prima della ricerca"
 
 [initial_mod_state_description]
-other = "Mantieni disabilitate le mod già disabilitate oppure ometti altre mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Le opzioni per ometterle sono sotto."
+other = "Mantieni disabilitate le mod già disabilitate oppure ometti altre mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Se non sei sicuro, lascia tutto deselezionato e clicca su Continua."
 
 [keep_mods_disabled]
 other = "Mantieni le mod disabilitate"

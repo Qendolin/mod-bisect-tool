@@ -361,7 +361,7 @@ other = "{{.ID}} aus '{{.File}}.jar'"
 other = "Mod-Status vor der Suche"
 
 [initial_mod_state_description]
-other = "Behalte bekannte deaktivierte Mods deaktiviert oder lasse andere Mods aus der Suche aus, wenn du bereits weißt, dass sie gut, schlecht oder beim Testen störend sind. Die Auswahl zum Auslassen findest du unten."
+other = "Behalte bekannte deaktivierte Mods deaktiviert oder lasse andere Mods aus der Suche aus, wenn du bereits weißt, dass sie gut, schlecht oder beim Testen störend sind. Wenn du dir unsicher bist, lasse alles abgewählt und klicke auf Weiter."
 
 [all]
 other = "Alle"

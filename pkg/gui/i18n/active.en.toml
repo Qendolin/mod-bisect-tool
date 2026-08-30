@@ -361,7 +361,7 @@ other = "{{.ID}} from '{{.File}}.jar'"
 other = "Mod State Before Search"
 
 [initial_mod_state_description]
-other = "Keep known-disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing. The omission choices are below."
+other = "Keep known-disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing. If you're unsure leave everything unchecked and click Continue."
 
 [all]
 other = "All"

@@ -365,7 +365,7 @@ other = "{{.ID}} z '{{.File}}.jar'"
 other = "Stan modów przed wyszukiwaniem"
 
 [initial_mod_state_description]
-other = "Pozostaw wyłączone wcześniej wyłączone mody lub pomiń inne mody w wyszukiwaniu, jeśli już wiesz, że są dobre, złe lub przeszkadzają w testach. Opcje pominięcia znajdują się poniżej."
+other = "Pozostaw wyłączone wcześniej wyłączone mody lub pomiń inne mody w wyszukiwaniu, jeśli już wiesz, że są dobre, złe lub przeszkadzają w testach. Jeśli nie masz pewności, pozostaw wszystko odznaczone i kliknij Kontynuuj."
 
 [all]
 other = "Wszystkie"
