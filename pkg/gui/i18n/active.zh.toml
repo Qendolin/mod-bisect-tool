@@ -55,10 +55,10 @@ other = "正在加载模组..."
 [loading_mods_description]
 other = "这通常只需几秒钟。"
 
-[select_mods]
-other = "选择要保持启用的模组"
+[setup_required_mods]
+other = "设置必需的模组"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "如果你不知道是什么导致了问题，请保持全部未勾选并点击“继续”。\n\n如果你确定问题涉及某个特定模组（例如光影模组），请在此处勾选它。\n\n这可确保它在所有测试中保持启用，以便工具找出与其冲突的模组。"
 
 [next_step]
@@ -355,11 +355,11 @@ other = "来自未知来源"
 [from_jar]
 other = "“{{.File}}.jar” 中的 {{.ID}}"
 
-[initial_mod_state]
-other = "搜索前的模组状态"
+[setup_excluded_mods]
+other = "设置排除的模组"
 
-[initial_mod_state_description]
-other = "保持已知已禁用的模组处于禁用状态，或者如果你已知某些模组是正常的、有问题的或在测试中会产生干扰，可以将其从搜索中排除。如果你不确定，请保持全部未勾选并点击“继续”。"
+[setup_excluded_mods_omit]
+other = "如果你已知模组是正常的、有问题的或在测试中会产生干扰，可以将其从搜索中排除。如果你不确定，请保持全部未勾选并点击“继续”。"
 
 [all]
 other = "全部"
@@ -372,3 +372,6 @@ other = "保持模组禁用"
 
 [omit_mods_from_search]
 other = "从搜索中排除模组"
+
+[setup_excluded_mods_keep_disabled]
+other = "保持已禁用的模组处于禁用状态。"

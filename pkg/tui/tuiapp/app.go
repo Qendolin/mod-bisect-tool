@@ -247,8 +247,8 @@ func (a *App) OnUnresolvableMods(mods []ui.UnresolvableModInfo) {
 
 func (a *App) OnInitialModStateSelection(initiallyDisabled []string) {
 	a.ExecuteAndDraw(func() {
-		page := pages.NewInitialModStatePage(a, initiallyDisabled)
-		a.navManager.ShowModal("initial_mod_state", page)
+		page := pages.NewSetupExcludedModsPage(a, initiallyDisabled)
+		a.navManager.ShowModal("setup_excluded_mods", page)
 		if _, present := a.GetViewModel().Mods.Infos["crash_assistant"]; present {
 			a.dialogManager.ShowQuestionDialog("Crash Assistant Detected", "Crash Assistant can slow down the search. Do you want to disable it?", "", true, func() { page.KeepDisabled("crash_assistant") }, nil)
 		}

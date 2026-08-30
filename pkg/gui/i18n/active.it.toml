@@ -55,10 +55,10 @@ other = "Caricamento delle mod in corso..."
 [loading_mods_description]
 other = "Dovrebbe richiedere solo pochi secondi."
 
-[select_mods]
-other = "Seleziona le mod da mantenere attive"
+[setup_required_mods]
+other = "Configura mod richieste"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "Se non sai cosa causa il problema, lascia tutto deselezionato e clicca su Continua.\n\nSe sai che il problema riguarda una mod specifica (come una mod per gli shader), selezionala qui.\n\nQuesto garantirà che rimanga attiva durante tutti i test, permettendo allo strumento di trovare con cosa va in conflitto."
 
 [next_step]
@@ -357,11 +357,11 @@ other = "da origine sconosciuta"
 [from_jar]
 other = "{{.ID}} da '{{.File}}.jar'"
 
-[initial_mod_state]
-other = "Stato delle mod prima della ricerca"
+[setup_excluded_mods]
+other = "Configura mod escluse"
 
-[initial_mod_state_description]
-other = "Mantieni disabilitate le mod già disabilitate oppure ometti altre mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Se non sei sicuro, lascia tutto deselezionato e clicca su Continua."
+[setup_excluded_mods_omit]
+other = "Ometti mod dalla ricerca se sai già che sono buone, problematiche o fastidiose durante i test. Se non sei sicuro, lascia tutto deselezionato e clicca su Continua."
 
 [keep_mods_disabled]
 other = "Mantieni le mod disabilitate"
@@ -374,3 +374,6 @@ other = "Tutte"
 
 [none]
 other = "Nessuna"
+
+[setup_excluded_mods_keep_disabled]
+other = "Mantenere disabilitate le mod già disabilitate."

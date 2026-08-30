@@ -42,7 +42,7 @@ func TestGermanTranslations(t *testing.T) {
 	if got := tr.Text("setup_description", "fallback", nil); got != "Wähle deinen Mod-Ordner aus, um zu beginnen." {
 		t.Fatalf("German setup description = %q, want informal form", got)
 	}
-	description := tr.Text("select_mods_description", "fallback", nil)
+	description := tr.Text("setup_required_mods_description", "fallback", nil)
 	if strings.Contains(description, "wähle ihn") || strings.Contains(description, "So bleibt er") {
 		t.Fatalf("German mod references use masculine pronouns: %q", description)
 	}

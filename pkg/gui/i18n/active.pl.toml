@@ -55,10 +55,10 @@ other = "Wczytywanie modów..."
 [loading_mods_description]
 other = "Powinno to zająć tylko kilka sekund."
 
-[select_mods]
-other = "Wybierz mody, które mają pozostać włączone"
+[setup_required_mods]
+other = "Skonfiguruj wymagane mody"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "Jeśli nie wiesz, co powoduje problem, pozostaw wszystko odznaczone i kliknij Kontynuuj.\n\nJeśli wiesz, że problem dotyczy konkretnego modu (np. modu na shadery), zaznacz go tutaj.\n\nDzięki temu pozostanie włączony podczas wszystkich testów, a narzędzie znajdzie, z czym powoduje konflikt."
 
 [next_step]
@@ -361,11 +361,11 @@ other = "z nieznanego źródła"
 [from_jar]
 other = "{{.ID}} z '{{.File}}.jar'"
 
-[initial_mod_state]
-other = "Stan modów przed wyszukiwaniem"
+[setup_excluded_mods]
+other = "Skonfiguruj wykluczone mody"
 
-[initial_mod_state_description]
-other = "Pozostaw wyłączone wcześniej wyłączone mody lub pomiń inne mody w wyszukiwaniu, jeśli już wiesz, że są dobre, złe lub przeszkadzają w testach. Jeśli nie masz pewności, pozostaw wszystko odznaczone i kliknij Kontynuuj."
+[setup_excluded_mods_omit]
+other = "Pomiń mody w wyszukiwaniu, jeśli już wiesz, że są dobre, złe lub przeszkadzają w testach. Jeśli nie masz pewności, pozostaw wszystko odznaczone i kliknij Kontynuuj."
 
 [all]
 other = "Wszystkie"
@@ -378,3 +378,6 @@ other = "Pozostaw mody wyłączone"
 
 [omit_mods_from_search]
 other = "Pomiń mody w wyszukiwaniu"
+
+[setup_excluded_mods_keep_disabled]
+other = "Pozostawić wyłączone wcześniej wyłączone mody."

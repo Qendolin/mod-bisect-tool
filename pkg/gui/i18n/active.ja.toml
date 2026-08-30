@@ -55,10 +55,10 @@ other = "MODを読み込み中..."
 [loading_mods_description]
 other = "これには数秒しかかかりません。"
 
-[select_mods]
-other = "有効のままにするMODを選択"
+[setup_required_mods]
+other = "必須MODの設定"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "何が原因かわからない場合は、すべて未選択のまま「続行」をクリックしてください。\n\n特定の問題に関係しているMOD（シェーダーMODなど）が分かっている場合は、ここで選択してください。\n\nこれにより、すべてのテスト中にそのMODが有効のままになり、ツールが競合相手を特定できます。"
 
 [next_step]
@@ -355,11 +355,11 @@ other = "不明なファイルから"
 [from_jar]
 other = "'{{.File}}.jar' 内の {{.ID}}"
 
-[initial_mod_state]
-other = "検索前のMOD状態"
+[setup_excluded_mods]
+other = "除外MODの設定"
 
-[initial_mod_state_description]
-other = "あらかじめ無効化されていたMODを無効のままにするか、正常・不良・テストの邪魔になると分かっているMODを検索から除外します。よくわからない場合は、すべて未選択のまま「続行」をクリックしてください。"
+[setup_excluded_mods_omit]
+other = "正常・不良・テストの邪魔になると分かっているMODを検索から除外します。よくわからない場合は、すべて未選択のまま「続行」をクリックしてください。"
 
 [all]
 other = "すべて"
@@ -372,3 +372,6 @@ other = "MODを無効のままにする"
 
 [omit_mods_from_search]
 other = "MODを検索から除外"
+
+[setup_excluded_mods_keep_disabled]
+other = "すでに無効化されているMODを無効のままにする。"

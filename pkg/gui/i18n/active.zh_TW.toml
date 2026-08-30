@@ -55,10 +55,10 @@ other = "正在載入模組..."
 [loading_mods_description]
 other = "這通常只需要幾秒鐘。"
 
-[select_mods]
-other = "選取要維持啟用的模組"
+[setup_required_mods]
+other = "設定必需的模組"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "若你不知道是什麼導致了問題，請保持全部取消勾選並點擊「繼續」。\n\n若你確定問題涉及某個特定模組（例如光影模組），請在此處勾選。\n\n這可確保該模組在所有測試中維持啟用，以便工具找出與其衝突的模組。"
 
 [next_step]
@@ -355,11 +355,11 @@ other = "來自未知來源"
 [from_jar]
 other = "「{{.File}}.jar」中的 {{.ID}}"
 
-[initial_mod_state]
-other = "搜尋前的模組狀態"
+[setup_excluded_mods]
+other = "設定排除的模組"
 
-[initial_mod_state_description]
-other = "維持已知已停用的模組處於停用狀態，或者若你已知某些模組運作正常、有問題或在測試時會造成干擾，可以將其從搜尋中排除。若你不確定，請保持全部取消勾選並點擊「繼續」。"
+[setup_excluded_mods_omit]
+other = "若你已知模組運作正常、有問題或在測試時會造成干擾，可以將其從搜尋中排除。若你不確定，請保持全部取消勾選並點擊「繼續」。"
 
 [all]
 other = "全部"
@@ -372,3 +372,6 @@ other = "維持模組停用"
 
 [omit_mods_from_search]
 other = "從搜尋中排除模組"
+
+[setup_excluded_mods_keep_disabled]
+other = "維持已停用的模組處於停用狀態。"

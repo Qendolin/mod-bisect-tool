@@ -55,10 +55,10 @@ other = "Modlar yükleniyor..."
 [loading_mods_description]
 other = "Bu işlem yalnızca birkaç saniye sürmelidir."
 
-[select_mods]
-other = "Etkin Kalacak Modları Seç"
+[setup_required_mods]
+other = "Gerekli Modları Ayarla"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "Soruna neyin sebep olduğunu bilmiyorsan her şeyi işaretsiz bırakıp Devam Et'e tıkla.\n\nSorunun belirli bir modla (örneğin gölgelendirici modu) ilgili olduğunu biliyorsan buradan seç.\n\nBu, tüm testler boyunca etkin kalmasını sağlar, böylece araç neyle çakıştığını bulabilir."
 
 [next_step]
@@ -355,11 +355,11 @@ other = "bilinmeyen kaynaktan"
 [from_jar]
 other = "'{{.File}}.jar' içinden {{.ID}}"
 
-[initial_mod_state]
-other = "Arama Öncesi Mod Durumu"
+[setup_excluded_mods]
+other = "Hariç Tutulan Modları Ayarla"
 
-[initial_mod_state_description]
-other = "Önceden devre dışı bırakılmış modları devre dışı tut veya sorunsuz, sorunlu veya test sırasında dikkat dağıtıcı olduğunu bildiğin diğer modları aramadan hariç tut. Emin değilsen her şeyi işaretsiz bırakıp Devam Et'e tıkla."
+[setup_excluded_mods_omit]
+other = "Sorunsuz, sorunlu veya test sırasında dikkat dağıtıcı olduğunu bildiğin modları aramadan hariç tut. Emin değilsen her şeyi işaretsiz bırakıp Devam Et'e tıkla."
 
 [all]
 other = "Tümü"
@@ -372,3 +372,6 @@ other = "Modları Devre Dışı Bırakılmış Tut"
 
 [omit_mods_from_search]
 other = "Modları Aramadan Hariç Tut"
+
+[setup_excluded_mods_keep_disabled]
+other = "Zaten devre dışı bırakılmış modları devre dışı tut."

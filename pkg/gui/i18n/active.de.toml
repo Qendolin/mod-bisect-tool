@@ -55,10 +55,10 @@ other = "Mods werden geladen..."
 [loading_mods_description]
 other = "Dies sollte nur wenige Sekunden dauern."
 
-[select_mods]
-other = "Mods auswählen, die aktiviert bleiben sollen"
+[setup_required_mods]
+other = "Erforderliche Mods einrichten"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "Wenn du nicht weißt, was das Problem verursacht, lasse alle Mods abgewählt und klicke auf Weiter.\n\nWenn du weißt, dass das Problem eine bestimmte Mod betrifft (z. B. eine Shader-Mod), wähle sie hier aus.\n\nSo bleibt sie während aller Tests aktiviert und das Tool kann den Konflikt finden."
 
 [next_step]
@@ -357,11 +357,11 @@ other = "aus unbekannter Datei"
 [from_jar]
 other = "{{.ID}} aus '{{.File}}.jar'"
 
-[initial_mod_state]
-other = "Mod-Status vor der Suche"
+[setup_excluded_mods]
+other = "Ausgeschlossene Mods einrichten"
 
-[initial_mod_state_description]
-other = "Behalte bekannte deaktivierte Mods deaktiviert oder lasse andere Mods aus der Suche aus, wenn du bereits weißt, dass sie gut, schlecht oder beim Testen störend sind. Wenn du dir unsicher bist, lasse alles abgewählt und klicke auf Weiter."
+[setup_excluded_mods_omit]
+other = "Lasse Mods aus der Suche aus, wenn du bereits weißt, dass sie gut, schlecht oder beim Testen störend sind. Wenn du dir unsicher bist, lasse alles abgewählt und klicke auf Weiter."
 
 [all]
 other = "Alle"
@@ -374,3 +374,6 @@ other = "Mods deaktiviert lassen"
 
 [omit_mods_from_search]
 other = "Mods von der Suche ausschließen"
+
+[setup_excluded_mods_keep_disabled]
+other = "Bereits deaktivierte Mods deaktiviert lassen."

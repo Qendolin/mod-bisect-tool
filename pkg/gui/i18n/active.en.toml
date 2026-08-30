@@ -55,10 +55,10 @@ other = "Loading Mods..."
 [loading_mods_description]
 other = "This should only take a few seconds."
 
-[select_mods]
-other = "Select Mods to Keep Enabled"
+[setup_required_mods]
+other = "Setup Required Mods"
 
-[select_mods_description]
+[setup_required_mods_description]
 other = "If you don't know what's causing the issue, leave everything unchecked and click Continue.\n\nIf you know the issue involves a specific mod (like a shaders mod), check it here.\n\nThis ensures it stays turned on during all tests so the tool can find what is conflicting with it."
 
 [next_step]
@@ -357,11 +357,11 @@ other = "from unknown"
 [from_jar]
 other = "{{.ID}} from '{{.File}}.jar'"
 
-[initial_mod_state]
-other = "Mod State Before Search"
+[setup_excluded_mods]
+other = "Setup Excluded Mods"
 
-[initial_mod_state_description]
-other = "Keep known-disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing. If you're unsure leave everything unchecked and click Continue."
+[setup_excluded_mods_omit]
+other = "Omit mods from the search if you already know they are good, bad, or distracting during testing. If you're unsure leave everything unchecked and click Continue."
 
 [all]
 other = "All"
@@ -374,3 +374,6 @@ other = "Keep Mods Disabled"
 
 [omit_mods_from_search]
 other = "Omit Mods from Search"
+
+[setup_excluded_mods_keep_disabled]
+other = "Keep already disabled mods disabled."

@@ -16,7 +16,7 @@ import (
 	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
-type InitialModStateScreen struct {
+type SetupExcludedModsScreen struct {
 	app                         App
 	vm                          ui.BisectionViewModel
 	initial, additional         []string
@@ -29,8 +29,8 @@ type InitialModStateScreen struct {
 	searchEditor                widget.Editor
 }
 
-func NewInitialModStateScreen(app App, initiallyDisabled []string) *InitialModStateScreen {
-	s := &InitialModStateScreen{
+func NewSetupExcludedModsScreen(app App, initiallyDisabled []string) *SetupExcludedModsScreen {
+	s := &SetupExcludedModsScreen{
 		app:       app,
 		vm:        app.GetViewModel(),
 		initial:   append([]string(nil), initiallyDisabled...),
@@ -59,7 +59,7 @@ func NewInitialModStateScreen(app App, initiallyDisabled []string) *InitialModSt
 	return s
 }
 
-func (s *InitialModStateScreen) KeepDisabled(id string) {
+func (s *SetupExcludedModsScreen) KeepDisabled(id string) {
 	if _, initially := s.keep[id]; initially {
 		s.keep[id].Value = true
 	} else if state, ok := s.omit[id]; ok {
@@ -67,7 +67,7 @@ func (s *InitialModStateScreen) KeepDisabled(id string) {
 	}
 }
 
-func (s *InitialModStateScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
+func (s *SetupExcludedModsScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
 	for _, id := range s.initial {
 		if s.keepClick[id].Clicked(gtx) {
 			s.keep[id].Value = !s.keep[id].Value
@@ -115,14 +115,14 @@ func (s *InitialModStateScreen) Layout(gtx layout.Context, th *material.Theme) l
 	return layout.UniformInset(unit.Dp(16)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 			layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-				l := material.H6(th, s.app.Text("initial_mod_state", "Mod State Before Search", nil))
+				l := material.H6(th, s.app.Text("setup_excluded_mods", "Setup Excluded Mods", nil))
 				l.Color = theme.PrimaryColor
 				l.Font.Weight = font.Bold
 				return l.Layout(gtx)
 			}),
 			layout.Rigid(layout.Spacer{Height: unit.Dp(6)}.Layout),
 			layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-				l := material.Body2(th, s.app.Text("initial_mod_state_description", "Keep known-disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing. The omission choices are below.", nil))
+				l := material.Body2(th, s.app.Text("setup_excluded_mods_omit", "Omit mods from the search if you already know they are good, bad, or distracting during testing. If you're unsure leave everything unchecked and click Continue.", nil))
 				l.Color = theme.FgColor
 				return l.Layout(gtx)
 			}),
@@ -144,7 +144,7 @@ func (s *InitialModStateScreen) Layout(gtx layout.Context, th *material.Theme) l
 	})
 }
 
-func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget {
+func (s *SetupExcludedModsScreen) layoutSections(th *material.Theme) layout.Widget {
 	return func(gtx layout.Context) layout.Dimensions {
 		var children []layout.FlexChild
 
@@ -153,6 +153,11 @@ func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget
 			children = append(children,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					return s.layoutFrameHeading(gtx, th, s.app.Text("keep_mods_disabled", "Keep Mods Disabled", nil), &s.keepAllClick, &s.keepNoneClick)
+				}),
+				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+					l := material.Body2(th, s.app.Text("setup_excluded_mods_keep_disabled", "Keep already disabled mods disabled.", nil))
+					l.Color = theme.TextMutedColor
+					return l.Layout(gtx)
 				}),
 				layout.Rigid(layout.Spacer{Height: unit.Dp(8)}.Layout),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
@@ -181,7 +186,7 @@ func (s *InitialModStateScreen) layoutSections(th *material.Theme) layout.Widget
 	}
 }
 
-func (s *InitialModStateScreen) layoutFrameHeading(gtx layout.Context, th *material.Theme, title string, allClick, noneClick *widget.Clickable) layout.Dimensions {
+func (s *SetupExcludedModsScreen) layoutFrameHeading(gtx layout.Context, th *material.Theme, title string, allClick, noneClick *widget.Clickable) layout.Dimensions {
 	return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			l := material.Body1(th, title)
@@ -206,7 +211,7 @@ func (s *InitialModStateScreen) layoutFrameHeading(gtx layout.Context, th *mater
 	)
 }
 
-func (s *InitialModStateScreen) layoutSearch(gtx layout.Context, th *material.Theme) layout.Dimensions {
+func (s *SetupExcludedModsScreen) layoutSearch(gtx layout.Context, th *material.Theme) layout.Dimensions {
 	ed := material.Editor(th, &s.searchEditor, s.app.Text("search_mods", "Search mods...", nil))
 	ed.TextSize = unit.Sp(12)
 	ed.Color = theme.FgColor
@@ -214,7 +219,7 @@ func (s *InitialModStateScreen) layoutSearch(gtx layout.Context, th *material.Th
 	return layout.Inset{Top: unit.Dp(4), Bottom: unit.Dp(4)}.Layout(gtx, ed.Layout)
 }
 
-func (s *InitialModStateScreen) filteredAdditional() []string {
+func (s *SetupExcludedModsScreen) filteredAdditional() []string {
 	filter := strings.ToLower(s.searchEditor.Text())
 	if filter == "" {
 		return s.additional
@@ -229,7 +234,7 @@ func (s *InitialModStateScreen) filteredAdditional() []string {
 	return filtered
 }
 
-func (s *InitialModStateScreen) layoutFramedList(gtx layout.Context, th *material.Theme, list *widget.List, ids []string, values map[string]*widget.Bool, clicks map[string]*widget.Clickable, _ string) layout.Dimensions {
+func (s *SetupExcludedModsScreen) layoutFramedList(gtx layout.Context, th *material.Theme, list *widget.List, ids []string, values map[string]*widget.Bool, clicks map[string]*widget.Clickable, _ string) layout.Dimensions {
 	return widget.Border{Color: theme.BorderColor, CornerRadius: unit.Dp(4), Width: unit.Dp(1)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			return material.List(th, list).Layout(gtx, len(ids), func(gtx layout.Context, i int) layout.Dimensions {

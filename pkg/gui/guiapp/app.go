@@ -36,7 +36,7 @@ type App struct {
 	// Screen pages
 	setupScreen        *screens.SetupScreen
 	loadingScreen      *screens.LoadingScreen
-	modSelectionScreen *screens.ModSelectionScreen
+	modSelectionScreen *screens.SetupRequiredModsScreen
 	mainScreen         *screens.MainScreen
 	resultScreen       *screens.ResultScreen
 
@@ -79,7 +79,7 @@ func NewApp(controller ui.AppController, logger *logging.Logger, locale string) 
 
 	a.setupScreen = screens.NewSetupScreen(a)
 	a.loadingScreen = screens.NewLoadingScreen(a)
-	a.modSelectionScreen = screens.NewModSelectionScreen(a)
+	a.modSelectionScreen = screens.NewSetupRequiredModsScreen(a)
 	a.mainScreen = screens.NewMainScreen(a)
 	a.resultScreen = screens.NewResultScreen(a)
 

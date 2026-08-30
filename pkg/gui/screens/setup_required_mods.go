@@ -15,7 +15,7 @@ import (
 	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
-type ModSelectionScreen struct {
+type SetupRequiredModsScreen struct {
 	app App
 
 	searchEditor  widget.Editor
@@ -34,8 +34,8 @@ type ModSelectionScreen struct {
 	unresolvableMods map[string]bool
 }
 
-func NewModSelectionScreen(app App) *ModSelectionScreen {
-	s := &ModSelectionScreen{
+func NewSetupRequiredModsScreen(app App) *SetupRequiredModsScreen {
+	s := &SetupRequiredModsScreen{
 		app:            app,
 		checkboxStates: make(map[string]*widget.Bool),
 		checkboxClicks: make(map[string]*widget.Clickable),
@@ -45,7 +45,7 @@ func NewModSelectionScreen(app App) *ModSelectionScreen {
 	return s
 }
 
-func (s *ModSelectionScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
+func (s *SetupRequiredModsScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
 	vm := s.app.GetViewModel()
 	statuses := s.app.GetModStatusController().GetModStatuses()
 
@@ -103,9 +103,9 @@ func (s *ModSelectionScreen) Layout(gtx layout.Context, th *material.Theme) layo
 
 // ── Left Panel (Simplified Instructions) ─────────────────────────────────────
 
-func (s *ModSelectionScreen) layoutLeftPanel(gtx layout.Context, th *material.Theme) layout.Dimensions {
-	headerText := s.app.Text("select_mods", "Select Mods to Keep Enabled", nil)
-	descText := s.app.Text("select_mods_description", "If you don't know what's causing the issue, leave everything unchecked and click Continue.\n\n"+
+func (s *SetupRequiredModsScreen) layoutLeftPanel(gtx layout.Context, th *material.Theme) layout.Dimensions {
+	headerText := s.app.Text("setup_required_mods", "Setup Required Mods", nil)
+	descText := s.app.Text("setup_required_mods_description", "If you don't know what's causing the issue, leave everything unchecked and click Continue.\n\n"+
 		"If you know the issue involves a specific mod (like a shaders mod), check it here.\n\n"+
 		"This ensures it stays turned on during all tests so the tool can find what is conflicting with it.", nil)
 
@@ -138,7 +138,7 @@ func (s *ModSelectionScreen) layoutLeftPanel(gtx layout.Context, th *material.Th
 
 // ── Right Panel (Compact, Scrollable List) ───────────────────────────────────
 
-func (s *ModSelectionScreen) layoutRightPanel(gtx layout.Context, th *material.Theme, vm *ui.BisectionViewModel) layout.Dimensions {
+func (s *SetupRequiredModsScreen) layoutRightPanel(gtx layout.Context, th *material.Theme, vm *ui.BisectionViewModel) layout.Dimensions {
 	return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			lbl := material.Body1(th, s.app.Text("available_mods", "Available Mods", nil))
@@ -230,7 +230,7 @@ func (s *ModSelectionScreen) layoutRightPanel(gtx layout.Context, th *material.T
 
 // ── Shared Helpers ────────────────────────────────────────────────────────────
 
-func (s *ModSelectionScreen) layoutTwoPanel(gtx layout.Context, left, right layout.Widget) layout.Dimensions {
+func (s *SetupRequiredModsScreen) layoutTwoPanel(gtx layout.Context, left, right layout.Widget) layout.Dimensions {
 	return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
 		layout.Flexed(1, left),
 		layout.Rigid(layout.Spacer{Width: unit.Dp(24)}.Layout),

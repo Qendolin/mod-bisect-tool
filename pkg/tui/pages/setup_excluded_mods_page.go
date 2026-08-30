@@ -14,7 +14,7 @@ import (
 	"github.com/rivo/tview"
 )
 
-type InitialModStatePage struct {
+type SetupExcludedModsPage struct {
 	*tview.Flex
 	app                                   tui.TUIApp
 	statusText                            *tview.TextView
@@ -25,8 +25,8 @@ type InitialModStatePage struct {
 	allButton, noneButton, continueButton *tview.Button
 }
 
-func NewInitialModStatePage(app tui.TUIApp, initiallyDisabled []string) *InitialModStatePage {
-	p := &InitialModStatePage{
+func NewSetupExcludedModsPage(app tui.TUIApp, initiallyDisabled []string) *SetupExcludedModsPage {
+	p := &SetupExcludedModsPage{
 		Flex:       tview.NewFlex().SetDirection(tview.FlexRow),
 		app:        app,
 		statusText: tview.NewTextView().SetDynamicColors(true),
@@ -79,13 +79,21 @@ func NewInitialModStatePage(app tui.TUIApp, initiallyDisabled []string) *Initial
 	p.refresh()
 
 	description := tview.NewTextView().SetWordWrap(true).SetText(
-		"Keep already disabled mods disabled, or omit other mods from the search if you already know they are good, bad, or distracting during testing.")
+		"Omit other mods from the search if you already know they are good, bad, or distracting during testing.")
 	description.SetBorderPadding(0, 0, 1, 1)
 
 	p.AddItem(widgets.NewTitleFrame(description, "Info"), 3, 0, false)
 
 	if len(p.initial) > 0 {
-		frame := widgets.NewTitleFrame(p.initialTable, "Keep Disabled")
+		keepDescription := tview.NewTextView().SetWordWrap(true).SetText(
+			"Keep already disabled mods disabled.")
+		keepDescription.SetBorderPadding(0, 0, 1, 1)
+
+		keepContent := tview.NewFlex().SetDirection(tview.FlexRow).
+			AddItem(keepDescription, 2, 0, false).
+			AddItem(p.initialTable, 0, 1, true)
+
+		frame := widgets.NewTitleFrame(keepContent, "Keep Disabled")
 		frame.AddTitleItem(nil, 0, 1, false).
 			AddTitleItem(p.allButton, 8, 0, false).
 			AddTitleItem(nil, 1, 0, false).
@@ -108,7 +116,7 @@ func NewInitialModStatePage(app tui.TUIApp, initiallyDisabled []string) *Initial
 	return p
 }
 
-func (p *InitialModStatePage) KeepDisabled(id string) {
+func (p *SetupExcludedModsPage) KeepDisabled(id string) {
 	if _, initial := p.keep[id]; initial {
 		p.keep[id] = true
 	} else {
@@ -124,7 +132,7 @@ func makeCheckmark(checked bool) string {
 	return "[ ]"
 }
 
-func (p *InitialModStatePage) refresh() {
+func (p *SetupExcludedModsPage) refresh() {
 	vm := p.app.GetViewModel()
 
 	initialRows := make([][]string, 0, len(p.initial))
@@ -154,7 +162,7 @@ func (p *InitialModStatePage) refresh() {
 	})
 }
 
-func (p *InitialModStatePage) toggleEntry(state map[string]bool, table *widgets.ExtendedTable, row int) bool {
+func (p *SetupExcludedModsPage) toggleEntry(state map[string]bool, table *widgets.ExtendedTable, row int) bool {
 	id := p.selectedTableID(table, row)
 	if id == "" {
 		return false
@@ -168,7 +176,7 @@ func (p *InitialModStatePage) toggleEntry(state map[string]bool, table *widgets.
 	return true
 }
 
-func (p *InitialModStatePage) selectedTableID(table *widgets.ExtendedTable, row int) string {
+func (p *SetupExcludedModsPage) selectedTableID(table *widgets.ExtendedTable, row int) string {
 	if row <= 0 || table == nil {
 		return ""
 	}
@@ -179,7 +187,7 @@ func (p *InitialModStatePage) selectedTableID(table *widgets.ExtendedTable, row 
 	return strings.TrimPrefix(strings.TrimSuffix(cell.Text, "[-]"), "[gray]")
 }
 
-func (p *InitialModStatePage) inputHandler() func(*tcell.EventKey) *tcell.EventKey {
+func (p *SetupExcludedModsPage) inputHandler() func(*tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if util.IsTextInput(p.app.GetFocus()) {
 			return e
@@ -220,7 +228,7 @@ func (p *InitialModStatePage) inputHandler() func(*tcell.EventKey) *tcell.EventK
 	}
 }
 
-func (p *InitialModStatePage) continueAction() {
+func (p *SetupExcludedModsPage) continueAction() {
 	keep, omit := sets.Set{}, sets.Set{}
 	for _, id := range p.initial {
 		if p.keep[id] {
@@ -239,20 +247,20 @@ func (p *InitialModStatePage) continueAction() {
 	}()
 }
 
-func (p *InitialModStatePage) GetActionPrompts() []tui.ActionPrompt {
+func (p *SetupExcludedModsPage) GetActionPrompts() []tui.ActionPrompt {
 	return []tui.ActionPrompt{
 		{Input: "Space/Enter", Action: "Toggle"},
 		{Input: "A/N", Action: "All/None"},
 	}
 }
 
-func (p *InitialModStatePage) GetStatusPrimitive() *tview.TextView { return p.statusText }
+func (p *SetupExcludedModsPage) GetStatusPrimitive() *tview.TextView { return p.statusText }
 
-func (p *InitialModStatePage) GetFocusablePrimitives() []tview.Primitive {
+func (p *SetupExcludedModsPage) GetFocusablePrimitives() []tview.Primitive {
 	if len(p.initial) > 0 {
 		return []tview.Primitive{p.initialTable, p.omitTable, p.continueButton, p.allButton, p.noneButton}
 	}
 	return []tview.Primitive{p.omitTable, p.continueButton}
 }
 
-func (p *InitialModStatePage) Update() {}
+func (p *SetupExcludedModsPage) Update() {}
