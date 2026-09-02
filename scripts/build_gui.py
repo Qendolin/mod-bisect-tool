@@ -141,6 +141,17 @@ def macos_signing_keychain() -> Generator[None, None, None]:
             "pkcs12",
             str(keychain),
         )
+        # Authorize codesign to access the key without prompting
+        run(
+            "security",
+            "set-key-partition-list",
+            "-S",
+            "apple-tool:,apple:,codesign:",
+            "-s",
+            "-k",
+            keychain_password,
+            str(keychain),
+        )
         run("security", "list-keychains", "-d", "user", "-s", str(keychain))
         run("security", "default-keychain", "-s", str(keychain))
         yield
@@ -371,7 +382,6 @@ def build_darwin(
             run(
                 "codesign",
                 "--force",
-                "--deep",
                 "--options",
                 "runtime",
                 "--timestamp",
@@ -382,7 +392,7 @@ def build_darwin(
         else:
             # Ad-hoc signing keeps local and unsigned CI builds launchable for testing.
             print("MACOS_SIGNING_IDENTITY is not set; using an ad-hoc signature")
-            run("codesign", "--force", "--deep", "--sign", "-", str(app))
+            run("codesign", "--force", "--sign", "-", str(app))
 
     output = dist / f"mod-bisect-gui-{git_tag}-darwin-{goarch}.zip"
     run("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", str(app), str(output))
@@ -410,7 +420,15 @@ def build_darwin(
             "--wait",
         )
         run("xcrun", "stapler", "staple", str(app))
-        run("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", str(app), str(output))
+        run(
+            "ditto",
+            "-c",
+            "-k",
+            "--sequesterRsrc",
+            "--keepParent",
+            str(app),
+            str(output),
+        )
     elif signing_identity:
         print("Notarization credentials are not set; leaving the signed app unstapled")
 
