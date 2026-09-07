@@ -26,8 +26,9 @@ func IsValidDir(path string) bool {
 // Users sometimes enter the path to the Minecraft instance directory instead of
 // the mods folder itself. If path itself contains mod jars it is returned
 // unchanged; otherwise common instance layouts are checked in order:
-// <path>/mods and <path>/.minecraft/mods. If neither contains mod jars, the
-// original path is returned unchanged so callers report errors normally.
+// <path>/mods, <path>/.minecraft/mods and <path>/minecraft/mods (Prism).
+// If none contains mod jars, the original path is returned unchanged so
+// callers report errors normally.
 func ResolveModsDir(path string) string {
 	if !IsValidDir(path) {
 		return path
@@ -35,7 +36,7 @@ func ResolveModsDir(path string) string {
 	if containsModJars(path) {
 		return path
 	}
-	for _, sub := range []string{"mods", filepath.Join(".minecraft", "mods")} {
+	for _, sub := range []string{"mods", filepath.Join(".minecraft", "mods"), filepath.Join("minecraft", "mods")} {
 		candidate := filepath.Join(path, sub)
 		if containsModJars(candidate) {
 			return candidate

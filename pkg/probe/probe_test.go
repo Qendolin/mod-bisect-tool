@@ -205,6 +205,32 @@ func TestResolveModsDir(t *testing.T) {
 			expected: func(_ *testing.T, root string) string { return filepath.Join(root, ".minecraft", "mods") },
 		},
 		{
+			name: "Prism_minecraft_mods_subdirectory",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, "minecraft", "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				fabricJar(t, filepath.Join(root, "minecraft", "mods"), "a.jar", "mod_a")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, "minecraft", "mods") },
+		},
+		{
+			name: "Minecraft_mods_subdirectory_wins_over_prism_minecraft_mods",
+			setup: func(t *testing.T, root string) {
+				if err := os.MkdirAll(filepath.Join(root, ".minecraft", "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				if err := os.MkdirAll(filepath.Join(root, "minecraft", "mods"), 0755); err != nil {
+					t.Fatalf("creating mods dir: %v", err)
+				}
+				fabricJar(t, filepath.Join(root, ".minecraft", "mods"), "a.jar", "mod_a")
+				fabricJar(t, filepath.Join(root, "minecraft", "mods"), "b.jar", "mod_b")
+			},
+			input:    func(_ *testing.T, root string) string { return root },
+			expected: func(_ *testing.T, root string) string { return filepath.Join(root, ".minecraft", "mods") },
+		},
+		{
 			name: "Mods_subdirectory_wins_over_minecraft_mods",
 			setup: func(t *testing.T, root string) {
 				if err := os.MkdirAll(filepath.Join(root, "mods"), 0755); err != nil {
