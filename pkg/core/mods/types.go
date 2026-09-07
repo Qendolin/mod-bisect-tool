@@ -153,6 +153,10 @@ type Mod struct {
 	Metadata          ModMetadata
 	NestedModules     []NestedModule
 	EffectiveProvides map[string]version.Version // Maps all unique IDs this mod provides to their version.
+	// ClassIndex indexes the declared and referenced class names of the jar
+	// tree, used for the potential (undeclared) dependency inference. It is
+	// built during mod loading and may be nil for hand-built mods.
+	ClassIndex *JarClassIndex
 }
 
 // FriendlyName returns a human-readable name for the mod.

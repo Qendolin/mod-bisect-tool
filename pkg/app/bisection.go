@@ -8,6 +8,7 @@ import (
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // bisectionController implements ui.BisectionController. It drives the bisection
@@ -42,7 +43,14 @@ func (b *bisectionController) Step() {
 }
 
 func (b *bisectionController) SubmitTestResult(result imcs.TestResult) {
-	b.app.bisectSvc.SubmitTestResult(result)
+	injected := b.app.bisectSvc.SubmitTestResult(result)
+	if len(injected) > 0 {
+		assumed := make([]ui.AssumedDependency, len(injected))
+		for i, dep := range injected {
+			assumed[i] = ui.AssumedDependency{SourceID: dep.SourceID, TargetID: dep.TargetID}
+		}
+		b.app.view.ShowDialogInfoBisectionAssumedDepsApplied(assumed)
+	}
 	state := b.app.bisectSvc.GetCurrentState()
 	if state.IsHalted {
 		b.showHaltedPage()

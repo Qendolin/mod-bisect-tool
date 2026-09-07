@@ -211,6 +211,24 @@ func (e *Engine) AddCandidates(additions sets.Set) {
 	e.state.Candidates = sets.MakeSlice(newCandidates)
 }
 
+// HaltSearch halts the search so no further tests can be planned. The search
+// stack is left intact so the UI can reconstruct the two conflicting groups.
+// Used when a double-INDETERMINATE could not be resolved with injected
+// potential dependencies.
+func (e *Engine) HaltSearch() {
+	logging.Warnf("IMCSEngine: Halting search at the request of the service layer.")
+	e.state.IsHalted = true
+	e.state.NeedsPotentialDependencies = false
+}
+
+// ClearNeedsPotentialDependencies marks a pending potential-dependency request
+// as handled. The service layer calls this after injecting the inferred
+// dependencies, so the next planned test re-runs the split with the injected
+// dependencies resolved in.
+func (e *Engine) ClearNeedsPotentialDependencies() {
+	e.state.NeedsPotentialDependencies = false
+}
+
 // Returns the number of undos possible
 func (e *Engine) UndoCount() int {
 	return e.undoStack.Size()

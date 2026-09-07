@@ -218,6 +218,11 @@ func (a *App) ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods sets.
 	})
 }
 
+// ShowDialogInfoBisectionAssumedDepsApplied is a no-op stub: the GUI surfaces
+// assumed (bytecode-analysis inferred) dependencies, the TUI does not yet.
+func (a *App) ShowDialogInfoBisectionAssumedDepsApplied(deps []ui.AssumedDependency) {
+}
+
 func (a *App) ShowDialogQuestionBisectionContinueWithMissingMods(missingMods sets.Set) bool {
 	return showDialogValue(a, func(onDismiss func(bool)) {
 		a.dialogManager.ShowQuestionDialog(

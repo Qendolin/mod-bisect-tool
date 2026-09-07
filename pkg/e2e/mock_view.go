@@ -23,6 +23,7 @@ const (
 	DialogErrorBisectionPrepare
 	DialogInfoBisectionModsMissingExpected
 	DialogInfoBisectionUnresolvableModsDisabled
+	DialogInfoBisectionAssumedDepsApplied
 	DialogQuestionBisectionContinueWithMissingMods
 )
 
@@ -42,6 +43,8 @@ func (k DialogKind) String() string {
 		return "ShowDialogInfoBisectionModsMissingExpected"
 	case DialogInfoBisectionUnresolvableModsDisabled:
 		return "ShowDialogInfoBisectionUnresolvableModsDisabled"
+	case DialogInfoBisectionAssumedDepsApplied:
+		return "ShowDialogInfoBisectionAssumedDepsApplied"
 	case DialogQuestionBisectionContinueWithMissingMods:
 		return "ShowDialogQuestionBisectionContinueWithMissingMods"
 	default:
@@ -58,6 +61,7 @@ type DialogInvocation struct {
 	Err          error
 	MissingMods  sets.Set
 	DisabledMods sets.Set
+	AssumedDeps  []ui.AssumedDependency
 
 	respond chan bool
 }
@@ -259,6 +263,11 @@ func (m *MockView) ShowDialogInfoBisectionModsMissingExpected(missingMods sets.S
 func (m *MockView) ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods sets.Set) {
 	m.record("ShowDialogInfoBisectionUnresolvableModsDisabled")
 	m.block(DialogInvocation{Kind: DialogInfoBisectionUnresolvableModsDisabled, DisabledMods: disabledMods})
+}
+
+func (m *MockView) ShowDialogInfoBisectionAssumedDepsApplied(deps []ui.AssumedDependency) {
+	m.record("ShowDialogInfoBisectionAssumedDepsApplied")
+	m.block(DialogInvocation{Kind: DialogInfoBisectionAssumedDepsApplied, AssumedDeps: deps})
 }
 
 func (m *MockView) ShowDialogQuestionBisectionContinueWithMissingMods(missingMods sets.Set) bool {

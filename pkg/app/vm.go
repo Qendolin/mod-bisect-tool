@@ -57,6 +57,8 @@ func (a *App) GetViewModel() ui.BisectionViewModel {
 		CanUndo:            a.bisectSvc.Engine().UndoCount() > 0,
 		LastTestResult:     state.LastTestResult,
 		LastFoundElement:   state.LastFoundElement,
+
+		PotentialDependenciesUsed: a.bisectSvc.PotentialDependenciesUsed(),
 	}
 	vm.Sets = ui.SearchSetsViewModel{
 		AllConflicts:    enumState.FoundConflictSets,

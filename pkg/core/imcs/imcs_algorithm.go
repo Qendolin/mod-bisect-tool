@@ -120,11 +120,15 @@ func applyComplementResult(newState SearchState, stable sets.Set, candidates []s
 		replaceStackTop(&newState, newSearchStep(newStable, c1))
 	case TestResultIndeterminate:
 		// Both halves have independent secondary conflicts and neither has a
-		// verified reading, so the search cannot proceed. Halt and leave the
-		// search stack intact so the UI can reconstruct the two groups from the
-		// current candidate set.
-		logging.Infof("IMCSAlgorithm: Both halves indeterminate (%v / %v). Halting search.", c1, c2)
-		newState.IsHalted = true
+		// verified reading, so the split is unobservable as-is. The search
+		// stack is left intact and the service layer is asked to inject
+		// inferred (bytecode-analysis) undeclared dependencies into the mod
+		// metadata. The split is then re-planned as a normal continuation:
+		// with the injected dependencies resolved in, the halves are expected
+		// to become observable. If no dependencies can be inferred — or this
+		// already happened once — the service layer halts the search instead.
+		logging.Infof("IMCSAlgorithm: Both halves indeterminate (%v / %v). Requesting potential dependency injection.", c1, c2)
+		newState.NeedsPotentialDependencies = true
 	}
 
 	logging.Debugf("IMCSAlgorithm.applyComplementResult: Applied complement result '%s'. New state: IsComplete=%t, IsHalted=%t, ConflictSet=%v, StackDepth=%d", result, newState.IsComplete, newState.IsHalted, sets.FormatSet(newState.ConflictSet), len(newState.SearchStack))

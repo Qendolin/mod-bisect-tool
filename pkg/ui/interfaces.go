@@ -70,6 +70,15 @@ type ModStatusController interface {
 	ResolveUnresolvableMods(decisions map[string]UnresolvableModAction)
 }
 
+// AssumedDependency describes a potential undeclared dependency that was
+// inferred via bytecode analysis and injected into the dependency resolution.
+type AssumedDependency struct {
+	// SourceID is the mod whose code references classes it does not declare.
+	SourceID string
+	// TargetID is the mod that declares the referenced classes.
+	TargetID string
+}
+
 // View defines the operations that the business logic can request from the UI.
 type View interface {
 	Start() error
@@ -85,6 +94,10 @@ type View interface {
 
 	ShowDialogInfoBisectionModsMissingExpected(missingMods sets.Set)
 	ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods sets.Set)
+	// ShowDialogInfoBisectionAssumedDepsApplied informs the user that assumed
+	// (bytecode-analysis inferred) undeclared dependencies were injected into
+	// the dependency resolution after a double-INDETERMINATE test.
+	ShowDialogInfoBisectionAssumedDepsApplied(deps []AssumedDependency)
 
 	ShowDialogQuestionBisectionContinueWithMissingMods(missingMods sets.Set) bool
 

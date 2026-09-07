@@ -41,15 +41,29 @@ type ModParser struct {
 	RunLoader RunLoader
 }
 
-// ExtractModMetadata opens a JAR and extracts its top-level and nested mod files.
-func (p *ModParser) ExtractModMetadata(jarPath, jarName string, logBuffer *logBuffer) (ModMetadata, []NestedModule, error) {
+// ExtractModMetadata opens a JAR and extracts its top-level and nested mod
+// files, together with the class index of the whole jar tree (used for the
+// potential dependency inference).
+func (p *ModParser) ExtractModMetadata(jarPath, jarName string, logBuffer *logBuffer) (ModMetadata, []NestedModule, *JarClassIndex, error) {
 	zr, err := zip.OpenReader(jarPath)
 	if err != nil {
-		return ModMetadata{}, nil, fmt.Errorf("opening JAR %s as zip: %w", jarPath, err)
+		return ModMetadata{}, nil, nil, fmt.Errorf("opening JAR %s as zip: %w", jarPath, err)
 	}
 	defer zr.Close()
 
-	return p.parseJarTree(newZipIndex(&zr.Reader), jarName, logBuffer)
+	classIndex := &JarClassIndex{
+		Declared:   make(map[string]struct{}),
+		Referenced: make(map[string]struct{}),
+	}
+	// The class index is built eagerly while the jar is already open, so the
+	// undeclared dependency inference later only needs map lookups.
+	indexJarReader(&zr.Reader, classIndex, 0, jarName)
+
+	metadata, nested, err := p.parseJarTree(newZipIndex(&zr.Reader), jarName, logBuffer)
+	if err != nil {
+		return ModMetadata{}, nil, nil, err
+	}
+	return metadata, nested, classIndex, nil
 }
 
 // jarInterpretation is the result of interpreting a single jar's manifests:

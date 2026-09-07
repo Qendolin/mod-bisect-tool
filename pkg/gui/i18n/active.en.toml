@@ -127,6 +127,12 @@ other = "Disabled Mods"
 [disabled_mods_message]
 other = "The following mods were automatically disabled due to unmet dependencies:"
 
+[assumed_dependencies]
+other = "Assumed Dependencies"
+
+[assumed_dependencies_message]
+other = "The search was blocked by two groups of mods that depend on each other through undeclared dependencies. The following dependencies were inferred from the mods' code and have been assumed:\nThe search will now retry the split with these dependencies applied."
+
 [missing_mod_files]
 other = "Missing Mod Files Detected"
 

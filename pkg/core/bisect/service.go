@@ -3,9 +3,12 @@ package bisect
 import (
 	"errors"
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
@@ -41,6 +44,14 @@ type Service struct {
 
 	enumState *Enumeration
 
+	// potentialDepsUsed latches that the one-time, bytecode-analysis based
+	// potential dependency injection has been performed in this session.
+	// After it is set, a double-INDETERMINATE halts the search instead of
+	// trying to resolve it. It survives engine replacement (ContinueSearch,
+	// ResetSearch) because the injected dependencies persist in the mod
+	// metadata, so re-analysis would not find anything new.
+	potentialDepsUsed bool
+
 	// lastReconcileRevision is the StateManager revision at the last time the
 	// state was reconciled. NeedsReconciliation reports whether the revision
 	// has since advanced, i.e. whether mod statuses changed.
@@ -71,6 +82,10 @@ func (s *Service) StateManager() *mods.StateManager { return s.state }
 func (s *Service) Activator() *mods.Activator       { return s.activator }
 func (s *Service) Engine() *imcs.Engine             { return s.engine }
 func (s *Service) EnumerationState() *Enumeration   { return s.enumState }
+
+// PotentialDependenciesUsed reports whether the one-time bytecode-analysis
+// based injection of assumed undeclared dependencies has been performed.
+func (s *Service) PotentialDependenciesUsed() bool { return s.potentialDepsUsed }
 
 // --- High-Level Workflow Methods ---
 
@@ -236,17 +251,128 @@ func (s *Service) finalizeEffectiveSet(proposedSet sets.Set, statuses map[string
 	return finalSet
 }
 
-// SubmitTestResult processes the outcome of a test.
-func (s *Service) SubmitTestResult(result imcs.TestResult) {
+// SubmitTestResult processes the outcome of a test. It returns the potential
+// dependencies that were injected in response to a double-INDETERMINATE test,
+// or nil if none were injected.
+func (s *Service) SubmitTestResult(result imcs.TestResult) []mods.PotentialDependency {
 	plan := s.engine.GetActiveTestPlan()
 	if plan == nil {
 		logging.Error("BisectService: Attempted to submit result without an active plan.")
-		return
+		return nil
 	}
 
 	if err := s.engine.SubmitTestResult(result); err != nil {
 		logging.Errorf("BisectService: Failed to submit test result to engine: %v", err)
+		return nil
 	}
+
+	return s.handlePotentialDependencies()
+}
+
+// handlePotentialDependencies resolves a pending potential-dependency request
+// raised by the algorithm after a double-INDETERMINATE. The first time this
+// happens, undeclared dependencies are inferred via bytecode analysis and
+// injected into the mod metadata so the same split can be re-planned with the
+// referenced mods activated. If the analysis finds nothing injectable, or the
+// injection was already used once this session, the search is halted instead.
+func (s *Service) handlePotentialDependencies() []mods.PotentialDependency {
+	if !s.engine.GetCurrentState().NeedsPotentialDependencies {
+		return nil
+	}
+
+	if s.potentialDepsUsed {
+		logging.Warnf("BisectService: Double-INDETERMINATE again, but potential dependencies were already used. Halting search.")
+		s.engine.HaltSearch()
+		return nil
+	}
+	s.potentialDepsUsed = true
+
+	deps := s.filterActivatableTargets(mods.InferPotentialDependencies(s.state.GetAllMods()))
+	if len(deps) == 0 {
+		logging.Warnf("BisectService: Bytecode analysis found no injectable potential dependencies. Halting search.")
+		s.engine.HaltSearch()
+		return nil
+	}
+
+	injected := s.injectPotentialDependencies(deps)
+	s.engine.ClearNeedsPotentialDependencies()
+	return injected
+}
+
+// filterActivatableTargets drops potential dependencies whose target mod
+// cannot currently be activated (force-disabled, missing, problematic or
+// unresolvable). Injecting such a dependency would make the source mod
+// unresolvable and break test preparation.
+func (s *Service) filterActivatableTargets(deps []mods.PotentialDependency) []mods.PotentialDependency {
+	statuses := s.state.GetModStatusesSnapshot()
+	filtered := make([]mods.PotentialDependency, 0, len(deps))
+	for _, dep := range deps {
+		if status, ok := statuses[dep.TargetID]; ok && status.IsActivatable() {
+			filtered = append(filtered, dep)
+		} else {
+			logging.Infof("BisectService: Skipping potential dependency '%s' -> '%s': target is not activatable.", dep.SourceID, dep.TargetID)
+		}
+	}
+	return filtered
+}
+
+// injectPotentialDependencies adds each potential dependency to the source
+// mod's metadata as a wildcard Depends entry, so the resolver activates the
+// target mod in every test that includes the source mod. Dependencies that
+// are already present are skipped.
+func (s *Service) injectPotentialDependencies(deps []mods.PotentialDependency) []mods.PotentialDependency {
+	allMods := s.state.GetAllMods()
+	anyVersion := version.Any()
+
+	injected := make([]mods.PotentialDependency, 0, len(deps))
+	for _, dep := range deps {
+		source, ok := allMods[dep.SourceID]
+		if !ok {
+			logging.Warnf("BisectService: Cannot inject potential dependency '%s' -> '%s': source mod not found.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		if dependencyAlreadyPresent(source, allMods[dep.TargetID]) {
+			logging.Debugf("BisectService: Skipping potential dependency '%s' -> '%s': dependency is already present.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		if source.Metadata.Depends == nil {
+			source.Metadata.Depends = make(mods.VersionRanges)
+		}
+		source.Metadata.Depends[dep.TargetID] = []*version.VersionPredicate{anyVersion}
+		logging.Infof("BisectService: Injected assumed dependency '%s' -> '%s' (referenced classes: %v).", dep.SourceID, dep.TargetID, dep.Classes)
+		injected = append(injected, dep)
+	}
+	return injected
+}
+
+// dependencyAlreadyPresent reports whether the source mod's metadata already
+// declares a dependency that covers the target (its ID or any of its
+// effective provides). Defensive second check on top of the inference-time
+// filtering, so an already-declared dependency is never injected twice.
+func dependencyAlreadyPresent(source *mods.Mod, target *mods.Mod) bool {
+	if source == nil {
+		return false
+	}
+	if source.Metadata.Depends == nil {
+		return false
+	}
+
+	ids := []string{}
+	if target != nil {
+		ids = append(ids, target.Metadata.ID)
+		if len(target.EffectiveProvides) > 0 {
+			ids = append(ids, slices.Sorted(maps.Keys(target.EffectiveProvides))...)
+		} else {
+			ids = append(ids, target.Metadata.Provides...)
+		}
+	}
+
+	for _, id := range ids {
+		if _, ok := source.Metadata.Depends[id]; ok {
+			return true
+		}
+	}
+	return false
 }
 
 // UndoLastStep orchestrates a complete undo operation. It reverts the bisection engine to its previous state.

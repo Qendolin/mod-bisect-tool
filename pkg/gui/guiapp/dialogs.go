@@ -1,7 +1,11 @@
 package guiapp
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 	"github.com/ncruces/zenity"
 )
 
@@ -77,6 +81,18 @@ func (a *App) ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods sets.
 		a.translator.Text("disabled_mods", "Disabled Mods", nil),
 		a.translator.Text("disabled_mods_message", "The following mods were automatically disabled due to unmet dependencies:", nil),
 		sets.FormatSet(disabledMods).String(),
+	)
+}
+
+func (a *App) ShowDialogInfoBisectionAssumedDepsApplied(deps []ui.AssumedDependency) {
+	pairs := make([]string, len(deps))
+	for i, dep := range deps {
+		pairs[i] = fmt.Sprintf("%s -> %s", dep.SourceID, dep.TargetID)
+	}
+	a.ShowInfoDialog(
+		a.translator.Text("assumed_dependencies", "Assumed Dependencies", nil),
+		a.translator.Text("assumed_dependencies_message", "The search hit two blocked mod groups. The following dependencies were not declared, but were inferred from the mods' code and have been assumed:\nThe search will now retry the split with these dependencies applied.", nil),
+		strings.Join(pairs, "\n"),
 	)
 }
 

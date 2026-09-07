@@ -112,19 +112,33 @@ func (s *MainScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimen
 	}
 	if s.successClick.Clicked(gtx) && s.isTestPromptActive {
 		s.isTestPromptActive = false
-		s.app.GetBisectionController().SubmitTestResult(imcs.TestResultGood)
+		// Submitting a result can surface blocking dialogs (e.g. assumed
+		// dependency info), so it must not run on the layout thread.
+		go func() {
+			defer logging.HandlePanic()
+			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultGood)
+		}()
 	}
 	if s.failureClick.Clicked(gtx) && s.isTestPromptActive {
 		s.isTestPromptActive = false
-		s.app.GetBisectionController().SubmitTestResult(imcs.TestResultFail)
+		go func() {
+			defer logging.HandlePanic()
+			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultFail)
+		}()
 	}
 	if s.indeterminateClick.Clicked(gtx) && s.isTestPromptActive {
 		s.isTestPromptActive = false
-		s.app.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
+		go func() {
+			defer logging.HandlePanic()
+			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
+		}()
 	}
 	if s.cancelClick.Clicked(gtx) && s.isTestPromptActive {
 		s.isTestPromptActive = false
-		s.app.GetBisectionController().CancelTest()
+		go func() {
+			defer logging.HandlePanic()
+			s.app.GetBisectionController().CancelTest()
+		}()
 	}
 
 	return layout.UniformInset(unit.Dp(16)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {

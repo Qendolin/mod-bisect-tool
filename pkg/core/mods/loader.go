@@ -234,7 +234,7 @@ func (ml *ModLoader) jarProcessingWorker(modsDir string, wg *sync.WaitGroup, tas
 
 		// Create a log buffer for this specific task.
 		var logBuffer logBuffer
-		topLevelModMetadata, nestedModMetadata, err := ml.ExtractModMetadata(fullPath, baseFilename+".jar", &logBuffer)
+		topLevelModMetadata, nestedModMetadata, classIndex, err := ml.ExtractModMetadata(fullPath, baseFilename+".jar", &logBuffer)
 		if err != nil {
 			results <- processFileResult{baseFileName: baseFilename, parseError: fmt.Errorf("extracting metadata from %s: %w", task.fileEntry.Name(), err), logs: logBuffer}
 			continue
@@ -245,6 +245,7 @@ func (ml *ModLoader) jarProcessingWorker(modsDir string, wg *sync.WaitGroup, tas
 			BaseFilename:  baseFilename,
 			Metadata:      topLevelModMetadata,
 			NestedModules: nestedModMetadata,
+			ClassIndex:    classIndex,
 		}
 		results <- processFileResult{
 			mod:          currentMod,

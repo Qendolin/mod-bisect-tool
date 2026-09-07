@@ -42,7 +42,7 @@ displayName = "Fabric API Base"
 
 	connector := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var connectorLogs logBuffer
-	connectorMetadata, _, err := connector.ExtractModMetadata(jarPath, "connector.jar", &connectorLogs)
+	connectorMetadata, _, _, err := connector.ExtractModMetadata(jarPath, "connector.jar", &connectorLogs)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata (Connector) failed: %v", err)
 	}
@@ -55,7 +55,7 @@ displayName = "Fabric API Base"
 
 	neoForge := ModParser{RunLoader: RunLoaderNeoForge}
 	var neoForgeLogs logBuffer
-	neoForgeMetadata, _, err := neoForge.ExtractModMetadata(jarPath, "connector.jar", &neoForgeLogs)
+	neoForgeMetadata, _, _, err := neoForge.ExtractModMetadata(jarPath, "connector.jar", &neoForgeLogs)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata (NeoForge) failed: %v", err)
 	}
@@ -89,7 +89,7 @@ displayName = "Dummy FML"
 
 	connector := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var connectorLogs logBuffer
-	connectorMetadata, _, err := connector.ExtractModMetadata(jarPath, "placeholder.jar", &connectorLogs)
+	connectorMetadata, _, _, err := connector.ExtractModMetadata(jarPath, "placeholder.jar", &connectorLogs)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata (Connector) failed: %v", err)
 	}
@@ -107,7 +107,7 @@ displayName = "Dummy FML"
 
 	neoForge := ModParser{RunLoader: RunLoaderNeoForge}
 	var neoForgeLogs logBuffer
-	neoForgeMetadata, _, err := neoForge.ExtractModMetadata(jarPath, "placeholder.jar", &neoForgeLogs)
+	neoForgeMetadata, _, _, err := neoForge.ExtractModMetadata(jarPath, "placeholder.jar", &neoForgeLogs)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata (NeoForge) failed: %v", err)
 	}
@@ -139,7 +139,7 @@ displayName = "Dummy FML"
 
 	p := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var lb logBuffer
-	metadata, _, err := p.ExtractModMetadata(jarPath, "placeholder.jar", &lb)
+	metadata, _, _, err := p.ExtractModMetadata(jarPath, "placeholder.jar", &lb)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata failed: %v", err)
 	}
@@ -162,7 +162,7 @@ func TestConnectorFallbackWarningForFabricOnlyMod(t *testing.T) {
 
 	p := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var lb logBuffer
-	if _, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb); err != nil {
+	if _, _, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb); err != nil {
 		t.Fatalf("ExtractModMetadata failed: %v", err)
 	}
 
@@ -203,7 +203,7 @@ provides = ["fabric-api-base"]
 
 	p := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var lb logBuffer
-	metadata, _, err := p.ExtractModMetadata(jarPath, "connector.jar", &lb)
+	metadata, _, _, err := p.ExtractModMetadata(jarPath, "connector.jar", &lb)
 	if err != nil {
 		t.Fatalf("ExtractModMetadata failed: %v", err)
 	}
@@ -236,7 +236,7 @@ func TestForeignManifestPresenceOnly(t *testing.T) {
 
 		p := ModParser{RunLoader: RunLoaderFabric}
 		var lb logBuffer
-		metadata, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb)
+		metadata, _, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb)
 		if err != nil {
 			t.Fatalf("ExtractModMetadata failed: %v", err)
 		}
@@ -260,7 +260,7 @@ displayName = "Plain NF"`),
 
 		p := ModParser{RunLoader: RunLoaderNeoForge}
 		var lb logBuffer
-		metadata, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb)
+		metadata, _, _, err := p.ExtractModMetadata(jarPath, "plain.jar", &lb)
 		if err != nil {
 			t.Fatalf("ExtractModMetadata failed: %v", err)
 		}
