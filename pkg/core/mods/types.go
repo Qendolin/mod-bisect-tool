@@ -105,6 +105,10 @@ type ProviderInfo struct {
 	VersionOfProvidedItem version.Version
 	IsDirectProvide       bool
 	TopLevelModVersion    version.Version
+	// ProviderJarPath is the path of the jar whose metadata created this
+	// entry, relative to the mods directory: "<file>.jar" for the top-level
+	// mod itself, "<file>.jar/<nested path>" for a nested module.
+	ProviderJarPath string
 }
 
 // PotentialProvidersMap maps a dependency ID to a list of ProviderInfo structs.
