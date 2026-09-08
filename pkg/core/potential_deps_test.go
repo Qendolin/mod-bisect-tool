@@ -74,12 +74,12 @@ type undeclaredPair struct {
 }
 
 // runBisectionWithUndeclaredDeps drives the full bisection through the
-// service layer (not the engine directly), so double-INDETERMINATE results
-// trigger the potential dependency injection. It returns the final conflict
-// set and every injection the service performed.
-func runBisectionWithUndeclaredDeps(t *testing.T, svc *bisect.Service, allMods map[string]*mods.Mod, problematicSets []sets.Set, undeclared []undeclaredPair) (sets.Set, [][]mods.PotentialDependency) {
+// service layer. When double-INDETERMINATE halts the search, it attempts to
+// infer undeclared dependencies, applies them if found, and retries. It returns
+// the final conflict set and every injection performed.
+func runBisectionWithUndeclaredDeps(t *testing.T, svc *bisect.Service, allMods map[string]*mods.Mod, problematicSets []sets.Set, undeclared []undeclaredPair) (sets.Set, [][]mods.InferredDependency) {
 	t.Helper()
-	var injections [][]mods.PotentialDependency
+	var injections [][]mods.InferredDependency
 
 	for testCount := 0; !svc.Engine().GetCurrentState().IsComplete; testCount++ {
 		if testCount > 100 {
@@ -126,10 +126,17 @@ func runBisectionWithUndeclaredDeps(t *testing.T, svc *bisect.Service, allMods m
 
 		t.Logf("Step %d: Testing %v -> Effective %v -> Result: %s", testCount+1,
 			sets.MakeSlice(plan.ModIDsToTest()), sets.MakeSlice(effectiveSet), result)
-		injected := svc.SubmitTestResult(result)
-		if len(injected) > 0 {
-			t.Logf("Step %d injected %d assumed dependencies", testCount+1, len(injected))
-			injections = append(injections, injected)
+		svc.SubmitTestResult(result)
+
+		if svc.Engine().GetCurrentState().IsHalted && svc.CanInferDependencies() {
+			inferred := svc.InferDependencies()
+			if len(inferred) > 0 {
+				injected := svc.ApplyInferredDependencies(inferred)
+				t.Logf("Step %d injected %d inferred dependencies", testCount+1, len(injected))
+				injections = append(injections, injected)
+			} else {
+				svc.DismissInferredDependencies()
+			}
 		}
 	}
 
@@ -219,8 +226,8 @@ func TestDoubleIndeterminateResolvedByAssumedDependencies(t *testing.T) {
 	if len(injections) != 1 || len(injections[0]) != 2 {
 		t.Fatalf("expected exactly one injection of two dependencies, got %+v", injections)
 	}
-	if !svc.PotentialDependenciesUsed() {
-		t.Fatal("expected the potential dependency latch to be set")
+	if svc.CanInferDependencies() {
+		t.Fatal("expected CanInferDependencies to be false after inferred dependencies applied")
 	}
 
 	if allMods["mod_a"].Metadata.Depends["mod_e"] == nil {

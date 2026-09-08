@@ -57,7 +57,7 @@ func (p *ModParser) ExtractModMetadata(jarPath, jarName string, logBuffer *logBu
 	}
 	// The class index is built eagerly while the jar is already open, so the
 	// undeclared dependency inference later only needs map lookups.
-	indexJarReader(&zr.Reader, classIndex, 0, jarName)
+	IndexJar(&zr.Reader, classIndex, 0, jarName)
 
 	metadata, nested, err := p.parseJarTree(newZipIndex(&zr.Reader), jarName, logBuffer)
 	if err != nil {

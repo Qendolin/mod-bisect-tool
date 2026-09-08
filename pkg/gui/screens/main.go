@@ -112,8 +112,6 @@ func (s *MainScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimen
 	}
 	if s.successClick.Clicked(gtx) && s.isTestPromptActive {
 		s.isTestPromptActive = false
-		// Submitting a result can surface blocking dialogs (e.g. assumed
-		// dependency info), so it must not run on the layout thread.
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultGood)

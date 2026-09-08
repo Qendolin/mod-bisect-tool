@@ -249,8 +249,17 @@ other = "? Can't Tell"
 [broken]
 other = "✗ Broken"
 
+[cancel]
+other = "Cancel"
+
 [cancel_test]
 other = "Cancel Test"
+
+[undeclared_dependencies]
+other = "Undeclared Dependencies Detected"
+
+[undeclared_dependencies_description]
+other = "The search was blocked by two mod groups that depend on each other through undeclared dependencies. The following dependencies were inferred from the mods' code. Continue to retry the split with these dependencies applied."
 
 [reset_search]
 other = "Reset Search"

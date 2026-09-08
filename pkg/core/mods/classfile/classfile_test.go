@@ -1,10 +1,9 @@
-package mods
+package classfile
 
 import (
 	"bytes"
 	"encoding/binary"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -139,6 +138,12 @@ func cpClass(nameIndex uint16) []byte {
 	return binary.BigEndian.AppendUint16([]byte{cpTagClass}, nameIndex)
 }
 
+func cpNameAndType(nameIndex, descriptorIndex uint16) []byte {
+	out := []byte{cpTagNameAndType}
+	out = binary.BigEndian.AppendUint16(out, nameIndex)
+	return binary.BigEndian.AppendUint16(out, descriptorIndex)
+}
+
 func cpLong() []byte {
 	return append([]byte{cpTagLong}, make([]byte, 8)...)
 }
@@ -214,8 +219,33 @@ func TestParseClassFileExcludesSelfReference(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseClassFile failed: %v", err)
 	}
+
 	if len(info.References) != 0 {
 		t.Errorf("expected self references to be excluded, got %v", info.References)
+	}
+}
+
+func TestParseClassFileExtractsDescriptorReferences(t *testing.T) {
+	// #1 own name, #2 method descriptor, #3 NameAndType using #2, #4 this_class.
+	data := classFileBytes(4, 5,
+		cpUtf8("com/example/Source"),
+		cpUtf8("(Lcom/example/arg/Argument;[Lcom/example/target/Target;)Lcom/example/result/Result;"),
+		cpNameAndType(1, 2),
+		cpClass(1),
+	)
+
+	info, err := ParseClassFile(data)
+	if err != nil {
+		t.Fatalf("ParseClassFile failed: %v", err)
+	}
+	for _, ref := range []string{
+		"com/example/arg/Argument",
+		"com/example/target/Target",
+		"com/example/result/Result",
+	} {
+		if !slices.Contains(info.References, ref) {
+			t.Errorf("expected descriptor reference %q in %v", ref, info.References)
+		}
 	}
 }
 
@@ -297,198 +327,44 @@ func TestParseClassFileBadMagicErrors(t *testing.T) {
 	}
 }
 
-// --- Tests against real class files compiled with javac ---
+// --- Tests against real class files compiled with javac (pre-compiled in testdata/classes) ---
 
-// compileJava compiles the given source files into dir/out and returns the
-// paths of all produced .class files. Skipped when javac is not installed.
-func compileJava(t *testing.T, dir string, sources map[string]string) []string {
+func loadTestdataClasses(t *testing.T) map[string]ClassInfo {
 	t.Helper()
-
-	javac, err := exec.LookPath("javac")
-	if err != nil {
-		t.Skip("javac not found in PATH; skipping compiled-class-file test")
-	}
-
-	outDir := filepath.Join(dir, "out")
-	if err := os.MkdirAll(outDir, 0755); err != nil {
-		t.Fatal(err)
-	}
-
-	var sourcePaths []string
-	for name, content := range sources {
-		path := filepath.Join(dir, name)
-		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
-			t.Fatal(err)
-		}
-		sourcePaths = append(sourcePaths, path)
-	}
-
-	cmd := exec.Command(javac, append([]string{"-d", outDir}, sourcePaths...)...)
-	if output, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("javac failed: %v\n%s", err, output)
-	}
-
-	var classFiles []string
-	err = filepath.WalkDir(outDir, func(path string, d os.DirEntry, err error) error {
+	testdataDir := filepath.Join("testdata", "classes")
+	byName := make(map[string]ClassInfo)
+	err := filepath.WalkDir(testdataDir, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if !d.IsDir() && strings.HasSuffix(path, ".class") {
-			classFiles = append(classFiles, path)
+			data, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatalf("failed to read testdata class %s: %v", path, err)
+			}
+			info, err := ParseClassFile(data)
+			if err != nil {
+				t.Fatalf("ParseClassFile failed for %s: %v", path, err)
+			}
+			byName[filepath.Base(path)] = info
 		}
 		return nil
 	})
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("failed to walk testdata/classes: %v", err)
 	}
-	return classFiles
+	return byName
 }
-
-func parseCompiledClass(t *testing.T, path string) ClassInfo {
-	t.Helper()
-	data, err := os.ReadFile(path)
-	if err != nil {
-		t.Fatal(err)
-	}
-	info, err := ParseClassFile(data)
-	if err != nil {
-		t.Fatalf("ParseClassFile failed for %s: %v", path, err)
-	}
-	return info
-}
-
-const classSourceA = `package com.example.a;
-
-public class A {
-    public static final long LIMIT = 1234567890123L;
-
-    public static String greet(String name) {
-        return "Hello, " + name + "!";
-    }
-}
-`
-
-const classSourceB = `package com.example.b;
-
-import com.example.a.A;
-
-public class B implements Runnable {
-    @Override
-    public void run() {
-        if (A.LIMIT > 0) {
-            A.greet("x").length();
-        }
-        Runnable lambda = () -> System.out.println(A.greet("y"));
-        lambda.run();
-    }
-}
-`
-
-const classSourceModuleInfo = `module com.example.test {
-    exports com.example.a;
-}
-`
-
-const classSourceRuntimeRef = `package com.example.a;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
-public @interface RuntimeRef {
-    Class<?> value();
-}
-`
-
-const classSourceClassRef = `package com.example.a;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.CLASS)
-public @interface ClassRef {
-    Class<?> value();
-}
-`
-
-const classSourceTypeUseRef = `package com.example.a;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE_USE)
-public @interface TypeUseRef {
-    Class<?> value();
-}
-`
-
-const classSourceTypeUseAnnotated = `package com.example.b;
-
-import com.example.a.A;
-import com.example.a.TypeUseRef;
-
-import java.util.List;
-
-public class TypeUseAnnotated {
-    void method() {
-        try {
-            Object o = new Object();
-            if (o instanceof @TypeUseRef(String.class) String s) {
-                A.greet(s);
-            }
-        } catch (@TypeUseRef(RuntimeException.class) RuntimeException e) {
-            throw e;
-        }
-        List<@TypeUseRef(Integer.class) String> list = null;
-        A.greet(list.toString());
-    }
-}
-`
-
-const classSourceAnnotated = `package com.example.b;
-
-import com.example.a.A;
-import com.example.a.ClassRef;
-import com.example.a.RuntimeRef;
-
-@RuntimeRef(A.class)
-public class Annotated {
-    @ClassRef(A.class)
-    private String field;
-
-    public void method(@RuntimeRef(A.class) String param) {
-    }
-}
-`
 
 func TestParseClassFileCompiledWithJavac(t *testing.T) {
-	dir := t.TempDir()
-	classFiles := compileJava(t, dir, map[string]string{
-		"A.java":                classSourceA,
-		"B.java":                classSourceB,
-		"RuntimeRef.java":       classSourceRuntimeRef,
-		"ClassRef.java":         classSourceClassRef,
-		"TypeUseRef.java":       classSourceTypeUseRef,
-		"Annotated.java":        classSourceAnnotated,
-		"TypeUseAnnotated.java": classSourceTypeUseAnnotated,
-		"module-info.java":      classSourceModuleInfo,
-	})
-	if len(classFiles) == 0 {
-		t.Fatal("javac produced no class files")
-	}
-
-	byName := make(map[string]ClassInfo)
-	for _, path := range classFiles {
-		info := parseCompiledClass(t, path)
-		byName[filepath.Base(path)] = info
+	byName := loadTestdataClasses(t)
+	if len(byName) == 0 {
+		t.Fatal("no testdata class files found in testdata/classes")
 	}
 
 	a, ok := byName["A.class"]
 	if !ok {
-		t.Fatalf("A.class not among compiled files: %v", classFiles)
+		t.Fatalf("A.class not found in testdata")
 	}
 	if a.Name != "com/example/a/A" {
 		t.Errorf("expected A.class to declare com/example/a/A, got %q", a.Name)
@@ -499,7 +375,7 @@ func TestParseClassFileCompiledWithJavac(t *testing.T) {
 
 	b, ok := byName["B.class"]
 	if !ok {
-		t.Fatalf("B.class not among compiled files: %v", classFiles)
+		t.Fatalf("B.class not found in testdata")
 	}
 	if b.Name != "com/example/b/B" {
 		t.Errorf("expected B.class to declare com/example/b/B, got %q", b.Name)
@@ -517,7 +393,7 @@ func TestParseClassFileCompiledWithJavac(t *testing.T) {
 	// reference would be invisible.
 	annotated, ok := byName["Annotated.class"]
 	if !ok {
-		t.Fatalf("Annotated.class not among compiled files: %v", classFiles)
+		t.Fatalf("Annotated.class not found in testdata")
 	}
 	if annotated.Name != "com/example/b/Annotated" {
 		t.Errorf("expected Annotated.class to declare com/example/b/Annotated, got %q", annotated.Name)
@@ -535,7 +411,7 @@ func TestParseClassFileCompiledWithJavac(t *testing.T) {
 	// argument) — the target_info paths that previously desynced the parser.
 	typeUseAnnotated, ok := byName["TypeUseAnnotated.class"]
 	if !ok {
-		t.Fatalf("TypeUseAnnotated.class not among compiled files: %v", classFiles)
+		t.Fatalf("TypeUseAnnotated.class not found in testdata")
 	}
 	for _, want := range []string{"java/lang/String", "java/lang/RuntimeException", "java/lang/Integer"} {
 		if !slices.Contains(typeUseAnnotated.References, want) {
@@ -545,7 +421,7 @@ func TestParseClassFileCompiledWithJavac(t *testing.T) {
 
 	mi, ok := byName["module-info.class"]
 	if !ok {
-		t.Fatalf("module-info.class not among compiled files: %v", classFiles)
+		t.Fatalf("module-info.class not found in testdata")
 	}
 	if mi.Name != "module-info" {
 		t.Errorf("expected module-info.class to declare module-info, got %q", mi.Name)
@@ -750,4 +626,93 @@ func TestParseClassFileUnknownElementValueTagErrors(t *testing.T) {
 	if !strings.Contains(err.Error(), "unknown annotation element value tag") {
 		t.Errorf("expected the error to name the element value tag, got: %v", err)
 	}
+}
+
+func TestParseClassFileDescriptorWithInternalL(t *testing.T) {
+	// Descriptor containing classes with internal uppercase 'L':
+	// java/util/List must not produce "ist"
+	// com/example/ClassLoader must not produce "oader"
+	data := classFileBytes(4, 5,
+		cpUtf8("com/example/Source"),
+		cpUtf8("(Ljava/util/List;Lcom/example/ClassLoader;)V"),
+		cpNameAndType(1, 2),
+		cpClass(1),
+	)
+
+	info, err := ParseClassFile(data)
+	if err != nil {
+		t.Fatalf("ParseClassFile failed: %v", err)
+	}
+
+	for _, bogus := range []string{"ist", "oader"} {
+		if slices.Contains(info.References, bogus) {
+			t.Errorf("bogus truncated reference %q extracted from descriptor", bogus)
+		}
+	}
+
+	for _, want := range []string{"java/util/List", "com/example/ClassLoader"} {
+		if !slices.Contains(info.References, want) {
+			t.Errorf("expected reference %q, got %v", want, info.References)
+		}
+	}
+}
+
+func TestParseClassFileSignaturesAndGenerics(t *testing.T) {
+	b := newClassBuilder("com/example/Test")
+
+	// Class-level Signature attribute: generic superclass & interface
+	// Lcom/example/Super<Lcom/example/TypeArg;>;Lcom/example/Interface<[Lcom/example/ArrayArg;>;
+	sig := "Lcom/example/Super<Lcom/example/TypeArg;>;Lcom/example/Interface<[Lcom/example/ArrayArg;>;"
+	sigAttr := b.attribute("Signature", binary.BigEndian.AppendUint16(nil, b.utf8(sig)))
+
+	data := b.build(sigAttr)
+	info, err := ParseClassFile(data)
+	if err != nil {
+		t.Fatalf("ParseClassFile failed: %v", err)
+	}
+
+	expected := []string{
+		"com/example/Super",
+		"com/example/TypeArg",
+		"com/example/Interface",
+		"com/example/ArrayArg",
+	}
+	for _, want := range expected {
+		if !slices.Contains(info.References, want) {
+			t.Errorf("missing expected reference %q, got %v", want, info.References)
+		}
+	}
+}
+
+func TestParseClassFileMalformedSignatureAttribute(t *testing.T) {
+	b := newClassBuilder("com/example/Test")
+	// Declared length is 0 (invalid for Signature, which requires length 2)
+	badSigAttr := b.attribute("Signature", []byte{})
+
+	data := b.build(badSigAttr)
+	_, err := ParseClassFile(data)
+	if err == nil {
+		t.Fatal("expected error for Signature attribute with length < 2, got nil")
+	}
+}
+
+func TestParseClassFileAnnotationEnumValue(t *testing.T) {
+	b := newClassBuilder("com/example/Foo")
+
+	var ann bytes.Buffer
+	writeU2(&ann, b.utf8("Lcom/example/Ann;"))
+	writeU2(&ann, 1)
+	writeU2(&ann, b.utf8("mode"))
+	ann.WriteByte('e')
+	writeU2(&ann, b.utf8("Lcom/example/MyEnum;"))
+	writeU2(&ann, b.utf8("VALUE"))
+
+	data := b.build(b.attribute("RuntimeVisibleAnnotations", concatAnnotations(ann.Bytes())))
+	info, err := ParseClassFile(data)
+	if err != nil {
+		t.Fatalf("ParseClassFile failed: %v", err)
+	}
+
+	assertContainsRef(t, info.References, "com/example/MyEnum")
+	assertContainsRef(t, info.References, "com/example/Ann")
 }

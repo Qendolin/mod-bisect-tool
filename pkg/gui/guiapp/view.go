@@ -59,3 +59,9 @@ func (a *App) OnBisectionHalted(groupA, groupB sets.Set) {
 		a.SetActiveScreen(screens.NewHaltScreen(a, groupA, groupB))
 	})
 }
+
+func (a *App) OnUndeclaredDependenciesDetected(deps []ui.InferredDependency) {
+	a.Run(func() {
+		a.SetActiveScreen(screens.NewInferredDepsScreen(a, deps))
+	})
+}

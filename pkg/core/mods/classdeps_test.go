@@ -1,6 +1,10 @@
 package mods
 
 import (
+	"archive/zip"
+	"bytes"
+	"encoding/binary"
+	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
@@ -9,7 +13,49 @@ import (
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 )
 
-// mustWriteJar writes a zip archive to dir and returns its full path.
+func IndexJarClasses(jarPath string) (*JarClassIndex, error) {
+	zr, err := zip.OpenReader(jarPath)
+	if err != nil {
+		return nil, fmt.Errorf("opening JAR %s: %w", jarPath, err)
+	}
+	defer zr.Close()
+
+	index := &JarClassIndex{
+		Declared:   make(map[string]struct{}),
+		Referenced: make(map[string]struct{}),
+	}
+	IndexJar(&zr.Reader, index, 0, filepath.Base(jarPath))
+	return index, nil
+}
+
+func classFileBytes(thisClassIndex, cpCount uint16, cpEntries ...[]byte) []byte {
+	var buf bytes.Buffer
+	buf.Write([]byte{0xCA, 0xFE, 0xBA, 0xBE})
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	_ = binary.Write(&buf, binary.BigEndian, uint16(52))
+	_ = binary.Write(&buf, binary.BigEndian, cpCount)
+	for _, entry := range cpEntries {
+		buf.Write(entry)
+	}
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0x0021))
+	_ = binary.Write(&buf, binary.BigEndian, thisClassIndex)
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	_ = binary.Write(&buf, binary.BigEndian, uint16(0))
+	return buf.Bytes()
+}
+
+func cpUtf8(s string) []byte {
+	out := binary.BigEndian.AppendUint16([]byte{1}, uint16(len(s)))
+	return append(out, s...)
+}
+
+func cpClass(nameIndex uint16) []byte {
+	return binary.BigEndian.AppendUint16([]byte{7}, nameIndex)
+}
+
 func mustWriteJar(t *testing.T, dir, name string, entries map[string][]byte) string {
 	t.Helper()
 	path := filepath.Join(dir, name)
@@ -19,16 +65,11 @@ func mustWriteJar(t *testing.T, dir, name string, entries map[string][]byte) str
 	return path
 }
 
-// classDeclaring builds class file bytes for a class that declares itself.
 func classDeclaring(internalName string) []byte {
 	return classFileBytes(2, 3, cpUtf8(internalName), cpClass(1))
 }
 
-// classReferencing builds class file bytes for a class that declares itself
-// and references other internal class names.
 func classReferencing(internalName string, refs ...string) []byte {
-	// #1 own name, #2.. Utf8 entries for the refs, then one Class entry per
-	// Utf8, and this_class last.
 	utf8Count := 1 + len(refs)
 	thisClass := uint16(2 * utf8Count)
 	entries := make([][]byte, 0, utf8Count+len(refs)+1)
@@ -43,8 +84,6 @@ func classReferencing(internalName string, refs ...string) []byte {
 	return classFileBytes(thisClass, uint16(len(entries)+1), entries...)
 }
 
-// modAt builds a Mod for the jar with the class index populated, mirroring
-// what the loader does at load time.
 func modAt(t *testing.T, id, jarPath string) *Mod {
 	t.Helper()
 	index, err := IndexJarClasses(jarPath)
@@ -59,9 +98,6 @@ func modAt(t *testing.T, id, jarPath string) *Mod {
 	}
 }
 
-// TestVendoredClassPrefixes spot-checks the vendored-library exclusion list:
-// common shaded library packages are excluded, while Fabric API, QSL and
-// ordinary mod packages remain eligible as dependency targets.
 func TestVendoredClassPrefixes(t *testing.T) {
 	excluded := []string{
 		"com/google/common/collect/ImmutableList",
@@ -127,13 +163,13 @@ func TestIndexJarClassesTopLevelAndNested(t *testing.T) {
 		}
 	}
 	if !slices.Contains(sortedKeys(index.Referenced), "com/pkg/A") {
-		t.Errorf("expected referenced class %q from the nested jar, got %v", "com/pkg/A", sortedKeys(index.Referenced))
+		t.Errorf("expected referenced class %q from nested jar, got %v", "com/pkg/A", sortedKeys(index.Referenced))
 	}
 }
 
 func TestIndexJarClassesMissingFileErrors(t *testing.T) {
 	if _, err := IndexJarClasses(filepath.Join(t.TempDir(), "does-not-exist.jar")); err == nil {
-		t.Fatal("expected an error for a missing jar file, got nil")
+		t.Fatal("expected error for missing jar file, got nil")
 	}
 }
 
@@ -146,7 +182,7 @@ func sortedKeys(set map[string]struct{}) []string {
 	return keys
 }
 
-func TestInferPotentialDependencies(t *testing.T) {
+func TestInferDependencies(t *testing.T) {
 	dir := t.TempDir()
 
 	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
@@ -159,14 +195,14 @@ func TestInferPotentialDependencies(t *testing.T) {
 		"com/c/C.class": classDeclaring("com/c/C"),
 	})
 
-	deps := InferPotentialDependencies(map[string]*Mod{
+	deps := InferDependencies(map[string]*Mod{
 		"a": modAt(t, "a", aJar),
 		"b": modAt(t, "b", bJar),
 		"c": modAt(t, "c", cJar),
 	})
 
 	if len(deps) != 1 {
-		t.Fatalf("expected exactly 1 potential dependency, got %+v", deps)
+		t.Fatalf("expected exactly 1 inferred dependency, got %+v", deps)
 	}
 	dep := deps[0]
 	if dep.SourceID != "b" || dep.TargetID != "a" {
@@ -177,7 +213,7 @@ func TestInferPotentialDependencies(t *testing.T) {
 	}
 }
 
-func TestInferPotentialDependenciesSkipsAlreadyDeclared(t *testing.T) {
+func TestInferDependenciesSkipsAlreadyDeclared(t *testing.T) {
 	dir := t.TempDir()
 
 	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
@@ -193,25 +229,20 @@ func TestInferPotentialDependenciesSkipsAlreadyDeclared(t *testing.T) {
 		return mod
 	}
 
-	if deps := InferPotentialDependencies(map[string]*Mod{"a": modAt(t, "a", aJar), "b": newMod()}); len(deps) != 0 {
-		t.Errorf("expected no potential dependency when already declared, got %+v", deps)
+	if deps := InferDependencies(map[string]*Mod{"a": modAt(t, "a", aJar), "b": newMod()}); len(deps) != 0 {
+		t.Errorf("expected no dependency when already declared, got %+v", deps)
 	}
 
-	// A dependency on one of the target's provided IDs also counts as declared.
 	a := modAt(t, "a", aJar)
 	a.Metadata.Provides = []string{"a-provided"}
 	providedMod := newMod()
 	providedMod.Metadata.Depends = VersionRanges{"a-provided": {version.Any()}}
-	if deps := InferPotentialDependencies(map[string]*Mod{"a": a, "b": providedMod}); len(deps) != 0 {
-		t.Errorf("expected no potential dependency when declared via provides, got %+v", deps)
+	if deps := InferDependencies(map[string]*Mod{"a": a, "b": providedMod}); len(deps) != 0 {
+		t.Errorf("expected no dependency when declared via provides, got %+v", deps)
 	}
 }
 
-// TestInferPotentialDependenciesSkipsNestedModuleProvides verifies that a
-// dependency on an ID provided by one of the target's nested modules counts
-// as already declared (EffectiveProvides), so no dependency on the container
-// mod is inferred.
-func TestInferPotentialDependenciesSkipsNestedModuleProvides(t *testing.T) {
+func TestInferDependenciesSkipsNestedModuleProvides(t *testing.T) {
 	dir := t.TempDir()
 
 	containerJar := mustWriteJar(t, dir, "container.jar", map[string][]byte{
@@ -227,17 +258,13 @@ func TestInferPotentialDependenciesSkipsNestedModuleProvides(t *testing.T) {
 	user := modAt(t, "user", userJar)
 	user.Metadata.Depends = VersionRanges{"sodium": {version.Any()}}
 
-	deps := InferPotentialDependencies(map[string]*Mod{"container": container, "user": user})
+	deps := InferDependencies(map[string]*Mod{"container": container, "user": user})
 	if len(deps) != 0 {
 		t.Errorf("expected dependency on nested-module provide to count as declared, got %+v", deps)
 	}
 }
 
-// TestInferPotentialDependenciesSkipsVendoredClasses verifies the
-// minecord-style case: a mod that vendors library classes (e.g.
-// org/slf4j/Logger) into its own jar does not become a dependency target for
-// other mods referencing those classes.
-func TestInferPotentialDependenciesSkipsVendoredClasses(t *testing.T) {
+func TestInferDependenciesSkipsVendoredClasses(t *testing.T) {
 	dir := t.TempDir()
 
 	vendorJar := mustWriteJar(t, dir, "vendor.jar", map[string][]byte{
@@ -248,7 +275,7 @@ func TestInferPotentialDependenciesSkipsVendoredClasses(t *testing.T) {
 		"com/user/User.class": classReferencing("com/user/User", "org/slf4j/Logger"),
 	})
 
-	deps := InferPotentialDependencies(map[string]*Mod{
+	deps := InferDependencies(map[string]*Mod{
 		"vendor": modAt(t, "vendor", vendorJar),
 		"user":   modAt(t, "user", userJar),
 	})
@@ -257,7 +284,7 @@ func TestInferPotentialDependenciesSkipsVendoredClasses(t *testing.T) {
 	}
 }
 
-func TestInferPotentialDependenciesSkipsAmbiguousClasses(t *testing.T) {
+func TestInferDependenciesSkipsAmbiguousClasses(t *testing.T) {
 	dir := t.TempDir()
 
 	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
@@ -270,7 +297,7 @@ func TestInferPotentialDependenciesSkipsAmbiguousClasses(t *testing.T) {
 		"com/b/Bar.class": classReferencing("com/b/Bar", "com/shared/Foo"),
 	})
 
-	deps := InferPotentialDependencies(map[string]*Mod{
+	deps := InferDependencies(map[string]*Mod{
 		"a": modAt(t, "a", aJar),
 		"b": modAt(t, "b", bJar),
 		"c": modAt(t, "c", cJar),
@@ -280,24 +307,20 @@ func TestInferPotentialDependenciesSkipsAmbiguousClasses(t *testing.T) {
 	}
 }
 
-func TestInferPotentialDependenciesSkipsSelfAndUnknown(t *testing.T) {
+func TestInferDependenciesSkipsSelfAndUnknown(t *testing.T) {
 	dir := t.TempDir()
 
 	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
-		// References its own class and a class nobody declares.
 		"com/a/Foo.class": classReferencing("com/a/Foo", "com/a/Foo", "java/lang/Object"),
 	})
 
-	deps := InferPotentialDependencies(map[string]*Mod{"a": modAt(t, "a", aJar)})
+	deps := InferDependencies(map[string]*Mod{"a": modAt(t, "a", aJar)})
 	if len(deps) != 0 {
 		t.Errorf("expected self and unknown references to be ignored, got %+v", deps)
 	}
 }
 
-// TestInferPotentialDependenciesSkipsMissingClassIndex verifies that a mod
-// without a class index (e.g. hand-built) is skipped instead of aborting the
-// inference.
-func TestInferPotentialDependenciesSkipsMissingClassIndex(t *testing.T) {
+func TestInferDependenciesSkipsMissingClassIndex(t *testing.T) {
 	dir := t.TempDir()
 
 	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
@@ -308,13 +331,67 @@ func TestInferPotentialDependenciesSkipsMissingClassIndex(t *testing.T) {
 	})
 
 	b := modAt(t, "b", bJar)
-	b.ClassIndex = nil // Unindexed mod.
+	b.ClassIndex = nil
 
-	deps := InferPotentialDependencies(map[string]*Mod{
+	deps := InferDependencies(map[string]*Mod{
 		"a": modAt(t, "a", aJar),
 		"b": b,
 	})
 	if len(deps) != 0 {
-		t.Errorf("expected the unindexed mod to be skipped, got %+v", deps)
+		t.Errorf("expected unindexed mod to be skipped, got %+v", deps)
+	}
+}
+
+func TestApplyInferredDependencies(t *testing.T) {
+	allMods := map[string]*Mod{
+		"a": {Metadata: ModMetadata{ID: "a"}},
+		"b": {Metadata: ModMetadata{ID: "b"}},
+	}
+	deps := []InferredDependency{
+		{SourceID: "b", TargetID: "a", Classes: []string{"com/a/Foo"}},
+	}
+	applied := ApplyInferredDependencies(allMods, deps)
+	if len(applied) != 1 {
+		t.Fatalf("expected 1 applied dependency, got %d", len(applied))
+	}
+	if allMods["b"].Metadata.Depends["a"] == nil {
+		t.Fatal("expected mod b to now depend on a")
+	}
+
+	// Second apply should be a no-op because it's already present.
+	appliedAgain := ApplyInferredDependencies(allMods, deps)
+	if len(appliedAgain) != 0 {
+		t.Fatalf("expected 0 reapplied dependencies, got %d", len(appliedAgain))
+	}
+}
+
+func TestInferDependenciesSkipsSuggestsAndConflicts(t *testing.T) {
+	dir := t.TempDir()
+
+	bJar := mustWriteJar(t, dir, "b.jar", map[string][]byte{
+		"com/b/B.class": classDeclaring("com/b/B"),
+	})
+	bMod := modAt(t, "b", bJar)
+
+	aJar := mustWriteJar(t, dir, "a.jar", map[string][]byte{
+		"com/a/A.class": classReferencing("com/a/A", "com/b/B"),
+	})
+
+	// Case 1: Mod A declares Suggests: b (optional dependency)
+	aModSuggests := modAt(t, "a", aJar)
+	aModSuggests.Metadata.Suggests = VersionRanges{"b": {version.Any()}}
+
+	deps := InferDependencies(map[string]*Mod{"a": aModSuggests, "b": bMod})
+	if len(deps) != 0 {
+		t.Errorf("expected no dependency when target is in Suggests, got %+v", deps)
+	}
+
+	// Case 2: Mod A declares Breaks: b (incompatible mod)
+	aModBreaks := modAt(t, "a", aJar)
+	aModBreaks.Metadata.Breaks = VersionRanges{"b": {version.Any()}}
+
+	deps = InferDependencies(map[string]*Mod{"a": aModBreaks, "b": bMod})
+	if len(deps) != 0 {
+		t.Errorf("expected no dependency when target is in Breaks, got %+v", deps)
 	}
 }

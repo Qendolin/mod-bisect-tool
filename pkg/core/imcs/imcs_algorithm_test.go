@@ -186,30 +186,24 @@ func TestIndeterminateComplementFail(t *testing.T) {
 	}
 }
 
-// TestIndeterminateBothHalvesRequestsPotentialDependencies verifies that a
-// double-INDETERMINATE result (both halves of a split crash independently)
-// does not halt immediately: the search requests potential dependency
-// injection from the service layer. When nothing can be injected (simulated
-// here via HaltSearch, as the service does), the search halts and the current
-// candidate set is preserved so the UI can reconstruct the two conflicting
-// groups.
-func TestIndeterminateBothHalvesRequestsPotentialDependencies(t *testing.T) {
+// TestIndeterminateBothHalvesHalts verifies that a double-INDETERMINATE result
+// halts the search and preserves the candidate set so the UI can reconstruct the groups.
+func TestIndeterminateBothHalvesHalts(t *testing.T) {
 	mods := []string{"a", "b", "c", "d"}
 
 	oracle := func(s sets.Set) TestResult {
 		_, hasA := s["a"]
 		_, hasC := s["c"]
 		if hasA != hasC {
-			// Exactly one of a and c is present, so the missing partner causes a crash.
 			return TestResultIndeterminate
 		}
 		return TestResultGood
 	}
 
 	engine := NewEngine(initialStateFor(mods...))
-	for steps := 0; !engine.GetCurrentState().NeedsPotentialDependencies; steps++ {
+	for steps := 0; !engine.GetCurrentState().IsHalted; steps++ {
 		if steps > 100 {
-			t.Fatal("search never requested potential dependency injection")
+			t.Fatal("search did not halt on double-indeterminate")
 		}
 		plan, err := engine.PlanNextTest()
 		if err != nil {
@@ -221,34 +215,13 @@ func TestIndeterminateBothHalvesRequestsPotentialDependencies(t *testing.T) {
 	}
 
 	state := engine.GetCurrentState()
-	if state.IsHalted {
-		t.Fatal("expected the search to not halt before the service reacts")
-	}
-	if state.IsComplete {
-		t.Fatal("expected the search to not be complete")
-	}
-	if state.IsHandlingIndeterminate {
-		t.Fatal("expected the indeterminate handling to be cleared for the re-plan")
-	}
-	if len(state.ConflictSet) != 0 {
-		t.Fatalf("expected empty conflict set, got %v", sets.MakeSlice(state.ConflictSet))
-	}
-
-	// Simulate the service finding no injectable dependencies: the search halts.
-	engine.HaltSearch()
-
-	state = engine.GetCurrentState()
 	if !state.IsHalted {
-		t.Fatalf("expected the search to be halted, but IsHalted=%t", state.IsHalted)
+		t.Fatalf("expected search to be halted, got IsHalted=%t", state.IsHalted)
 	}
 	if state.IsComplete {
-		t.Fatal("expected the halted search to not be marked complete")
-	}
-	if state.NeedsPotentialDependencies {
-		t.Fatal("expected the potential dependency request to be cleared on halt")
+		t.Fatal("expected halted search to not be complete")
 	}
 
-	// The two groups are reconstructable from the preserved candidate set.
 	candidateSlice := sets.MakeSlice(state.GetCandidateSet())
 	c1, c2 := sets.Split(candidateSlice)
 	if !sets.Equal(sets.MakeSet(c1), sets.MakeSet([]string{"a", "b"})) ||
@@ -261,12 +234,9 @@ func TestIndeterminateBothHalvesRequestsPotentialDependencies(t *testing.T) {
 	}
 }
 
-// TestDoubleIndeterminateReplansSameSplitAfterInjection verifies that after
-// the service has injected potential dependencies, the next planned test
-// re-runs the same split (same stable set and candidates), so the split is
-// retried with the referenced mods activated. With observability restored
-// (simulated in the oracle), the search completes normally.
-func TestDoubleIndeterminateReplansSameSplitAfterInjection(t *testing.T) {
+// TestDoubleIndeterminateRetryHaltedSplit verifies that RetryHaltedSplit re-runs the
+// same split so that if external conditions change, the search can complete.
+func TestDoubleIndeterminateRetryHaltedSplit(t *testing.T) {
 	mods := []string{"a", "b", "c", "d"}
 
 	injected := false
@@ -276,8 +246,6 @@ func TestDoubleIndeterminateReplansSameSplitAfterInjection(t *testing.T) {
 		if hasA != hasC && !injected {
 			return TestResultIndeterminate
 		}
-		// After the injection, a's partner c is activated alongside, so the
-		// test becomes observable. The primary conflict is c.
 		if hasC {
 			return TestResultFail
 		}
@@ -287,17 +255,15 @@ func TestDoubleIndeterminateReplansSameSplitAfterInjection(t *testing.T) {
 	engine := NewEngine(initialStateFor(mods...))
 
 	var firstSplitTest sets.Set
-	for steps := 0; !engine.GetCurrentState().NeedsPotentialDependencies; steps++ {
+	for steps := 0; !engine.GetCurrentState().IsHalted; steps++ {
 		if steps > 100 {
-			t.Fatal("search never requested potential dependency injection")
+			t.Fatal("search did not halt")
 		}
 		plan, err := engine.PlanNextTest()
 		if err != nil {
 			t.Fatalf("PlanNextTest failed: %v", err)
 		}
 		if plan.Kind == TestPlanNewBisection {
-			// The initial test of the split; the injection retries the split
-			// from its start, so this is the plan to compare against.
 			firstSplitTest = plan.ModIDsToTest()
 		}
 		if err := engine.SubmitTestResult(oracle(plan.ModIDsToTest())); err != nil {
@@ -305,26 +271,22 @@ func TestDoubleIndeterminateReplansSameSplitAfterInjection(t *testing.T) {
 		}
 	}
 
-	// Simulate the service injecting the dependencies.
+	// Retry the halted split after conditions changed.
 	injected = true
-	engine.ClearNeedsPotentialDependencies()
+	engine.RetryHaltedSplit()
 
 	plan, err := engine.GetCurrentTestPlan()
 	if err != nil {
-		t.Fatalf("GetCurrentTestPlan failed after injection: %v", err)
+		t.Fatalf("GetCurrentTestPlan failed after retry: %v", err)
 	}
 	if firstSplitTest == nil || !sets.Equal(plan.ModIDsToTest(), firstSplitTest) {
-		t.Fatalf("expected the split's first test to be re-planned after injection (%v), got %v",
+		t.Fatalf("expected split test to be re-planned (%v), got %v",
 			sets.MakeSlice(firstSplitTest), sets.MakeSlice(plan.ModIDsToTest()))
 	}
 
-	// Drive the rest of the search to completion.
 	for steps := 0; !engine.GetCurrentState().IsComplete; steps++ {
 		if steps > 100 {
-			t.Fatal("search did not complete after injection")
-		}
-		if engine.GetCurrentState().NeedsPotentialDependencies {
-			t.Fatal("expected no further potential dependency requests")
+			t.Fatal("search did not complete after retry")
 		}
 		next, err := engine.PlanNextTest()
 		if err != nil {

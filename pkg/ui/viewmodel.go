@@ -108,10 +108,6 @@ type BisectionProgressViewModel struct {
 	EstimatedMaxTests  int
 	LastTestResult     imcs.TestResult
 	LastFoundElement   string
-	// PotentialDependenciesUsed is true once assumed (bytecode-analysis
-	// inferred) undeclared dependencies have been injected into the
-	// dependency resolution.
-	PotentialDependenciesUsed bool
 }
 
 // SearchSetsViewModel groups the sets describing the current search position.

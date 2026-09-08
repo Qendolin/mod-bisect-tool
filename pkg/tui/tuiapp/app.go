@@ -218,9 +218,10 @@ func (a *App) ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods sets.
 	})
 }
 
-// ShowDialogInfoBisectionAssumedDepsApplied is a no-op stub: the GUI surfaces
-// assumed (bytecode-analysis inferred) dependencies, the TUI does not yet.
-func (a *App) ShowDialogInfoBisectionAssumedDepsApplied(deps []ui.AssumedDependency) {
+func (a *App) OnUndeclaredDependenciesDetected(deps []ui.InferredDependency) {
+	a.ExecuteAndDraw(func() {
+		a.navManager.ShowModal(tui.PageUndeclaredDepsID, pages.NewUndeclaredDepsPage(a, deps))
+	})
 }
 
 func (a *App) ShowDialogQuestionBisectionContinueWithMissingMods(missingMods sets.Set) bool {

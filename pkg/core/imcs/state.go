@@ -79,19 +79,9 @@ type SearchState struct {
 
 	// IsVerifyingConflictSet is true if the next test planned should be the final `test(ConflictSet)` optimization step.
 	IsVerifyingConflictSet bool
-	// IsHalted is true if the search was stopped because both halves of a split
-	// returned INDETERMINATE and potential dependencies could not help. No
-	// further tests can be planned. The search stack is left intact so the UI
-	// can reconstruct the two conflicting groups from the current candidate set.
+	// IsHalted is true if the search stopped because both halves of a split
+	// returned INDETERMINATE. The search stack is left intact so candidates can be inspected.
 	IsHalted bool
-	// NeedsPotentialDependencies is set when both halves of a split returned
-	// INDETERMINATE for the first time. The service layer must then inject
-	// inferred undeclared dependencies (bytecode analysis) into the mod
-	// metadata, or halt the search if none can be inferred. The split frame
-	// stays on the stack and IsHandlingIndeterminate is cleared, so after the
-	// injection the same split is simply re-planned — now with the injected
-	// dependencies resolved in, which is expected to make the halves observable.
-	NeedsPotentialDependencies bool
 	// AllModIDs is the universe of all mods, used for context and resetting candidates.
 	AllModIDs []string
 	// IsComplete is true if the search has concluded and no more tests are needed.

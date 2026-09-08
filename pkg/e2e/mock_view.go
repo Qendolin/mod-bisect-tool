@@ -23,7 +23,6 @@ const (
 	DialogErrorBisectionPrepare
 	DialogInfoBisectionModsMissingExpected
 	DialogInfoBisectionUnresolvableModsDisabled
-	DialogInfoBisectionAssumedDepsApplied
 	DialogQuestionBisectionContinueWithMissingMods
 )
 
@@ -43,8 +42,6 @@ func (k DialogKind) String() string {
 		return "ShowDialogInfoBisectionModsMissingExpected"
 	case DialogInfoBisectionUnresolvableModsDisabled:
 		return "ShowDialogInfoBisectionUnresolvableModsDisabled"
-	case DialogInfoBisectionAssumedDepsApplied:
-		return "ShowDialogInfoBisectionAssumedDepsApplied"
 	case DialogQuestionBisectionContinueWithMissingMods:
 		return "ShowDialogQuestionBisectionContinueWithMissingMods"
 	default:
@@ -61,7 +58,6 @@ type DialogInvocation struct {
 	Err          error
 	MissingMods  sets.Set
 	DisabledMods sets.Set
-	AssumedDeps  []ui.AssumedDependency
 
 	respond chan bool
 }
@@ -89,6 +85,7 @@ type MockView struct {
 	// haltedCh receives the groups passed to OnBisectionHalted (once each).
 	haltedCh                   chan HaltInvocation
 	initialModStateSelectionCh chan []string
+	inferredDepsCh             chan []ui.InferredDependency
 }
 
 // HaltInvocation describes a single OnBisectionHalted call.
@@ -105,6 +102,7 @@ func NewMockView() *MockView {
 		unresolvableCh:             make(chan []ui.UnresolvableModInfo, 1),
 		haltedCh:                   make(chan HaltInvocation, 1),
 		initialModStateSelectionCh: make(chan []string, 1),
+		inferredDepsCh:             make(chan []ui.InferredDependency, 1),
 	}
 }
 
@@ -203,6 +201,18 @@ func (m *MockView) WaitInitialModStateSelection(t *testing.T, timeout time.Durat
 	return nil
 }
 
+// WaitUndeclaredDeps blocks until OnUndeclaredDependenciesDetected fires and returns the reported dependencies, or fails the test on timeout.
+func (m *MockView) WaitUndeclaredDeps(t *testing.T, timeout time.Duration) []ui.InferredDependency {
+	t.Helper()
+	select {
+	case deps := <-m.inferredDepsCh:
+		return deps
+	case <-time.After(timeout):
+		t.Fatalf("MockView: timed out waiting for OnUndeclaredDependenciesDetected; calls: %v", m.Calls())
+	}
+	return nil
+}
+
 // block sends an invocation to the dialog channel and blocks until Respond.
 func (m *MockView) block(inv DialogInvocation) bool {
 	if inv.respond == nil {
@@ -265,11 +275,6 @@ func (m *MockView) ShowDialogInfoBisectionUnresolvableModsDisabled(disabledMods 
 	m.block(DialogInvocation{Kind: DialogInfoBisectionUnresolvableModsDisabled, DisabledMods: disabledMods})
 }
 
-func (m *MockView) ShowDialogInfoBisectionAssumedDepsApplied(deps []ui.AssumedDependency) {
-	m.record("ShowDialogInfoBisectionAssumedDepsApplied")
-	m.block(DialogInvocation{Kind: DialogInfoBisectionAssumedDepsApplied, AssumedDeps: deps})
-}
-
 func (m *MockView) ShowDialogQuestionBisectionContinueWithMissingMods(missingMods sets.Set) bool {
 	m.record("ShowDialogQuestionBisectionContinueWithMissingMods")
 	return m.block(DialogInvocation{Kind: DialogQuestionBisectionContinueWithMissingMods, MissingMods: missingMods})
@@ -312,6 +317,14 @@ func (m *MockView) OnBisectionHalted(groupA, groupB sets.Set) {
 	m.record("OnBisectionHalted")
 	select {
 	case m.haltedCh <- HaltInvocation{GroupA: groupA, GroupB: groupB}:
+	default:
+	}
+}
+
+func (m *MockView) OnUndeclaredDependenciesDetected(deps []ui.InferredDependency) {
+	m.record("OnUndeclaredDependenciesDetected")
+	select {
+	case m.inferredDepsCh <- deps:
 	default:
 	}
 }

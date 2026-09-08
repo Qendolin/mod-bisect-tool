@@ -90,21 +90,20 @@ func deepCopyState(state SearchState) SearchState {
 	}
 
 	return SearchState{
-		ConflictSet:                copiedConflictSet,
-		Candidates:                 copiedCandidates,
-		StableSet:                  copiedStableSet,
-		SearchStack:                copySteps(state.SearchStack),
-		IsHandlingIndeterminate:    state.IsHandlingIndeterminate,
-		IsVerifyingConflictSet:     state.IsVerifyingConflictSet,
-		IsHalted:                   state.IsHalted,
-		NeedsPotentialDependencies: state.NeedsPotentialDependencies,
-		AllModIDs:                  state.AllModIDs, // This can be a shallow copy as it's immutable reference data
-		IsComplete:                 state.IsComplete,
-		LastFoundElement:           state.LastFoundElement,
-		LastTestResult:             state.LastTestResult,
-		Round:                      state.Round,
-		Iteration:                  state.Iteration,
-		Step:                       state.Step,
-		IndeterminateCount:         state.IndeterminateCount,
+		ConflictSet:             copiedConflictSet,
+		Candidates:              copiedCandidates,
+		StableSet:               copiedStableSet,
+		SearchStack:             copySteps(state.SearchStack),
+		IsHandlingIndeterminate: state.IsHandlingIndeterminate,
+		IsVerifyingConflictSet:  state.IsVerifyingConflictSet,
+		IsHalted:                state.IsHalted,
+		AllModIDs:               state.AllModIDs, // This can be a shallow copy as it's immutable reference data
+		IsComplete:              state.IsComplete,
+		LastFoundElement:        state.LastFoundElement,
+		LastTestResult:          state.LastTestResult,
+		Round:                   state.Round,
+		Iteration:               state.Iteration,
+		Step:                    state.Step,
+		IndeterminateCount:      state.IndeterminateCount,
 	}
 }

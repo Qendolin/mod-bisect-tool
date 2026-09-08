@@ -1,6 +1,7 @@
 package app
 
 import (
+	"slices"
 	"sort"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
@@ -23,6 +24,24 @@ func makeModVM(id string, mods map[string]*mods.Mod) ui.ModViewModel {
 			IsUnknown: true,
 		}
 	}
+}
+
+func buildInferredDepsVM(deps []mods.InferredDependency) []ui.InferredDependency {
+	uiDeps := make([]ui.InferredDependency, len(deps))
+	for i, d := range deps {
+		uiDeps[i] = ui.InferredDependency{
+			SourceID: d.SourceID,
+			TargetID: d.TargetID,
+			Classes:  slices.Clone(d.Classes),
+		}
+	}
+	sort.Slice(uiDeps, func(i, j int) bool {
+		if uiDeps[i].SourceID != uiDeps[j].SourceID {
+			return uiDeps[i].SourceID < uiDeps[j].SourceID
+		}
+		return uiDeps[i].TargetID < uiDeps[j].TargetID
+	})
+	return uiDeps
 }
 
 func (a *App) GetViewModel() ui.BisectionViewModel {
@@ -57,8 +76,6 @@ func (a *App) GetViewModel() ui.BisectionViewModel {
 		CanUndo:            a.bisectSvc.Engine().UndoCount() > 0,
 		LastTestResult:     state.LastTestResult,
 		LastFoundElement:   state.LastFoundElement,
-
-		PotentialDependenciesUsed: a.bisectSvc.PotentialDependenciesUsed(),
 	}
 	vm.Sets = ui.SearchSetsViewModel{
 		AllConflicts:    enumState.FoundConflictSets,

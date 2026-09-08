@@ -916,12 +916,12 @@ func e2eClassReferencing(internalName string, refs ...string) string {
 	return string(e2eClassFile(thisClass, uint16(len(entries)+1), entries...))
 }
 
-// TestDoubleIndeterminateAppliesAssumedDepsWithDialog verifies the full app
-// flow for a resolvable double-INDETERMINATE: the bytecode analysis infers the
-// undeclared dependencies (mod_a -> mod_c, mod_d -> mod_b), injects them, and
-// the user is informed via a blocking info dialog. The search continues
-// instead of halting.
-func TestDoubleIndeterminateAppliesAssumedDepsWithDialog(t *testing.T) {
+// TestDoubleIndeterminateDetectsInferredDeps verifies the full app flow
+// for a resolvable double-INDETERMINATE: the bytecode analysis infers the
+// undeclared dependencies (mod_a -> mod_c, mod_d -> mod_b), and the view is
+// notified via OnInferredDependenciesDetected. When applied explicitly, the
+// search continues.
+func TestDoubleIndeterminateDetectsInferredDeps(t *testing.T) {
 	specs := map[string]modSpec{
 		"mod-a-1.0.jar": {
 			JSONContent: `{"id": "mod_a", "version": "1.0"}`,
@@ -947,35 +947,28 @@ func TestDoubleIndeterminateAppliesAssumedDepsWithDialog(t *testing.T) {
 	a.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
 
 	// Second test: the complement is indeterminate too (mod_d needs mod_b).
-	// This triggers the injection, and the app blocks on the info dialog,
-	// so submit from a goroutine.
+	// This triggers detection and dispatches OnInferredDependenciesDetected.
 	a.GetBisectionController().Step()
-	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		a.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
-	}()
+	a.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
 
-	inv := mock.WaitDialog(t, timeout)
-	if inv.Kind != DialogInfoBisectionAssumedDepsApplied {
-		t.Fatalf("expected the assumed deps info dialog, got %s", inv.Kind)
+	inferred := mock.WaitUndeclaredDeps(t, timeout)
+	if len(inferred) != 2 {
+		t.Fatalf("expected 2 inferred deps, got %d: %v", len(inferred), inferred)
 	}
-	assumed := make(map[string]string, len(inv.AssumedDeps))
-	for _, dep := range inv.AssumedDeps {
-		assumed[dep.SourceID] = dep.TargetID
+	inferredMap := make(map[string]string, len(inferred))
+	for _, dep := range inferred {
+		inferredMap[dep.SourceID] = dep.TargetID
 	}
-	if assumed["mod_a"] != "mod_c" || assumed["mod_d"] != "mod_b" {
-		t.Fatalf("unexpected assumed dependencies: %v", assumed)
+	if inferredMap["mod_a"] != "mod_c" || inferredMap["mod_d"] != "mod_b" {
+		t.Fatalf("unexpected inferred dependencies: %v", inferredMap)
 	}
-	inv.Respond(true)
-	<-done
+
+	// Apply inferred dependencies explicitly
+	a.GetBisectionController().ApplyInferredDependencies(inferred)
 
 	vm := a.GetViewModel()
 	if vm.Progress.IsHalted {
-		t.Error("expected the search to continue after injection, not halt")
-	}
-	if !vm.Progress.PotentialDependenciesUsed {
-		t.Error("expected the view model to report PotentialDependenciesUsed")
+		t.Error("expected the search to continue after applying inferred dependencies, not halt")
 	}
 }
 

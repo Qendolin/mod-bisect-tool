@@ -113,7 +113,6 @@ func (a *App) onLoadingComplete(modsPath string, allMods map[string]*mods.Mod, p
 	}
 
 	a.bisectSvc = svc
-	a.bisectSvc.ResetSearch()
 
 	initiallyDisabled := svc.Activator().InitiallyDisabledModIDs()
 	a.view.OnInitialModStateSelection(initiallyDisabled)
@@ -171,6 +170,16 @@ func (a *App) CompleteInitialModState(keepDisabled, omitted sets.Set) {
 		a.bisectSvc.StateManager().SetForceDisabled(id, false)
 		a.bisectSvc.StateManager().SetOmitted(id, true)
 	}
+
+	if a.cliArgs.ApplyInferredDependencies {
+		inferred := a.bisectSvc.InferDependencies()
+		if len(inferred) > 0 {
+			logging.Infof("App: Applying %d inferred dependencies from startup flag.", len(inferred))
+			mods.ApplyInferredDependencies(a.bisectSvc.StateManager().GetAllMods(), inferred)
+			a.bisectSvc.DismissInferredDependencies()
+		}
+	}
+
 	// TODO: Make app loading a state machine, this is horrible
 	a.finishLoading()
 }

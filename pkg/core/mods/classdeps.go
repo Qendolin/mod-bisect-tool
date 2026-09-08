@@ -3,27 +3,20 @@ package mods
 import (
 	"archive/zip"
 	"bytes"
-	"fmt"
 	"maps"
-	"path/filepath"
 	"slices"
 	"strings"
 	"time"
 
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/classfile"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
-// maxNestedJarDepth bounds recursion into jars bundled inside jars (jarjar,
-// fabric "jars", etc.) to protect against pathological archives.
+// maxNestedJarDepth limits recursion into nested JARs.
 const maxNestedJarDepth = 4
 
-// vendoredClassPackagePrefixes lists package prefixes (internal name form,
-// e.g. "com/google/common/") whose classes are library/runtime classes, not
-// mod classes. Mods frequently vendor (shade) these into their own jar; such
-// a vendored class must not make its host mod a dependency target. Entries
-// were sampled from Minecraft 1.8–26.2 and the Forge, NeoForge, Fabric and
-// Quilt loader/runtime class trees. Deliberately NOT listed: net/fabricmc/
-// fabric (Fabric API mods) and org/quiltmc/qsl (QSL mods).
+// vendoredClassPackagePrefixes lists library and runtime package prefixes.
 var vendoredClassPackagePrefixes = []string{
 	"com/azure/json/",
 	"com/electronwill/nightconfig/",
@@ -39,7 +32,7 @@ var vendoredClassPackagePrefixes = []string{
 	"io/github/zekerzhayard/",
 	"io/netty/",
 	"it/unimi/dsi/",
-	"javax/vecmath/",
+	"javax/",
 	"joptsimple/",
 	"net/fabricmc/api/",
 	"net/fabricmc/loader/",
@@ -66,10 +59,12 @@ var vendoredClassPackagePrefixes = []string{
 	"oshi/",
 	"paulscode/sound/",
 	"tv/twitch/",
+	// Additional, non minecraft-specific vendored packages
+	"org/jetbrains/annotations/",
+	"org/intellij/lang/annotations/",
 }
 
-// isVendoredClass reports whether the internal class name lives under one of
-// the vendored (library) package prefixes.
+// isVendoredClass reports whether internalName belongs to a known vendored package.
 func isVendoredClass(internalName string) bool {
 	for _, prefix := range vendoredClassPackagePrefixes {
 		if strings.HasPrefix(internalName, prefix) {
@@ -79,41 +74,18 @@ func isVendoredClass(internalName string) bool {
 	return false
 }
 
-// JarClassIndex holds all class names declared and referenced by a jar tree
-// (the top-level jar plus any nested jars). Classes inside nested jars are
-// attributed to the top-level jar, mirroring how activating a container mod
-// always activates its nested content.
+// JarClassIndex stores classes declared and referenced by a JAR tree.
 type JarClassIndex struct {
-	// Declared contains the internal names of every class file in the jar
-	// tree, regardless of visibility (public, private, nested, anonymous...).
+	// Declared contains internal names of classes in the JAR tree.
 	Declared map[string]struct{}
-	// Referenced contains the internal names of all CONSTANT_Class entries
-	// found in the jar tree's class files.
+	// Referenced contains internal names referenced by classes in the JAR tree.
 	Referenced map[string]struct{}
 }
 
-// IndexJarClasses parses every class file in the jar and collects declared and
-// referenced class names. Class files that fail to parse (e.g. unknown
-// constant pool tags from future JVM versions) are logged and skipped; a
-// partially indexed jar only degrades the quality of the dependency inference.
-func IndexJarClasses(jarPath string) (*JarClassIndex, error) {
-	zr, err := zip.OpenReader(jarPath)
-	if err != nil {
-		return nil, fmt.Errorf("opening JAR %s as zip: %w", jarPath, err)
-	}
-	defer zr.Close()
-
-	index := &JarClassIndex{
-		Declared:   make(map[string]struct{}),
-		Referenced: make(map[string]struct{}),
-	}
-	indexJarReader(&zr.Reader, index, 0, filepath.Base(jarPath))
-	return index, nil
-}
-
-func indexJarReader(reader *zip.Reader, index *JarClassIndex, depth int, identifier string) {
+// IndexJar adds class files in reader and nested JARs to index.
+func IndexJar(reader *zip.Reader, index *JarClassIndex, depth int, identifier string) {
 	if depth > maxNestedJarDepth {
-		logging.Warnf("ClassDeps: Maximum nested jar depth (%d) exceeded at '%s'; skipping deeper jars.", maxNestedJarDepth, identifier)
+		logging.Warnf("ClassDeps: Maximum nested jar depth (%d) exceeded at '%s'", maxNestedJarDepth, identifier)
 		return
 	}
 
@@ -125,7 +97,7 @@ func indexJarReader(reader *zip.Reader, index *JarClassIndex, depth int, identif
 				logging.Warnf("ClassDeps: Failed to read class file '%s' in '%s': %v", f.Name, identifier, err)
 				continue
 			}
-			info, err := ParseClassFile(data)
+			info, err := classfile.ParseClassFile(data)
 			if err != nil {
 				logging.Warnf("ClassDeps: Skipping unparseable class file '%s' in '%s': %v", f.Name, identifier, err)
 				continue
@@ -145,36 +117,30 @@ func indexJarReader(reader *zip.Reader, index *JarClassIndex, depth int, identif
 				logging.Warnf("ClassDeps: Failed to open nested jar '%s' in '%s' as zip: %v", f.Name, identifier, err)
 				continue
 			}
-			indexJarReader(nestedReader, index, depth+1, f.Name)
+			IndexJar(nestedReader, index, depth+1, f.Name)
 		}
 	}
 }
 
-// PotentialDependency is an inferred undeclared dependency between two mods.
-type PotentialDependency struct {
-	// SourceID is the mod whose code references classes it does not declare.
+// InferredDependency describes an undeclared dependency inferred from bytecode.
+type InferredDependency struct {
+	// SourceID identifies the mod with the undeclared reference.
 	SourceID string
-	// TargetID is the mod that declares the referenced classes.
+	// TargetID identifies the mod declaring the referenced classes.
 	TargetID string
-	// Classes are the referenced internal class names that led to this
-	// inference, sorted.
+	// Classes lists the referenced internal class names.
 	Classes []string
 }
 
-// InferPotentialDependencies reads the class index of every top-level mod
-// (built during mod loading) and infers undeclared dependencies: when mod B's
-// class references point at a class that only mod A declares, and B does not
-// already declare a dependency on A (by ID or any of A's effective provides),
-// B -> A is assumed to be an undeclared dependency. Classes declared by more
-// than one mod, and classes under vendored (library) package prefixes, are
-// ignored. The result is sorted deterministically.
-func InferPotentialDependencies(allMods map[string]*Mod) []PotentialDependency {
+// InferDependencies identifies undeclared dependencies from mod class references.
+// It ignores vendored, ambiguous, and already-related classes and targets.
+func InferDependencies(allMods map[string]*Mod) []InferredDependency {
 	start := time.Now()
 
 	indexes := make(map[string]*JarClassIndex, len(allMods))
 	for id, mod := range allMods {
 		if mod == nil || mod.ClassIndex == nil {
-			logging.Warnf("ClassDeps: Mod '%s' has no class index; skipping it for the dependency inference.", id)
+			logging.Warnf("ClassDeps: Mod '%s' has no class index; skipping.", id)
 			continue
 		}
 		indexes[id] = mod.ClassIndex
@@ -192,14 +158,17 @@ func InferPotentialDependencies(allMods map[string]*Mod) []PotentialDependency {
 		}
 	}
 
-	var deps []PotentialDependency
+	var deps []InferredDependency
 	for _, sourceID := range slices.Sorted(maps.Keys(indexes)) {
 		source := allMods[sourceID]
 		classesByTarget := make(map[string][]string)
 		for class := range indexes[sourceID].Referenced {
+			if isVendoredClass(class) {
+				continue
+			}
 			ownerList := owners[class]
 			if len(ownerList) != 1 {
-				continue // Unknown origin (e.g. the JDK) or ambiguous ownership.
+				continue
 			}
 			targetID := ownerList[0]
 			if targetID == sourceID {
@@ -214,7 +183,7 @@ func InferPotentialDependencies(allMods map[string]*Mod) []PotentialDependency {
 			}
 			classes := classesByTarget[targetID]
 			slices.Sort(classes)
-			deps = append(deps, PotentialDependency{
+			deps = append(deps, InferredDependency{
 				SourceID: sourceID,
 				TargetID: targetID,
 				Classes:  classes,
@@ -222,28 +191,65 @@ func InferPotentialDependencies(allMods map[string]*Mod) []PotentialDependency {
 		}
 	}
 
-	logging.Infof("ClassDeps: Inferred %d potential undeclared dependency/ies from %d jar(s) in %s.", len(deps), len(indexes), time.Since(start))
+	logging.Infof("ClassDeps: Inferred %d dependency/ies from %d jar(s) in %s.", len(deps), len(indexes), time.Since(start))
 	return deps
 }
 
-// sourceAlreadyDependsOn reports whether the source mod's manifest already
-// declares a dependency on the target mod, either via its ID or any of the
-// IDs it effectively provides (own ID, Provides, and nested-module provides;
-// falling back to ID+Provides when EffectiveProvides was not populated).
+// ApplyInferredDependencies adds inferred dependencies as any-version Depends entries.
+func ApplyInferredDependencies(allMods map[string]*Mod, deps []InferredDependency) []InferredDependency {
+	anyVersion := version.Any()
+	injected := make([]InferredDependency, 0, len(deps))
+	for _, dep := range deps {
+		source, ok := allMods[dep.SourceID]
+		if !ok {
+			logging.Warnf("ClassDeps: Cannot inject dependency '%s' -> '%s': source mod not found.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		target, ok := allMods[dep.TargetID]
+		if !ok {
+			logging.Warnf("ClassDeps: Cannot inject dependency '%s' -> '%s': target mod not found.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		if sourceAlreadyDependsOn(source, target) {
+			continue
+		}
+		if source.Metadata.Depends == nil {
+			source.Metadata.Depends = make(VersionRanges)
+		}
+		source.Metadata.Depends[dep.TargetID] = []*version.VersionPredicate{anyVersion}
+		logging.Infof("ClassDeps: Injected inferred dependency '%s' -> '%s' (classes: %v).", dep.SourceID, dep.TargetID, dep.Classes)
+		injected = append(injected, dep)
+	}
+	return injected
+}
+
+// sourceAlreadyDependsOn reports whether source already relates to target.
 func sourceAlreadyDependsOn(source *Mod, target *Mod) bool {
 	if source == nil || target == nil {
-		return true // Missing data: assume declared rather than guessing.
+		return true
 	}
 
-	var providedIDs []string
+	ids := []string{target.Metadata.ID}
 	if len(target.EffectiveProvides) > 0 {
-		providedIDs = slices.Sorted(maps.Keys(target.EffectiveProvides))
-	} else {
-		providedIDs = append([]string{target.Metadata.ID}, target.Metadata.Provides...)
+		ids = append(ids, slices.Sorted(maps.Keys(target.EffectiveProvides))...)
+	} else if len(target.Metadata.Provides) > 0 {
+		ids = append(ids, target.Metadata.Provides...)
 	}
 
-	for _, id := range providedIDs {
+	for _, id := range ids {
 		if _, ok := source.Metadata.Depends[id]; ok {
+			return true
+		}
+		if _, ok := source.Metadata.Suggests[id]; ok {
+			return true
+		}
+		if _, ok := source.Metadata.Recommends[id]; ok {
+			return true
+		}
+		if _, ok := source.Metadata.Breaks[id]; ok {
+			return true
+		}
+		if _, ok := source.Metadata.Conflicts[id]; ok {
 			return true
 		}
 	}
