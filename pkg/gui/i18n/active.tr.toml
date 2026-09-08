@@ -375,3 +375,18 @@ other = "Modları Aramadan Hariç Tut"
 
 [setup_excluded_mods_keep_disabled]
 other = "Zaten devre dışı bırakılmış modları devre dışı tut."
+
+[cancel]
+other = "İptal"
+
+[cascade_all_disable_potential]
+other = "Bu çakışmadaki tüm modları devre dışı bırakırsan şunları da devre dışı bırakman gerekebilir:"
+
+[cascade_disable_potential]
+other = "Bu modu devre dışı bırakmak şunların da devre dışı bırakılmasını gerektirebilir:"
+
+[undeclared_dependencies]
+other = "Bildirilmemiş Bağımlılıklar Tespit Edildi"
+
+[undeclared_dependencies_description]
+other = "Arama, bildirilmemiş bağımlılıklar nedeniyle birbirine bağımlı olan iki mod grubu tarafından engellendi. Aşağıdaki bağımlılıklar modların kodundan çıkarıldı. Bu bağımlılıkları uygulayarak bölmeyi tekrar denemek için “Devam Et” butonuna tıkla."

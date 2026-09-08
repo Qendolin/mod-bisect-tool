@@ -377,3 +377,18 @@ other = "Exclure des mods de la recherche"
 
 [setup_excluded_mods_keep_disabled]
 other = "Garder désactivés les mods déjà désactivés."
+
+[cancel]
+other = "Annuler"
+
+[cascade_all_disable_potential]
+other = "Si tu désactives tous les mods de ce conflit, tu devras peut-être aussi désactiver :"
+
+[cascade_disable_potential]
+other = "Désactiver ce mod peut également nécessiter de désactiver :"
+
+[undeclared_dependencies]
+other = "Dépendances non déclarées détectées"
+
+[undeclared_dependencies_description]
+other = "La recherche a été bloquée par deux groupes de mods qui dépendent l'un de l'autre via des dépendances non déclarées. Les dépendances suivantes ont été déduites du code des mods. Clique sur « Continuer » pour réessayer la division avec ces dépendances appliquées."

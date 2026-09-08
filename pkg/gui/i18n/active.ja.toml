@@ -375,3 +375,18 @@ other = "MODを検索から除外"
 
 [setup_excluded_mods_keep_disabled]
 other = "すでに無効化されているMODを無効のままにする。"
+
+[cancel]
+other = "キャンセル"
+
+[cascade_all_disable_potential]
+other = "この競合内のすべてのMODを無効にする場合、以下も無効にする必要がある可能性があります:"
+
+[cascade_disable_potential]
+other = "このMODを無効にすると、以下も無効にする必要がある可能性があります:"
+
+[undeclared_dependencies]
+other = "未宣言の依存関係が検出されました"
+
+[undeclared_dependencies_description]
+other = "未宣言の依存関係によって互いに依存している2つのMODグループにより、検索がブロックされました。以下の依存関係がMODのコードから推測されました。これらの依存関係を適用して分割を再試行するには「続行」を選択してください。"
