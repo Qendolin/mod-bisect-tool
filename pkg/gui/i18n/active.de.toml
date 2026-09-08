@@ -377,3 +377,9 @@ other = "Mods von der Suche ausschließen"
 
 [setup_excluded_mods_keep_disabled]
 other = "Bereits deaktivierte Mods deaktiviert lassen."
+
+[active_test_set]
+other = "Aktive Gruppe"
+
+[inactive_test_set]
+other = "Andere Gruppe"

@@ -375,3 +375,9 @@ other = "MODを検索から除外"
 
 [setup_excluded_mods_keep_disabled]
 other = "すでに無効化されているMODを無効のままにする。"
+
+[active_test_set]
+other = "アクティブグループ"
+
+[inactive_test_set]
+other = "その他のグループ"

@@ -377,3 +377,9 @@ other = "Nessuna"
 
 [setup_excluded_mods_keep_disabled]
 other = "Mantenere disabilitate le mod già disabilitate."
+
+[active_test_set]
+other = "Gruppo attivo"
+
+[inactive_test_set]
+other = "Altro gruppo"

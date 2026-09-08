@@ -31,6 +31,7 @@ type ActionReport struct {
 type TestPlan struct {
 	ModIDsToTest       sets.Set
 	IsVerificationStep bool
+	Kind               imcs.TestPlanKind
 }
 
 // Service encapsulates the entire bisection business logic.
@@ -101,6 +102,7 @@ func toServiceTestPlan(plan *imcs.TestPlan) *TestPlan {
 	return &TestPlan{
 		ModIDsToTest:       sets.Copy(plan.ModIDsToTest()),
 		IsVerificationStep: plan.IsVerificationStep(),
+		Kind:               plan.Kind,
 	}
 }
 

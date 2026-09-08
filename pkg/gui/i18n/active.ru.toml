@@ -381,3 +381,9 @@ other = "Исключить моды из поиска"
 
 [setup_excluded_mods_keep_disabled]
 other = "Оставить ранее отключенные моды отключенными."
+
+[active_test_set]
+other = "Активная группа"
+
+[inactive_test_set]
+other = "Другая группа"

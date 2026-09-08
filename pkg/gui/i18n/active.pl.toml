@@ -381,3 +381,9 @@ other = "Pomiń mody w wyszukiwaniu"
 
 [setup_excluded_mods_keep_disabled]
 other = "Pozostawić wyłączone wcześniej wyłączone mody."
+
+[active_test_set]
+other = "Aktywna grupa"
+
+[inactive_test_set]
+other = "Inna grupa"

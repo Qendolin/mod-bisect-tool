@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/color"
 	"sort"
+	"strings"
 
 	"gioui.org/font"
 	"gioui.org/layout"
@@ -146,8 +147,11 @@ func (s *MainScreen) layoutNormalView(gtx layout.Context, th *material.Theme, vm
 		listHeader = s.app.Text("conflict_set", "Conflict Set", nil)
 		candidates = modItemsFromSet(vm.Mods.Infos, vm.Sets.CurrentConflict)
 	} else {
-		candidates = modItemsFromSet(vm.Mods.Infos, vm.Sets.Candidate)
-		listHeader = s.app.Translator().Plural("remaining_candidates", "Remaining Candidate ({{.Count}})", "Remaining Candidates ({{.Count}})", len(candidates), map[string]any{"Count": len(candidates)})
+		candidates = modItemsFromSetWithSplit(vm.Mods.Infos, vm.Sets.Candidate,
+			vm.CurrentTestPlan.Kind,
+			s.app.Text("active_test_set", "Active Group", nil),
+			s.app.Text("inactive_test_set", "Other Group", nil))
+		listHeader = s.app.Translator().Plural("remaining_candidates", "Remaining Candidate ({{.Count}})", "Remaining Candidates ({{.Count}})", len(vm.Sets.Candidate), map[string]any{"Count": len(vm.Sets.Candidate)})
 	}
 
 	return s.layoutTwoPanel(gtx,
@@ -435,6 +439,38 @@ func modItemsFromSet(modsInfo map[string]ui.ModViewModel, modSet sets.Set) []exw
 	return items
 }
 
+// modItemsFromSetWithSplit orders each test partition by name and inserts a
+// marker between them. The partition itself follows the algorithm's
+// deterministic ID ordering.
+func modItemsFromSetWithSplit(modsInfo map[string]ui.ModViewModel, modSet sets.Set, planKind imcs.TestPlanKind, firstLabel, secondLabel string) []exwidgets.ModListItem {
+	orderedIDs := sets.MakeSlice(modSet)
+	if len(orderedIDs) < 2 {
+		return modItemsFromSet(modsInfo, modSet)
+	}
+
+	splitIndex := sets.GetSplitIndex(len(orderedIDs))
+	if planKind == imcs.TestPlanComplement {
+		firstLabel, secondLabel = secondLabel, firstLabel
+	}
+	items := make([]exwidgets.ModListItem, 0, len(orderedIDs)+2)
+	items = append(items, exwidgets.ModListItem{Name: firstLabel, Tag: exwidgets.ModListTagHeading})
+	firstGroup := make([]exwidgets.ModListItem, 0, splitIndex)
+	for _, id := range orderedIDs[:splitIndex] {
+		firstGroup = append(firstGroup, modListItem(id, modsInfo[id]))
+	}
+	sortModItems(firstGroup)
+	items = append(items, firstGroup...)
+
+	items = append(items, exwidgets.ModListItem{Name: secondLabel, Tag: exwidgets.ModListTagHeading})
+
+	secondItems := make([]exwidgets.ModListItem, 0, len(orderedIDs)-splitIndex)
+	for _, id := range orderedIDs[splitIndex:] {
+		secondItems = append(secondItems, modListItem(id, modsInfo[id]))
+	}
+	sortModItems(secondItems)
+	return append(items, secondItems...)
+}
+
 // sortModItems orders mod items alphabetically by name, falling back to the id.
 func sortModItems(items []exwidgets.ModListItem) {
 	sort.Slice(items, func(i, j int) bool {
@@ -445,8 +481,16 @@ func sortModItems(items []exwidgets.ModListItem) {
 		if b == "" {
 			b = items[j].ID
 		}
+		al, bl := strings.ToLower(a), strings.ToLower(b)
+		if al != bl {
+			return al < bl
+		}
 		if a != b {
 			return a < b
+		}
+		il, jl := strings.ToLower(items[i].ID), strings.ToLower(items[j].ID)
+		if il != jl {
+			return il < jl
 		}
 		return items[i].ID < items[j].ID
 	})

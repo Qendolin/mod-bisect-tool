@@ -375,3 +375,9 @@ other = "从搜索中排除模组"
 
 [setup_excluded_mods_keep_disabled]
 other = "保持已禁用的模组处于禁用状态。"
+
+[active_test_set]
+other = "活动组"
+
+[inactive_test_set]
+other = "其他组"

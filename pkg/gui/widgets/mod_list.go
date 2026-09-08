@@ -21,6 +21,7 @@ const (
 	ModListTagNone          ModListTag = ""
 	ModListTagDependency    ModListTag = "dependency"
 	ModListTagAlwaysEnabled ModListTag = "always"
+	ModListTagHeading       ModListTag = "heading"
 )
 
 // ModListItem is a single row in a ModList: a friendly name with the mod ID
@@ -71,6 +72,12 @@ func (ml *ModList) Layout(gtx layout.Context, th *material.Theme, items []ModLis
 			return layout.UniformInset(unit.Dp(8)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				return material.List(th, &ml.list).Layout(gtx, len(items), func(gtx layout.Context, i int) layout.Dimensions {
 					item := items[i]
+					if item.Tag == ModListTagHeading {
+						lbl := material.Body1(th, item.Name)
+						lbl.Color = theme.PrimaryColor
+						lbl.Font.Weight = font.Bold
+						return layout.Inset{Top: unit.Dp(8), Bottom: unit.Dp(4)}.Layout(gtx, lbl.Layout)
+					}
 					return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 							name := item.Name

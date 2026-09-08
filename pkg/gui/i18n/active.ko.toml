@@ -375,3 +375,9 @@ other = "검색에서 모드 제외"
 
 [setup_excluded_mods_keep_disabled]
 other = "이미 비활성화된 모드를 비활성화 상태로 유지합니다."
+
+[active_test_set]
+other = "활성 그룹"
+
+[inactive_test_set]
+other = "다른 그룹"

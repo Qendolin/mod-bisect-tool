@@ -375,3 +375,9 @@ other = "從搜尋中排除模組"
 
 [setup_excluded_mods_keep_disabled]
 other = "維持已停用的模組處於停用狀態。"
+
+[active_test_set]
+other = "活動群組"
+
+[inactive_test_set]
+other = "其他群組"

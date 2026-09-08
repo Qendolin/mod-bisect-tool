@@ -381,3 +381,9 @@ other = "Виключити моди з пошуку"
 
 [setup_excluded_mods_keep_disabled]
 other = "Залишити раніше вимкнені моди вимкненими."
+
+[active_test_set]
+other = "Активна група"
+
+[inactive_test_set]
+other = "Інша група"

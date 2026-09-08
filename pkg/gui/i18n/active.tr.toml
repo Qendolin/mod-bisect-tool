@@ -375,3 +375,9 @@ other = "Modları Aramadan Hariç Tut"
 
 [setup_excluded_mods_keep_disabled]
 other = "Zaten devre dışı bırakılmış modları devre dışı tut."
+
+[active_test_set]
+other = "Aktif Grup"
+
+[inactive_test_set]
+other = "Diğer Grup"
