@@ -113,6 +113,9 @@ func (s *Service) ResetSearch() {
 	s.state.SetUnresolvableBatch(allModIDs, false)
 
 	s.inferredDepsAttempted = false
+	if resolver := s.state.Resolver(); resolver != nil {
+		resolver.ClearInferredDependencies()
+	}
 	s.lastReconcileRevision = s.state.StateRevision()
 
 	initialState := imcs.NewInitialState()

@@ -10,7 +10,8 @@ import (
 
 func TestResetSearchResetsSessionState(t *testing.T) {
 	allMods := map[string]*mods.Mod{"a": {Metadata: mods.ModMetadata{ID: "a"}}}
-	stateMgr := mods.NewStateManager(allMods, nil)
+	resolver := mods.NewDependencyResolver(allMods, nil, mods.RunLoaderFabric)
+	stateMgr := mods.NewStateManager(allMods, resolver)
 	service := &Service{
 		state:  stateMgr,
 		engine: imcs.NewEngine(imcs.NewInitialState()),
@@ -37,7 +38,8 @@ func TestServiceInferredDependenciesHaltAndDismissalFlow(t *testing.T) {
 		"a": {Metadata: mods.ModMetadata{ID: "a"}},
 		"b": {Metadata: mods.ModMetadata{ID: "b"}},
 	}
-	stateMgr := mods.NewStateManager(allMods, nil)
+	resolver := mods.NewDependencyResolver(allMods, nil, mods.RunLoaderFabric)
+	stateMgr := mods.NewStateManager(allMods, resolver)
 	engine := imcs.NewEngine(imcs.NewInitialState())
 	engine.AddCandidates(sets.NewSet("a", "b"))
 
@@ -88,7 +90,8 @@ func TestServiceApplyInferredDependenciesUnчнойHaltsSplit(t *testing.T) {
 		"a": {Metadata: mods.ModMetadata{ID: "a"}},
 		"b": {Metadata: mods.ModMetadata{ID: "b"}},
 	}
-	stateMgr := mods.NewStateManager(allMods, nil)
+	resolver := mods.NewDependencyResolver(allMods, nil, mods.RunLoaderFabric)
+	stateMgr := mods.NewStateManager(allMods, resolver)
 	engine := imcs.NewEngine(imcs.NewInitialState())
 	engine.AddCandidates(sets.NewSet("a", "b"))
 
@@ -117,8 +120,11 @@ func TestServiceApplyInferredDependenciesUnчнойHaltsSplit(t *testing.T) {
 	if service.CanInferDependencies() {
 		t.Fatal("expected CanInferDependencies to be false after applying")
 	}
-	if allMods["a"].Metadata.Depends["b"] == nil {
-		t.Fatal("expected mod a to have dependency on mod b injected into metadata")
+	if !resolver.HasInferredDependency("a", "b") {
+		t.Fatal("expected resolver to record inferred dependency a -> b")
+	}
+	if allMods["a"].Metadata.Depends != nil && allMods["a"].Metadata.Depends["b"] != nil {
+		t.Fatal("expected mod a manifest metadata to remain untouched")
 	}
 }
 

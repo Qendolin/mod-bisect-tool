@@ -72,6 +72,17 @@ func WriteConflictSetMods(b *strings.Builder, mods []CascadingDisables, st TextS
 				b.WriteByte('\n')
 			}
 		}
+		if len(entry.PotentialAlsoRequireDisable) > 0 {
+			b.WriteString("    ")
+			b.WriteString(st.muted("└ Disabling this mod maybe also requires disabling:"))
+			b.WriteByte('\n')
+			for _, dep := range entry.PotentialAlsoRequireDisable {
+				b.WriteString("      - ")
+				st.writeModRef(b, dep, st.muted)
+				b.WriteString(" (inferred)")
+				b.WriteByte('\n')
+			}
+		}
 	}
 }
 
@@ -97,6 +108,17 @@ func WriteConflictSetFooter(b *strings.Builder, extraIfAll []ModViewModel, st Te
 func WriteConflictSet(b *strings.Builder, cs ConflictSetReport, st TextStyles) {
 	WriteConflictSetMods(b, cs.Mods, st)
 	WriteConflictSetFooter(b, cs.IfAllDisabledAlso, st)
+	if len(cs.IfAllDisabledPotentialAlso) > 0 {
+		b.WriteString("  ")
+		b.WriteString(st.muted("If you disable all mods in this conflict, you maybe also need to disable:"))
+		b.WriteByte('\n')
+		for _, dep := range cs.IfAllDisabledPotentialAlso {
+			b.WriteString("    - ")
+			st.writeModRef(b, dep, st.muted)
+			b.WriteString(" (inferred)")
+			b.WriteByte('\n')
+		}
+	}
 }
 
 // WriteGenerallyUnresolvable writes the list of mods with broken dependencies

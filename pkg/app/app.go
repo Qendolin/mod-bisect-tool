@@ -175,7 +175,7 @@ func (a *App) CompleteInitialModState(keepDisabled, omitted sets.Set) {
 		inferred := a.bisectSvc.InferDependencies()
 		if len(inferred) > 0 {
 			logging.Infof("App: Applying %d inferred dependencies from startup flag.", len(inferred))
-			mods.ApplyInferredDependencies(a.bisectSvc.StateManager().GetAllMods(), inferred)
+			a.bisectSvc.StateManager().Resolver().ApplyInferredDependencies(inferred)
 			a.bisectSvc.DismissInferredDependencies()
 		}
 	}

@@ -17,7 +17,7 @@ func (s *Service) CanInferDependencies() bool {
 // halted on a split, inference is restricted to undeclared dependencies crossing
 // between the two conflicting candidate halves.
 func (s *Service) InferDependencies() []mods.InferredDependency {
-	deps := mods.InferDependencies(s.state.GetAllMods())
+	deps := mods.InferDependencies(s.state.GetAllMods(), s.state.Resolver())
 	statuses := s.state.GetModStatusesSnapshot()
 
 	state := s.engine.GetCurrentState()
@@ -62,7 +62,7 @@ func (s *Service) ApplyInferredDependencies(deps []mods.InferredDependency) []mo
 		return nil
 	}
 	s.inferredDepsAttempted = true
-	injected := mods.ApplyInferredDependencies(s.state.GetAllMods(), deps)
+	injected := s.state.Resolver().ApplyInferredDependencies(deps)
 	s.engine.RetryHaltedSplit()
 	return injected
 }

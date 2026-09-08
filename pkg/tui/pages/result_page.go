@@ -197,6 +197,12 @@ func formatInProgressContent(vm *ui.ResultViewModel) (title, message, explanatio
 			"Or continue the search to find the remaining mods."
 	}
 	ui.WriteConflictSetFooter(&b, vm.CurrentConflict.IfAllDisabledAlso, resultStyles)
+	if len(vm.CurrentConflict.IfAllDisabledPotentialAlso) > 0 {
+		b.WriteString("  [gray]If you disable all mods in this conflict, you maybe also need to disable:[-:-:-]\n")
+		for _, m := range vm.CurrentConflict.IfAllDisabledPotentialAlso {
+			fmt.Fprintf(&b, "    [gray]- %s (inferred)[-:-:-]\n", m.ID)
+		}
+	}
 
 	writeArchivedConflictSets(&b, vm)
 

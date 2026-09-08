@@ -351,6 +351,9 @@ other = "Unknown Jar File"
 [cascade_disable]
 other = "Disabling this mod also requires disabling:"
 
+[cascade_disable_potential]
+other = "Disabling this mod maybe also requires disabling:"
+
 [at_least_one_more]
 other = "And at least one more..."
 
@@ -359,6 +362,9 @@ other = "And possibly more..."
 
 [cascade_all_disable]
 other = "If you disable all mods in this conflict, you must also disable:"
+
+[cascade_all_disable_potential]
+other = "If you disable all mods in this conflict, you maybe also need to disable:"
 
 [unresolved_or_unmet]
 other = "Unresolved or unmet dependencies:"

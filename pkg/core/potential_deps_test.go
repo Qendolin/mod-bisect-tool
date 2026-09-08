@@ -230,11 +230,11 @@ func TestDoubleIndeterminateResolvedByAssumedDependencies(t *testing.T) {
 		t.Fatal("expected CanInferDependencies to be false after inferred dependencies applied")
 	}
 
-	if allMods["mod_a"].Metadata.Depends["mod_e"] == nil {
-		t.Error("expected mod_a to depend on mod_e after injection")
+	if !svc.StateManager().Resolver().HasInferredDependency("mod_a", "mod_e") {
+		t.Error("expected resolver to record mod_a -> mod_e after injection")
 	}
-	if allMods["mod_f"].Metadata.Depends["mod_d"] == nil {
-		t.Error("expected mod_f to depend on mod_d after injection")
+	if !svc.StateManager().Resolver().HasInferredDependency("mod_f", "mod_d") {
+		t.Error("expected resolver to record mod_f -> mod_d after injection")
 	}
 }
 
@@ -314,8 +314,8 @@ func TestSecondDoubleIndeterminateHaltsAfterInjection(t *testing.T) {
 	if len(injections) != 1 || len(injections[0]) != 2 {
 		t.Fatalf("expected exactly one injection of two dependencies, got %+v", injections)
 	}
-	if allMods["mod_a"].Metadata.Depends["mod_e"] == nil {
-		t.Error("expected mod_a to depend on mod_e after injection")
+	if !svc.StateManager().Resolver().HasInferredDependency("mod_a", "mod_e") {
+		t.Error("expected resolver to record mod_a -> mod_e after injection")
 	}
 	if allMods["mod_b"].Metadata.Depends["mod_h"] != nil {
 		t.Error("expected no dependency to be injected for the undiscoverable mod_b -> mod_h")

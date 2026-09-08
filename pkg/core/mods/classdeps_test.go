@@ -350,16 +350,20 @@ func TestApplyInferredDependencies(t *testing.T) {
 	deps := []InferredDependency{
 		{SourceID: "b", TargetID: "a", Classes: []string{"com/a/Foo"}},
 	}
-	applied := ApplyInferredDependencies(allMods, deps)
+	dr := NewDependencyResolver(allMods, nil, RunLoaderFabric)
+	applied := dr.ApplyInferredDependencies(deps)
 	if len(applied) != 1 {
 		t.Fatalf("expected 1 applied dependency, got %d", len(applied))
 	}
-	if allMods["b"].Metadata.Depends["a"] == nil {
-		t.Fatal("expected mod b to now depend on a")
+	if !dr.HasInferredDependency("b", "a") {
+		t.Fatal("expected resolver to have inferred dependency b -> a")
+	}
+	if allMods["b"].Metadata.Depends != nil && allMods["b"].Metadata.Depends["a"] != nil {
+		t.Fatal("expected mod b manifest metadata to remain untouched")
 	}
 
 	// Second apply should be a no-op because it's already present.
-	appliedAgain := ApplyInferredDependencies(allMods, deps)
+	appliedAgain := dr.ApplyInferredDependencies(deps)
 	if len(appliedAgain) != 0 {
 		t.Fatalf("expected 0 reapplied dependencies, got %d", len(appliedAgain))
 	}

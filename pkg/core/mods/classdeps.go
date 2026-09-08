@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/classfile"
-	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
@@ -134,7 +133,7 @@ type InferredDependency struct {
 
 // InferDependencies identifies undeclared dependencies from mod class references.
 // It ignores vendored, ambiguous, and already-related classes and targets.
-func InferDependencies(allMods map[string]*Mod) []InferredDependency {
+func InferDependencies(allMods map[string]*Mod, dr ...*DependencyResolver) []InferredDependency {
 	start := time.Now()
 
 	indexes := make(map[string]*JarClassIndex, len(allMods))
@@ -178,7 +177,11 @@ func InferDependencies(allMods map[string]*Mod) []InferredDependency {
 		}
 
 		for _, targetID := range slices.Sorted(maps.Keys(classesByTarget)) {
-			if sourceAlreadyDependsOn(source, allMods[targetID]) {
+			target := allMods[targetID]
+			if sourceAlreadyDependsOn(source, target) {
+				continue
+			}
+			if len(dr) > 0 && dr[0] != nil && dr[0].HasInferredDependency(sourceID, targetID) {
 				continue
 			}
 			classes := classesByTarget[targetID]
@@ -195,32 +198,9 @@ func InferDependencies(allMods map[string]*Mod) []InferredDependency {
 	return deps
 }
 
-// ApplyInferredDependencies adds inferred dependencies as any-version Depends entries.
-func ApplyInferredDependencies(allMods map[string]*Mod, deps []InferredDependency) []InferredDependency {
-	anyVersion := version.Any()
-	injected := make([]InferredDependency, 0, len(deps))
-	for _, dep := range deps {
-		source, ok := allMods[dep.SourceID]
-		if !ok {
-			logging.Warnf("ClassDeps: Cannot inject dependency '%s' -> '%s': source mod not found.", dep.SourceID, dep.TargetID)
-			continue
-		}
-		target, ok := allMods[dep.TargetID]
-		if !ok {
-			logging.Warnf("ClassDeps: Cannot inject dependency '%s' -> '%s': target mod not found.", dep.SourceID, dep.TargetID)
-			continue
-		}
-		if sourceAlreadyDependsOn(source, target) {
-			continue
-		}
-		if source.Metadata.Depends == nil {
-			source.Metadata.Depends = make(VersionRanges)
-		}
-		source.Metadata.Depends[dep.TargetID] = []*version.VersionPredicate{anyVersion}
-		logging.Infof("ClassDeps: Injected inferred dependency '%s' -> '%s' (classes: %v).", dep.SourceID, dep.TargetID, dep.Classes)
-		injected = append(injected, dep)
-	}
-	return injected
+// ApplyInferredDependencies delegates recording inferred dependencies to the resolver.
+func ApplyInferredDependencies(dr *DependencyResolver, deps []InferredDependency) []InferredDependency {
+	return dr.ApplyInferredDependencies(deps)
 }
 
 // sourceAlreadyDependsOn reports whether source already relates to target.
