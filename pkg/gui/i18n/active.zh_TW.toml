@@ -390,3 +390,9 @@ other = "偵測到未宣告的相依性"
 
 [undeclared_dependencies_description]
 other = "搜尋因兩個模組群組之間存在未宣告的相互相依而被封鎖。以下相依性是從模組程式碼中推斷出來的。點擊「繼續」以套用這些相依性並重試拆分。"
+
+[active_test_set]
+other = "活動群組"
+
+[inactive_test_set]
+other = "其他群組"

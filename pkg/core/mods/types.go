@@ -105,6 +105,8 @@ type ProviderInfo struct {
 	VersionOfProvidedItem version.Version
 	IsDirectProvide       bool
 	TopLevelModVersion    version.Version
+	// ProviderJarPath is the metadata source jar path relative to the mods directory.
+	ProviderJarPath string
 }
 
 // PotentialProvidersMap maps a dependency ID to a list of ProviderInfo structs.

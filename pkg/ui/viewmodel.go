@@ -141,6 +141,7 @@ type LoaderViewModel struct {
 // value means no test is currently planned.
 type TestPlanViewModel struct {
 	ModIDsToTest sets.Set
+	Kind         imcs.TestPlanKind
 }
 
 // IsPlanned reports whether a test is actually planned (the zero value is not).

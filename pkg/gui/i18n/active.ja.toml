@@ -390,3 +390,9 @@ other = "未宣言の依存関係が検出されました"
 
 [undeclared_dependencies_description]
 other = "未宣言の依存関係によって互いに依存している2つのMODグループにより、検索がブロックされました。以下の依存関係がMODのコードから推測されました。これらの依存関係を適用して分割を再試行するには「続行」を選択してください。"
+
+[active_test_set]
+other = "アクティブグループ"
+
+[inactive_test_set]
+other = "その他のグループ"

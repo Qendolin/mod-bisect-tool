@@ -390,3 +390,9 @@ other = "Bildirilmemiş Bağımlılıklar Tespit Edildi"
 
 [undeclared_dependencies_description]
 other = "Arama, bildirilmemiş bağımlılıklar nedeniyle birbirine bağımlı olan iki mod grubu tarafından engellendi. Aşağıdaki bağımlılıklar modların kodundan çıkarıldı. Bu bağımlılıkları uygulayarak bölmeyi tekrar denemek için “Devam Et” butonuna tıkla."
+
+[active_test_set]
+other = "Aktif Grup"
+
+[inactive_test_set]
+other = "Diğer Grup"

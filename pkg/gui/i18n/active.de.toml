@@ -392,3 +392,9 @@ other = "Nicht deklarierte Abhängigkeiten erkannt"
 
 [undeclared_dependencies_description]
 other = "Die Suche wurde durch zwei Mod-Gruppen blockiert, die durch nicht deklarierte Abhängigkeiten voneinander abhängen. Die folgenden Abhängigkeiten wurden aus dem Code der Mods abgeleitet. Klicke auf „Weiter“, um die Aufteilung mit diesen angewendeten Abhängigkeiten erneut zu versuchen."
+
+[active_test_set]
+other = "Aktive Gruppe"
+
+[inactive_test_set]
+other = "Andere Gruppe"

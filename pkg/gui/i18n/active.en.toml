@@ -391,3 +391,9 @@ other = "Omit Mods from Search"
 
 [setup_excluded_mods_keep_disabled]
 other = "Keep already disabled mods disabled."
+
+[active_test_set]
+other = "Active Group"
+
+[inactive_test_set]
+other = "Other Group"

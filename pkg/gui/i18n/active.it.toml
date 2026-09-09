@@ -392,3 +392,9 @@ other = "Rilevate dipendenze non dichiarate"
 
 [undeclared_dependencies_description]
 other = "La ricerca è stata bloccata da due gruppi di mod che dipendono l'uno dall'altro attraverso dipendenze non dichiarate. Le seguenti dipendenze sono state dedotte dal codice delle mod. Clicca su «Continua» per riprovare la divisione applicando queste dipendenze."
+
+[active_test_set]
+other = "Gruppo attivo"
+
+[inactive_test_set]
+other = "Altro gruppo"

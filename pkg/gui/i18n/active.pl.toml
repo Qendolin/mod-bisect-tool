@@ -396,3 +396,9 @@ other = "Wykryto niezadeklarowane zależności"
 
 [undeclared_dependencies_description]
 other = "Wyszukiwanie zostało zablokowane przez dwie grupy modów, które zależą od siebie poprzez niezadeklarowane zależności. Poniższe zależności zostały wywnioskowane z kodu modów. Kliknij „Kontynuuj”, aby ponowić próbę podziału z zastosowaniem tych zależności."
+
+[active_test_set]
+other = "Aktywna grupa"
+
+[inactive_test_set]
+other = "Inna grupa"

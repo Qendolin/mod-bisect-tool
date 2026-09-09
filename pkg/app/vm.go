@@ -85,7 +85,10 @@ func (a *App) GetViewModel() ui.BisectionViewModel {
 		PendingAddition: engine.GetPendingAdditions(),
 	}
 	if currentPlan != nil {
-		vm.CurrentTestPlan = ui.TestPlanViewModel{ModIDsToTest: currentPlan.ModIDsToTest}
+		vm.CurrentTestPlan = ui.TestPlanViewModel{
+			ModIDsToTest: currentPlan.ModIDsToTest,
+			Kind:         currentPlan.Kind,
+		}
 	}
 	vm.Mods = ui.ModsViewModel{
 		All:   state.AllModIDs,

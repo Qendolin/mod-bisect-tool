@@ -11,6 +11,7 @@ import (
 type TestPlan struct {
 	ModIDsToTest       sets.Set
 	IsVerificationStep bool
+	Kind               imcs.TestPlanKind
 }
 
 func toServiceTestPlan(plan *imcs.TestPlan) *TestPlan {
@@ -20,6 +21,7 @@ func toServiceTestPlan(plan *imcs.TestPlan) *TestPlan {
 	return &TestPlan{
 		ModIDsToTest:       sets.Copy(plan.ModIDsToTest()),
 		IsVerificationStep: plan.IsVerificationStep(),
+		Kind:               plan.Kind,
 	}
 }
 

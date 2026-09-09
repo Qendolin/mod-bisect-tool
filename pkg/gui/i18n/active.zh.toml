@@ -390,3 +390,9 @@ other = "检测到未声明的依赖项"
 
 [undeclared_dependencies_description]
 other = "搜索由于两个模组组之间存在未声明的相互依赖而被阻塞。以下依赖项是从模组代码中推断出来的。点击“继续”以应用这些依赖项并重试拆分。"
+
+[active_test_set]
+other = "活动组"
+
+[inactive_test_set]
+other = "其他组"

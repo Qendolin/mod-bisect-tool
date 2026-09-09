@@ -392,3 +392,9 @@ other = "Dependencias no declaradas detectadas"
 
 [undeclared_dependencies_description]
 other = "La búsqueda fue bloqueada por dos grupos de mods que dependen entre sí a través de dependencias no declaradas. Las siguientes dependencias se dedujeron del código de los mods. Haz clic en «Continuar» para reintentar la división con estas dependencias aplicadas."
+
+[active_test_set]
+other = "Grupo activo"
+
+[inactive_test_set]
+other = "Otro grupo"
