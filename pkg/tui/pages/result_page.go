@@ -200,7 +200,7 @@ func formatInProgressContent(vm *ui.ResultViewModel) (title, message, explanatio
 	if len(vm.CurrentConflict.IfAllDisabledPotentialAlso) > 0 {
 		b.WriteString("  [gray]If you disable all mods in this conflict, you maybe also need to disable:[-:-:-]\n")
 		for _, m := range vm.CurrentConflict.IfAllDisabledPotentialAlso {
-			fmt.Fprintf(&b, "    [gray]- %s (inferred)[-:-:-]\n", m.ID)
+			fmt.Fprintf(&b, "    [gray]- %s[-:-:-]\n", m.ID)
 		}
 	}
 

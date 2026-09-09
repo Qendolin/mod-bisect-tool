@@ -88,7 +88,7 @@ func (s *MainScreen) HideTestPrompt() {
 func (s *MainScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
 	vm := s.app.GetViewModel()
 
-	if s.undoClick.Clicked(gtx) && vm.Progress.CanUndo {
+	if s.undoClick.Clicked(gtx) && !s.isTestPromptActive && vm.Progress.CanUndo {
 		go func() {
 			defer logging.HandlePanic()
 			ok := s.app.ShowQuestionDialog(s.app.Text("undo_last_step", "Undo Last Step", nil), s.app.Text("undo_confirm", "Are you sure you want to undo the last step?", nil), "", true)
@@ -105,38 +105,38 @@ func (s *MainScreen) Layout(gtx layout.Context, th *material.Theme) layout.Dimen
 			}
 		}()
 	}
-	if s.stepClick.Clicked(gtx) && vm.IsReady && !vm.Progress.IsComplete {
+	if s.stepClick.Clicked(gtx) && !s.isTestPromptActive && vm.IsReady && !vm.Progress.IsComplete {
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().Step()
 		}()
 	}
 	if s.successClick.Clicked(gtx) && s.isTestPromptActive {
-		s.isTestPromptActive = false
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultGood)
+			s.isTestPromptActive = false
 		}()
 	}
 	if s.failureClick.Clicked(gtx) && s.isTestPromptActive {
-		s.isTestPromptActive = false
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultFail)
+			s.isTestPromptActive = false
 		}()
 	}
 	if s.indeterminateClick.Clicked(gtx) && s.isTestPromptActive {
-		s.isTestPromptActive = false
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
+			s.isTestPromptActive = false
 		}()
 	}
 	if s.cancelClick.Clicked(gtx) && s.isTestPromptActive {
-		s.isTestPromptActive = false
 		go func() {
 			defer logging.HandlePanic()
 			s.app.GetBisectionController().CancelTest()
+			s.isTestPromptActive = false
 		}()
 	}
 

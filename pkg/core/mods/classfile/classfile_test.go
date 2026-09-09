@@ -446,6 +446,12 @@ func appendMemberAttributes(buf *bytes.Buffer, b *classBuilder, attrs ...[]byte)
 // carrying an attribute table, plus class attributes.
 func (b *classBuilder) buildWithMembers(fieldAttrs, methodAttrs, classAttrs [][]byte) []byte {
 	var buf bytes.Buffer
+	var members bytes.Buffer
+	writeU2(&members, 1) // fields_count
+	appendMemberAttributes(&members, b, fieldAttrs...)
+	writeU2(&members, 1) // methods_count
+	appendMemberAttributes(&members, b, methodAttrs...)
+
 	buf.Write([]byte{0xCA, 0xFE, 0xBA, 0xBE})
 	writeU2(&buf, 0)  // minor
 	writeU2(&buf, 52) // major
@@ -458,11 +464,7 @@ func (b *classBuilder) buildWithMembers(fieldAttrs, methodAttrs, classAttrs [][]
 	writeU2(&buf, 0)      // super_class
 	writeU2(&buf, 0)      // interfaces_count
 
-	writeU2(&buf, 1) // fields_count
-	appendMemberAttributes(&buf, b, fieldAttrs...)
-
-	writeU2(&buf, 1) // methods_count
-	appendMemberAttributes(&buf, b, methodAttrs...)
+	buf.Write(members.Bytes())
 
 	writeU2(&buf, uint16(len(classAttrs)))
 	for _, attr := range classAttrs {
@@ -600,7 +602,7 @@ func TestParseClassFileMemberAnnotationAttributes(t *testing.T) {
 		t.Fatalf("ParseClassFile failed: %v", err)
 	}
 
-	for _, want := range []string{"com/x/Field", "com/x/Param", "com/x/LocalVar", "com/x/Catch", "com/x/Bound", "com/x/Throws", "com/x/Offset", "com/x/TypeArg", "com/x/Default"} {
+	for _, want := range []string{"java/lang/String", "com/x/Field", "com/x/Param", "com/x/LocalVar", "com/x/Catch", "com/x/Bound", "com/x/Throws", "com/x/Offset", "com/x/TypeArg", "com/x/Default"} {
 		assertContainsRef(t, info.References, want)
 	}
 }

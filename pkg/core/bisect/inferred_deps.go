@@ -63,7 +63,9 @@ func (s *Service) ApplyInferredDependencies(deps []mods.InferredDependency) []mo
 	}
 	s.inferredDepsAttempted = true
 	injected := s.state.Resolver().ApplyInferredDependencies(deps)
-	s.engine.RetryHaltedSplit()
+	if len(injected) > 0 {
+		s.engine.RetryHaltedSplit()
+	}
 	return injected
 }
 

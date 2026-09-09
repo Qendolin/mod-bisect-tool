@@ -512,37 +512,36 @@ func (s *ResultScreen) layoutConflictSetEntries(gtx layout.Context, th *material
 						return layout.Inset{Left: unit.Dp(12), Top: unit.Dp(2)}.Layout(gtx, lbl.Layout)
 					}))
 				}
-				if len(set.IfAllDisabledPotentialAlso) > 0 {
-					children = append(children, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return layout.Inset{Left: unit.Dp(16), Top: unit.Dp(4), Bottom: unit.Dp(8)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							var footerChildren []layout.FlexChild
-							footerChildren = append(footerChildren, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								lbl := material.Body2(th, s.app.Text("cascade_all_disable_potential", "If you disable all mods in this conflict, you maybe also need to disable:", nil))
-								lbl.Font.Weight = font.Bold
-								lbl.Font.Style = font.Italic
-								lbl.Color = theme.TextMutedColor
-								return lbl.Layout(gtx)
-							}))
-							for _, cascadeMod := range set.IfAllDisabledPotentialAlso {
-								m := cascadeMod
-								footerChildren = append(footerChildren, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-									name := m.ID
-									if !m.IsUnknown {
-										name = s.app.Text("from_jar", "{{.ID}} from '{{.File}}.jar'", map[string]any{"ID": m.ID, "File": m.BaseFilename})
-									} else {
-										name = fmt.Sprintf("%s %s", m.ID, s.app.Text("from_unknown", "from unknown", nil))
-									}
-									lbl := material.Body2(th, name)
-									lbl.Font.Style = font.Italic
-									lbl.Color = theme.TextMutedColor
-									return layout.Inset{Left: unit.Dp(12), Top: unit.Dp(2)}.Layout(gtx, lbl.Layout)
-								}))
-							}
-							return layout.Flex{Axis: layout.Vertical}.Layout(gtx, footerChildren...)
-						})
+				return layout.Flex{Axis: layout.Vertical}.Layout(gtx, footerChildren...)
+			})
+		}))
+	}
+	if len(set.IfAllDisabledPotentialAlso) > 0 {
+		children = append(children, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			return layout.Inset{Left: unit.Dp(16), Top: unit.Dp(4), Bottom: unit.Dp(8)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				var footerChildren []layout.FlexChild
+				footerChildren = append(footerChildren, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+					lbl := material.Body2(th, s.app.Text("cascade_all_disable_potential", "If you disable all mods in this conflict, you maybe also need to disable:", nil))
+					lbl.Font.Weight = font.Bold
+					lbl.Font.Style = font.Italic
+					lbl.Color = theme.TextMutedColor
+					return lbl.Layout(gtx)
+				}))
+				for _, cascadeMod := range set.IfAllDisabledPotentialAlso {
+					m := cascadeMod
+					footerChildren = append(footerChildren, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						name := m.ID
+						if !m.IsUnknown {
+							name = s.app.Text("from_jar", "{{.ID}} from '{{.File}}.jar'", map[string]any{"ID": m.ID, "File": m.BaseFilename})
+						} else {
+							name = fmt.Sprintf("%s %s", m.ID, s.app.Text("from_unknown", "from unknown", nil))
+						}
+						lbl := material.Body2(th, name)
+						lbl.Font.Style = font.Italic
+						lbl.Color = theme.TextMutedColor
+						return layout.Inset{Left: unit.Dp(12), Top: unit.Dp(2)}.Layout(gtx, lbl.Layout)
 					}))
 				}
-
 				return layout.Flex{Axis: layout.Vertical}.Layout(gtx, footerChildren...)
 			})
 		}))

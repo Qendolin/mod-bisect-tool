@@ -85,7 +85,7 @@ func TestServiceInferredDependenciesHaltAndDismissalFlow(t *testing.T) {
 	}
 }
 
-func TestServiceApplyInferredDependenciesUnчнойHaltsSplit(t *testing.T) {
+func TestServiceApplyInferredDependenciesUnhaltsSplit(t *testing.T) {
 	allMods := map[string]*mods.Mod{
 		"a": {Metadata: mods.ModMetadata{ID: "a"}},
 		"b": {Metadata: mods.ModMetadata{ID: "b"}},

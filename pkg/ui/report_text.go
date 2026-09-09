@@ -115,7 +115,6 @@ func WriteConflictSet(b *strings.Builder, cs ConflictSetReport, st TextStyles) {
 		for _, dep := range cs.IfAllDisabledPotentialAlso {
 			b.WriteString("    - ")
 			st.writeModRef(b, dep, st.muted)
-			b.WriteString(" (inferred)")
 			b.WriteByte('\n')
 		}
 	}

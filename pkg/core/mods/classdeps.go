@@ -198,11 +198,6 @@ func InferDependencies(allMods map[string]*Mod, dr ...*DependencyResolver) []Inf
 	return deps
 }
 
-// ApplyInferredDependencies delegates recording inferred dependencies to the resolver.
-func ApplyInferredDependencies(dr *DependencyResolver, deps []InferredDependency) []InferredDependency {
-	return dr.ApplyInferredDependencies(deps)
-}
-
 // sourceAlreadyDependsOn reports whether source already relates to target.
 func sourceAlreadyDependsOn(source *Mod, target *Mod) bool {
 	if source == nil || target == nil {
