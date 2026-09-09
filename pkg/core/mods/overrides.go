@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods/version"
+	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
 )
 
@@ -249,5 +250,69 @@ func (r listBasedRule) Apply(mm *ModMetadata) {
 			}
 		}
 		*targetSlice = newSlice
+	}
+}
+
+// applyOverridesToLoadedMods applies a final, merged set of override rules.
+func (ml *ModLoader) applyOverridesToLoadedMods(mods map[string]*Mod, overrides *DependencyOverrides) {
+	if overrides == nil || len(overrides.Rules) == 0 {
+		return
+	}
+
+	rulesByModID := make(map[string][]OverrideRule)
+	for _, rule := range overrides.Rules {
+		targetID := rule.Target()
+		rulesByModID[targetID] = append(rulesByModID[targetID], rule)
+	}
+
+	foundTargets := make(map[string]struct{})
+
+	for topLevelID, mod := range mods {
+		if rules, ok := rulesByModID[topLevelID]; ok {
+			logging.Infof("ModLoader: Applying %d override rule(s) to top-level mod %s.", len(rules), topLevelID)
+			for _, rule := range rules {
+				rule.Apply(&mod.Metadata)
+				logging.Debugf("ModLoader:   - Applied rule: Target='%s', Field='%s', Key='%s', Action='%s', Value='%s'",
+					rule.Target(), rule.Field(), rule.Key(), rule.Action().String(), rule.Value())
+			}
+			foundTargets[topLevelID] = struct{}{}
+		}
+
+		for i := range mod.NestedModules {
+			nestedMod := &mod.NestedModules[i]
+			if rules, ok := rulesByModID[nestedMod.Info.ID]; ok {
+				logging.Infof("ModLoader: Applying %d override rule(s) to nested mod %s (within %s).", len(rules), nestedMod.Info.ID, topLevelID)
+				for _, rule := range rules {
+					rule.Apply(&nestedMod.Info)
+					logging.Debugf("ModLoader:   - Applied rule: Target='%s', Field='%s', Key='%s', Action='%s', Value='%s'",
+						rule.Target(), rule.Field(), rule.Key(), rule.Action().String(), rule.Value())
+				}
+				foundTargets[nestedMod.Info.ID] = struct{}{}
+			}
+		}
+	}
+
+	// Track unapplied targets by source
+	unappliedBySource := make(map[OverrideSource]map[string]struct{})
+	for targetID, rules := range rulesByModID {
+		if _, found := foundTargets[targetID]; !found {
+			// Use the source of the first rule targeting this mod
+			source := rules[0].Source()
+			if unappliedBySource[source] == nil {
+				unappliedBySource[source] = make(map[string]struct{})
+			}
+			unappliedBySource[source][targetID] = struct{}{}
+		}
+	}
+
+	// Report unapplied targets per source
+	for source, unapplied := range unappliedBySource {
+		if len(unapplied) > 0 {
+			if source == OverrideSourceBuiltin {
+				logging.Infof("ModLoader: Skipping builtin override rule(s) for unknown mod(s): %v", sets.FormatSet(unapplied))
+			} else {
+				logging.Warnf("ModLoader: Skipping override rule(s) for unknown mod(s) not found in any top-level or nested JAR: %v", sets.FormatSet(unapplied))
+			}
+		}
 	}
 }

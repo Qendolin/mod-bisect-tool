@@ -4,6 +4,8 @@ package sets
 
 import "sort"
 
+// TODO: Remove / Move GetSplitIndex and Split (should be internal to imcs)
+
 // GetSplitIndex calculates the index at which to split a slice of a given length
 // into two halves. The first half will be larger if the length is odd.
 func GetSplitIndex(length int) int {
@@ -105,6 +107,14 @@ func MakeSlice(set Set) OrderedSet {
 	}
 	sort.Strings(slice)
 	return slice
+}
+
+func NewSet(items ...string) Set {
+	set := make(Set, len(items))
+	for _, item := range items {
+		set[item] = struct{}{}
+	}
+	return set
 }
 
 // SubtractSlices returns a new slice containing elements from the 'a' slice

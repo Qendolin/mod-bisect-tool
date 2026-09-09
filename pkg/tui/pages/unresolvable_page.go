@@ -63,9 +63,9 @@ func NewUnresolvablePage(app tui.TUIApp, mods []ui.UnresolvableModInfo) *Unresol
 
 	listFrame := widgets.NewTitleFrame(p.list, "Unresolvable Mods")
 	buttons := tview.NewFlex().SetDirection(tview.FlexColumn).
-		AddItem(nil, 0, 1, false).
+		AddItem(tview.NewBox(), 0, 1, false).
 		AddItem(p.continueBt, 16, 0, true).
-		AddItem(nil, 1, 0, false)
+		AddItem(tview.NewBox(), 1, 0, false)
 
 	p.AddItem(listFrame, 0, 1, true).
 		AddItem(widgets.NewHorizontalSeparator(tcell.ColorGray), 1, 0, false).
@@ -123,7 +123,7 @@ func (p *UnresolvablePage) buildEntry(m ui.UnresolvableModInfo) tview.Primitive 
 	// The button is fixed at 3 rows, anchored to the top of the entry.
 	right := tview.NewFlex().SetDirection(tview.FlexRow)
 	right.AddItem(state, 3, 0, false)
-	right.AddItem(nil, 0, 1, false)
+	right.AddItem(tview.NewBox(), 0, 1, false)
 
 	entry := tview.NewFlex().SetDirection(tview.FlexColumn)
 	entry.AddItem(left, 0, 1, false)

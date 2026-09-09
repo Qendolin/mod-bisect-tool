@@ -186,10 +186,8 @@ func TestIndeterminateComplementFail(t *testing.T) {
 	}
 }
 
-// TestIndeterminateBothHalves verifies that a double-INDETERMINATE result (both
-// halves of a split crash independently) halts the search instead of continuing.
-// The current candidate set is preserved so the UI can reconstruct the two
-// conflicting groups.
+// TestIndeterminateBothHalvesHalts verifies that a double-INDETERMINATE result
+// halts the search and preserves the candidate set so the UI can reconstruct the groups.
 func TestIndeterminateBothHalvesHalts(t *testing.T) {
 	mods := []string{"a", "b", "c", "d"}
 
@@ -197,30 +195,111 @@ func TestIndeterminateBothHalvesHalts(t *testing.T) {
 		_, hasA := s["a"]
 		_, hasC := s["c"]
 		if hasA != hasC {
-			// Exactly one of a and c is present, so the missing partner causes a crash.
 			return TestResultIndeterminate
 		}
 		return TestResultGood
 	}
 
-	state := runSearchToCompletion(t, initialStateFor(mods...), oracle)
+	engine := NewEngine(initialStateFor(mods...))
+	for steps := 0; !engine.GetCurrentState().IsHalted; steps++ {
+		if steps > 100 {
+			t.Fatal("search did not halt on double-indeterminate")
+		}
+		plan, err := engine.PlanNextTest()
+		if err != nil {
+			t.Fatalf("PlanNextTest failed: %v", err)
+		}
+		if err := engine.SubmitTestResult(oracle(plan.ModIDsToTest())); err != nil {
+			t.Fatalf("SubmitTestResult failed: %v", err)
+		}
+	}
 
+	state := engine.GetCurrentState()
 	if !state.IsHalted {
-		t.Fatalf("expected the search to be halted, but IsHalted=%t", state.IsHalted)
+		t.Fatalf("expected search to be halted, got IsHalted=%t", state.IsHalted)
 	}
 	if state.IsComplete {
-		t.Fatal("expected the halted search to not be marked complete")
-	}
-	if len(state.ConflictSet) != 0 {
-		t.Fatalf("expected empty conflict set on halt, got %v", sets.MakeSlice(state.ConflictSet))
+		t.Fatal("expected halted search to not be complete")
 	}
 
-	// The two groups are reconstructable from the preserved candidate set.
 	candidateSlice := sets.MakeSlice(state.GetCandidateSet())
 	c1, c2 := sets.Split(candidateSlice)
 	if !sets.Equal(sets.MakeSet(c1), sets.MakeSet([]string{"a", "b"})) ||
 		!sets.Equal(sets.MakeSet(c2), sets.MakeSet([]string{"c", "d"})) {
 		t.Fatalf("expected groups a,b and c,d, got %v and %v", c1, c2)
+	}
+
+	if _, err := engine.PlanNextTest(); err == nil {
+		t.Fatal("expected PlanNextTest to fail on a halted search")
+	}
+}
+
+// TestDoubleIndeterminateRetryHaltedSplit verifies that RetryHaltedSplit re-runs the
+// same split so that if external conditions change, the search can complete.
+func TestDoubleIndeterminateRetryHaltedSplit(t *testing.T) {
+	mods := []string{"a", "b", "c", "d"}
+
+	injected := false
+	oracle := func(s sets.Set) TestResult {
+		_, hasA := s["a"]
+		_, hasC := s["c"]
+		if hasA != hasC && !injected {
+			return TestResultIndeterminate
+		}
+		if hasC {
+			return TestResultFail
+		}
+		return TestResultGood
+	}
+
+	engine := NewEngine(initialStateFor(mods...))
+
+	var firstSplitTest sets.Set
+	for steps := 0; !engine.GetCurrentState().IsHalted; steps++ {
+		if steps > 100 {
+			t.Fatal("search did not halt")
+		}
+		plan, err := engine.PlanNextTest()
+		if err != nil {
+			t.Fatalf("PlanNextTest failed: %v", err)
+		}
+		if plan.Kind == TestPlanNewBisection {
+			firstSplitTest = plan.ModIDsToTest()
+		}
+		if err := engine.SubmitTestResult(oracle(plan.ModIDsToTest())); err != nil {
+			t.Fatalf("SubmitTestResult failed: %v", err)
+		}
+	}
+
+	// Retry the halted split after conditions changed.
+	injected = true
+	engine.RetryHaltedSplit()
+
+	plan, err := engine.GetCurrentTestPlan()
+	if err != nil {
+		t.Fatalf("GetCurrentTestPlan failed after retry: %v", err)
+	}
+	if firstSplitTest == nil || !sets.Equal(plan.ModIDsToTest(), firstSplitTest) {
+		t.Fatalf("expected split test to be re-planned (%v), got %v",
+			sets.MakeSlice(firstSplitTest), sets.MakeSlice(plan.ModIDsToTest()))
+	}
+
+	for steps := 0; !engine.GetCurrentState().IsComplete; steps++ {
+		if steps > 100 {
+			t.Fatal("search did not complete after retry")
+		}
+		next, err := engine.PlanNextTest()
+		if err != nil {
+			t.Fatalf("PlanNextTest failed: %v", err)
+		}
+		if err := engine.SubmitTestResult(oracle(next.ModIDsToTest())); err != nil {
+			t.Fatalf("SubmitTestResult failed: %v", err)
+		}
+	}
+
+	state := engine.GetCurrentState()
+	if !sets.Equal(state.ConflictSet, sets.MakeSet([]string{"c"})) {
+		t.Fatalf("expected conflict set {c}, got %v", sets.MakeSlice(state.ConflictSet))
 	}
 }
 

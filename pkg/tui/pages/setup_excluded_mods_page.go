@@ -105,9 +105,9 @@ func NewSetupExcludedModsPage(app tui.TUIApp, initiallyDisabled []string) *Setup
 	p.AddItem(widgets.NewTitleFrame(p.omitTable, "Omit Mods"), 0, 2, len(initialSet) == 0).
 		AddItem(widgets.NewHorizontalSeparator(tcell.ColorGray), 1, 0, false).
 		AddItem(tview.NewFlex().
-			AddItem(nil, 0, 1, false).
+			AddItem(tview.NewBox(), 0, 1, false).
 			AddItem(p.continueButton, 12, 0, true).
-			AddItem(nil, 1, 0, false),
+			AddItem(tview.NewBox(), 1, 0, false),
 			3, 0, false)
 
 	p.SetInputCapture(p.inputHandler())

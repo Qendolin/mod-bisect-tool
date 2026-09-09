@@ -871,6 +871,107 @@ func TestBisectionHaltsOnDoubleIndeterminate(t *testing.T) {
 	mock.WaitHalted(t, timeout)
 }
 
+// --- Class file fixtures for assumed-dependency tests ---
+
+func e2eClassFile(thisClassIndex, cpCount uint16, cpEntries ...[]byte) []byte {
+	var buf bytes.Buffer
+	buf.WriteString("\xCA\xFE\xBA\xBE") // magic
+	buf.WriteString("\x00\x00\x00\x34") // versions (52)
+	buf.WriteByte(byte(cpCount >> 8))   // constant_pool_count
+	buf.WriteByte(byte(cpCount))
+	for _, entry := range cpEntries {
+		buf.Write(entry)
+	}
+	buf.WriteString("\x00\x21")              // access_flags
+	buf.WriteByte(byte(thisClassIndex >> 8)) // this_class
+	buf.WriteByte(byte(thisClassIndex))
+	buf.WriteString("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00") // super, counts
+	return buf.Bytes()
+}
+
+func e2eUtf8(s string) []byte {
+	out := []byte{1, byte(len(s) >> 8), byte(len(s))}
+	return append(out, s...)
+}
+
+func e2eClass(nameIndex uint16) []byte {
+	return []byte{7, byte(nameIndex >> 8), byte(nameIndex)}
+}
+
+func e2eClassDeclaring(internalName string) string {
+	return string(e2eClassFile(2, 3, e2eUtf8(internalName), e2eClass(1)))
+}
+
+func e2eClassReferencing(internalName string, refs ...string) string {
+	utf8Count := 1 + len(refs)
+	thisClass := uint16(2 * utf8Count)
+	entries := [][]byte{e2eUtf8(internalName)}
+	for _, ref := range refs {
+		entries = append(entries, e2eUtf8(ref))
+	}
+	for i := 2; i <= utf8Count; i++ {
+		entries = append(entries, e2eClass(uint16(i)))
+	}
+	entries = append(entries, e2eClass(1))
+	return string(e2eClassFile(thisClass, uint16(len(entries)+1), entries...))
+}
+
+// TestDoubleIndeterminateDetectsInferredDeps verifies the full app flow
+// for a resolvable double-INDETERMINATE: the bytecode analysis infers the
+// undeclared dependencies (mod_a -> mod_c, mod_d -> mod_b), and the view is
+// notified via OnInferredDependenciesDetected. When applied explicitly, the
+// search continues.
+func TestDoubleIndeterminateDetectsInferredDeps(t *testing.T) {
+	specs := map[string]modSpec{
+		"mod-a-1.0.jar": {
+			JSONContent: `{"id": "mod_a", "version": "1.0"}`,
+			RawFiles:    map[string]string{"com/a/Foo.class": e2eClassReferencing("com/a/Foo", "com/c/Baz")},
+		},
+		"mod-b-1.0.jar": {
+			JSONContent: `{"id": "mod_b", "version": "1.0"}`,
+			RawFiles:    map[string]string{"com/b/Bar.class": e2eClassDeclaring("com/b/Bar")},
+		},
+		"mod-c-1.0.jar": {
+			JSONContent: `{"id": "mod_c", "version": "1.0"}`,
+			RawFiles:    map[string]string{"com/c/Baz.class": e2eClassDeclaring("com/c/Baz")},
+		},
+		"mod-d-1.0.jar": {
+			JSONContent: `{"id": "mod_d", "version": "1.0"}`,
+			RawFiles:    map[string]string{"com/d/Qux.class": e2eClassReferencing("com/d/Qux", "com/b/Bar")},
+		},
+	}
+	a, mock, _ := newLoadedApp(t, specs)
+
+	// First test: the first half is indeterminate (mod_a silently needs mod_c).
+	a.GetBisectionController().Step()
+	a.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
+
+	// Second test: the complement is indeterminate too (mod_d needs mod_b).
+	// This triggers detection and dispatches OnInferredDependenciesDetected.
+	a.GetBisectionController().Step()
+	a.GetBisectionController().SubmitTestResult(imcs.TestResultIndeterminate)
+
+	inferred := mock.WaitUndeclaredDeps(t, timeout)
+	if len(inferred) != 2 {
+		t.Fatalf("expected 2 inferred deps, got %d: %v", len(inferred), inferred)
+	}
+	inferredMap := make(map[string]string, len(inferred))
+	for _, dep := range inferred {
+		inferredMap[dep.SourceID] = dep.TargetID
+	}
+	if inferredMap["mod_a"] != "mod_c" || inferredMap["mod_d"] != "mod_b" {
+		t.Fatalf("unexpected inferred dependencies: %v", inferredMap)
+	}
+
+	// Apply inferred dependencies explicitly
+	a.GetBisectionController().ApplyInferredDependencies(inferred)
+
+	vm := a.GetViewModel()
+	if vm.Progress.IsHalted {
+		t.Error("expected the search to continue after applying inferred dependencies, not halt")
+	}
+}
+
 // TestLoadFiresOnInitialModStateSelection asserts that the OnInitialModStateSelection callback is fired after loading, and that the initial disabled set is reported correctly.
 func TestInitialModStateSelectionInitiallyDisabled(t *testing.T) {
 	specs := map[string]modSpec{

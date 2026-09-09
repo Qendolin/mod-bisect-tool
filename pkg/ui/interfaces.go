@@ -37,6 +37,8 @@ type BisectionController interface {
 
 	CancelTest()
 	SubmitTestResult(result imcs.TestResult)
+	ApplyInferredDependencies(deps []InferredDependency)
+	CancelInferredDependencies()
 }
 
 // ModStatusController defines the operations to inspect and change the
@@ -68,6 +70,16 @@ type ModStatusController interface {
 	// state is reconciled afterwards. It has no other side effects and can be
 	// called at any time.
 	ResolveUnresolvableMods(decisions map[string]UnresolvableModAction)
+}
+
+// InferredDependency describes an undeclared dependency inferred from bytecode analysis.
+type InferredDependency struct {
+	// SourceID is the mod whose code references classes it does not declare.
+	SourceID string
+	// TargetID is the mod that declares the referenced classes.
+	TargetID string
+	// Classes are the referenced internal class names that led to this inference.
+	Classes []string
 }
 
 // View defines the operations that the business logic can request from the UI.
@@ -103,4 +115,7 @@ type View interface {
 	// mods block each other through undeclared dependencies. The UI presents the
 	// two groups as a full page; this is non-blocking.
 	OnBisectionHalted(groupA, groupB sets.Set)
+	// OnUndeclaredDependenciesDetected is called when double-INDETERMINATE halts the search
+	// and undeclared dependencies are inferred from bytecode. The UI presents them full-page.
+	OnUndeclaredDependenciesDetected(deps []InferredDependency)
 }

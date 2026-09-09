@@ -79,10 +79,8 @@ type SearchState struct {
 
 	// IsVerifyingConflictSet is true if the next test planned should be the final `test(ConflictSet)` optimization step.
 	IsVerifyingConflictSet bool
-	// IsHalted is true if the search was stopped because both halves of a split
-	// returned INDETERMINATE. No further tests can be planned. The search stack
-	// is left intact so the UI can reconstruct the two conflicting groups from
-	// the current candidate set.
+	// IsHalted is true if the search stopped because both halves of a split
+	// returned INDETERMINATE. The search stack is left intact so candidates can be inspected.
 	IsHalted bool
 	// AllModIDs is the universe of all mods, used for context and resetting candidates.
 	AllModIDs []string

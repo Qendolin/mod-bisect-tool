@@ -382,6 +382,21 @@ other = "Pomiń mody w wyszukiwaniu"
 [setup_excluded_mods_keep_disabled]
 other = "Pozostawić wyłączone wcześniej wyłączone mody."
 
+[cancel]
+other = "Anuluj"
+
+[cascade_all_disable_potential]
+other = "Jeśli wyłączysz wszystkie mody w tym konflikcie, być może musisz również wyłączyć:"
+
+[cascade_disable_potential]
+other = "Wyłączenie tego modu może również wymagać wyłączenia:"
+
+[undeclared_dependencies]
+other = "Wykryto niezadeklarowane zależności"
+
+[undeclared_dependencies_description]
+other = "Wyszukiwanie zostało zablokowane przez dwie grupy modów, które zależą od siebie poprzez niezadeklarowane zależności. Poniższe zależności zostały wywnioskowane z kodu modów. Kliknij „Kontynuuj”, aby ponowić próbę podziału z zastosowaniem tych zależności."
+
 [active_test_set]
 other = "Aktywna grupa"
 

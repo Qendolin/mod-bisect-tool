@@ -18,6 +18,7 @@ type DependencyResolver struct {
 	allMods            map[string]*Mod
 	potentialProviders PotentialProvidersMap
 	loader             RunLoader
+	inferredDeps       map[string]VersionRanges
 }
 
 // resolutionSession holds the state for a single dependency resolution operation.
@@ -28,6 +29,7 @@ type resolutionSession struct {
 	allMods            map[string]*Mod
 	potentialProviders PotentialProvidersMap
 	loader             RunLoader
+	inferredDeps       map[string]VersionRanges
 
 	// Per-call dynamic data
 	modStatuses      map[string]ModStatus
@@ -71,6 +73,7 @@ func NewDependencyResolver(allMods map[string]*Mod, potentialProviders Potential
 		allMods:            allMods,
 		potentialProviders: potentialProviders,
 		loader:             loader,
+		inferredDeps:       make(map[string]VersionRanges),
 	}
 }
 
@@ -84,6 +87,7 @@ func (dr *DependencyResolver) ResolveEffectiveSet(targetSet sets.Set, modStatuse
 		allMods:            dr.allMods,
 		potentialProviders: dr.potentialProviders,
 		loader:             dr.loader,
+		inferredDeps:       dr.inferredDeps,
 		modStatuses:        modStatuses,
 		effectiveSet:       make(map[string]*Mod),
 		resolutionPath:     make(map[string]ResolutionInfo),
@@ -192,6 +196,11 @@ func (s *resolutionSession) ensureModActive(modID, neededBy, reason, satisfiedDe
 	s.effectiveSet[modID] = mod
 
 	allDepsOK := s.resolveDependencies(modID, mod.Metadata.Depends, dependencyLogPrefix)
+	if allDepsOK {
+		if inferred := s.inferredDeps[modID]; len(inferred) > 0 {
+			allDepsOK = s.resolveDependencies(modID, inferred, dependencyLogPrefix)
+		}
+	}
 	if allDepsOK {
 		for i, nested := range mod.NestedModules {
 			branch := "├─"
@@ -570,11 +579,28 @@ func (dr *DependencyResolver) CalculateUnresolvableModsDetails(initialCandidates
 // need to know *if* a mod is broken to exclude it from further testing.
 // initialCandidates must contain top-level mod IDs.
 func (dr *DependencyResolver) CalculateTransitivelyUnresolvableMods(initialCandidates sets.Set) sets.Set {
+	return dr.calculateTransitivelyUnresolvable(initialCandidates, false)
+}
+
+// CalculateTransitivelyUnresolvableModsWithInferred calculates transitively
+// unresolvable mods including active inferred dependencies.
+func (dr *DependencyResolver) CalculateTransitivelyUnresolvableModsWithInferred(initialCandidates sets.Set) sets.Set {
+	if len(dr.inferredDeps) == 0 {
+		return dr.CalculateTransitivelyUnresolvableMods(initialCandidates)
+	}
+	return dr.calculateTransitivelyUnresolvable(initialCandidates, true)
+}
+
+func (dr *DependencyResolver) calculateTransitivelyUnresolvable(initialCandidates sets.Set, includeInferred bool) sets.Set {
 	currentlyAvailable := sets.Copy(initialCandidates)
 	totalUnresolvable := sets.Set{}
 
 	for {
-		newlyFoundUnresolvable := dr.CalculateDirectlyUnresolvableMods(currentlyAvailable)
+		newlyFoundUnresolvableMap := dr.calculateDirectlyUnresolvable(currentlyAvailable, true, includeInferred)
+		newlyFoundUnresolvable := make(sets.Set, len(newlyFoundUnresolvableMap))
+		for modID := range newlyFoundUnresolvableMap {
+			newlyFoundUnresolvable[modID] = struct{}{}
+		}
 
 		if len(newlyFoundUnresolvable) == 0 {
 			break
@@ -600,7 +626,7 @@ func (dr *DependencyResolver) CalculateTransitivelyUnresolvableMods(initialCandi
 // or for quick surface-level validation of a mod set.
 // availableMods must contain top-level mod IDs.
 func (dr *DependencyResolver) CalculateDirectlyUnresolvableMods(availableMods sets.Set) sets.Set {
-	resMap := dr.calculateDirectlyUnresolvable(availableMods, true)
+	resMap := dr.calculateDirectlyUnresolvable(availableMods, true, false)
 	resSet := make(sets.Set, len(resMap))
 	for modID := range resMap {
 		resSet[modID] = struct{}{}
@@ -619,7 +645,7 @@ func (dr *DependencyResolver) CalculateDirectlyUnresolvableMods(availableMods se
 // of mods, without traversing the entire dependency tree.
 // availableMods must contain top-level mod IDs.
 func (dr *DependencyResolver) CalculateDirectlyUnresolvableModsWithDetails(availableMods sets.Set) map[string][]string {
-	return dr.calculateDirectlyUnresolvable(availableMods, false)
+	return dr.calculateDirectlyUnresolvable(availableMods, false, false)
 }
 
 // calculateDirectlyUnresolvable is the underlying internal engine for all first-degree
@@ -632,7 +658,7 @@ func (dr *DependencyResolver) CalculateDirectlyUnresolvableModsWithDetails(avail
 //     exhaustively maps all missing dependencies for each broken mod.
 //
 // availableMods must contain top-level mod IDs.
-func (dr *DependencyResolver) calculateDirectlyUnresolvable(availableMods sets.Set, earlyExit bool) map[string][]string {
+func (dr *DependencyResolver) calculateDirectlyUnresolvable(availableMods sets.Set, earlyExit bool, includeInferred bool) map[string][]string {
 	unresolvable := make(map[string][]string)
 	sortedCandidates := sets.MakeSlice(availableMods)
 
@@ -659,12 +685,81 @@ func (dr *DependencyResolver) calculateDirectlyUnresolvable(availableMods sets.S
 			}
 		}
 
+		if (!isUnresolvable || !earlyExit) && includeInferred {
+			if inferred := dr.inferredDeps[modID]; len(inferred) > 0 {
+				for depID, predicates := range inferred {
+					if IsImplicitMod(depID) {
+						continue
+					}
+					if !dr.findValidProviderInSet(depID, predicates, availableMods) {
+						isUnresolvable = true
+						if earlyExit {
+							break
+						}
+						failedDeps = append(failedDeps, depID)
+					}
+				}
+			}
+		}
+
 		if isUnresolvable {
 			unresolvable[modID] = failedDeps
 		}
+
 	}
 
 	return unresolvable
+}
+
+// ApplyInferredDependencies records inferred dependencies in the resolver
+// without mutating Mod.Metadata. It returns the dependencies actually applied.
+func (dr *DependencyResolver) ApplyInferredDependencies(deps []InferredDependency) []InferredDependency {
+	anyVersion := version.Any()
+	var applied []InferredDependency
+	for _, dep := range deps {
+		source, ok := dr.allMods[dep.SourceID]
+		if !ok {
+			logging.Warnf("Resolver: Cannot apply inferred dependency '%s' -> '%s': source mod not found.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		target, ok := dr.allMods[dep.TargetID]
+		if !ok {
+			logging.Warnf("Resolver: Cannot apply inferred dependency '%s' -> '%s': target mod not found.", dep.SourceID, dep.TargetID)
+			continue
+		}
+		if sourceAlreadyDependsOn(source, target) || dr.HasInferredDependency(dep.SourceID, dep.TargetID) {
+			continue
+		}
+		if dr.inferredDeps == nil {
+			dr.inferredDeps = make(map[string]VersionRanges)
+		}
+		if dr.inferredDeps[dep.SourceID] == nil {
+			dr.inferredDeps[dep.SourceID] = make(VersionRanges)
+		}
+		dr.inferredDeps[dep.SourceID][dep.TargetID] = []*version.VersionPredicate{anyVersion}
+		logging.Infof("Resolver: Applied inferred dependency '%s' -> '%s' (classes: %v).", dep.SourceID, dep.TargetID, dep.Classes)
+		applied = append(applied, dep)
+	}
+	return applied
+}
+
+// ClearInferredDependencies removes all active inferred dependencies.
+func (dr *DependencyResolver) ClearInferredDependencies() {
+	dr.inferredDeps = make(map[string]VersionRanges)
+}
+
+// HasInferredDeps reports whether any inferred dependencies are active.
+func (dr *DependencyResolver) HasInferredDeps() bool {
+	return len(dr.inferredDeps) > 0
+}
+
+// HasInferredDependency reports whether an inferred dependency exists.
+func (dr *DependencyResolver) HasInferredDependency(sourceID, targetID string) bool {
+	if ranges, ok := dr.inferredDeps[sourceID]; ok {
+		_, exists := ranges[targetID]
+		return exists
+	}
+	return false
 }
 
 // findValidProviderInSet searches for at least one provider that satisfies the dependency,

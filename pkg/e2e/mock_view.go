@@ -85,6 +85,7 @@ type MockView struct {
 	// haltedCh receives the groups passed to OnBisectionHalted (once each).
 	haltedCh                   chan HaltInvocation
 	initialModStateSelectionCh chan []string
+	inferredDepsCh             chan []ui.InferredDependency
 }
 
 // HaltInvocation describes a single OnBisectionHalted call.
@@ -101,6 +102,7 @@ func NewMockView() *MockView {
 		unresolvableCh:             make(chan []ui.UnresolvableModInfo, 1),
 		haltedCh:                   make(chan HaltInvocation, 1),
 		initialModStateSelectionCh: make(chan []string, 1),
+		inferredDepsCh:             make(chan []ui.InferredDependency, 1),
 	}
 }
 
@@ -195,6 +197,18 @@ func (m *MockView) WaitInitialModStateSelection(t *testing.T, timeout time.Durat
 		return mods
 	case <-time.After(timeout):
 		t.Fatalf("MockView: timed out waiting for OnInitialModStateSelection; calls: %v", m.Calls())
+	}
+	return nil
+}
+
+// WaitUndeclaredDeps blocks until OnUndeclaredDependenciesDetected fires and returns the reported dependencies, or fails the test on timeout.
+func (m *MockView) WaitUndeclaredDeps(t *testing.T, timeout time.Duration) []ui.InferredDependency {
+	t.Helper()
+	select {
+	case deps := <-m.inferredDepsCh:
+		return deps
+	case <-time.After(timeout):
+		t.Fatalf("MockView: timed out waiting for OnUndeclaredDependenciesDetected; calls: %v", m.Calls())
 	}
 	return nil
 }
@@ -303,6 +317,14 @@ func (m *MockView) OnBisectionHalted(groupA, groupB sets.Set) {
 	m.record("OnBisectionHalted")
 	select {
 	case m.haltedCh <- HaltInvocation{GroupA: groupA, GroupB: groupB}:
+	default:
+	}
+}
+
+func (m *MockView) OnUndeclaredDependenciesDetected(deps []ui.InferredDependency) {
+	m.record("OnUndeclaredDependenciesDetected")
+	select {
+	case m.inferredDepsCh <- deps:
 	default:
 	}
 }

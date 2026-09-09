@@ -2,12 +2,14 @@ package app
 
 import (
 	"errors"
+	"slices"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/bisect"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/mods"
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/sets"
 	"github.com/Qendolin/mod-bisect-tool/pkg/logging"
+	"github.com/Qendolin/mod-bisect-tool/pkg/ui"
 )
 
 // bisectionController implements ui.BisectionController. It drives the bisection
@@ -44,11 +46,43 @@ func (b *bisectionController) Step() {
 func (b *bisectionController) SubmitTestResult(result imcs.TestResult) {
 	b.app.bisectSvc.SubmitTestResult(result)
 	state := b.app.bisectSvc.GetCurrentState()
-	if state.IsHalted {
-		b.showHaltedPage()
-	} else {
+	if !state.IsHalted {
 		b.displayResults()
+		b.app.view.Update()
+		return
 	}
+
+	if b.app.bisectSvc.CanInferDependencies() {
+		deps := b.app.bisectSvc.InferDependencies()
+		if len(deps) > 0 {
+			b.app.view.OnUndeclaredDependenciesDetected(buildInferredDepsVM(deps))
+			b.app.view.Update()
+			return
+		}
+		b.app.bisectSvc.DismissInferredDependencies()
+	}
+
+	b.showHaltedPage()
+	b.app.view.Update()
+}
+
+func (b *bisectionController) ApplyInferredDependencies(deps []ui.InferredDependency) {
+	coreDeps := make([]mods.InferredDependency, len(deps))
+	for i, d := range deps {
+		coreDeps[i] = mods.InferredDependency{
+			SourceID: d.SourceID,
+			TargetID: d.TargetID,
+			Classes:  slices.Clone(d.Classes),
+		}
+	}
+	b.app.bisectSvc.ApplyInferredDependencies(coreDeps)
+	b.displayResults()
+	b.app.view.Update()
+}
+
+func (b *bisectionController) CancelInferredDependencies() {
+	b.app.bisectSvc.DismissInferredDependencies()
+	b.showHaltedPage()
 	b.app.view.Update()
 }
 

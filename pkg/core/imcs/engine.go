@@ -211,6 +211,14 @@ func (e *Engine) AddCandidates(additions sets.Set) {
 	e.state.Candidates = sets.MakeSlice(newCandidates)
 }
 
+// RetryHaltedSplit un-halts the search so the interrupted split can be retried.
+func (e *Engine) RetryHaltedSplit() {
+	if e.state.IsHalted {
+		logging.Infof("IMCSEngine: Retrying halted split.")
+		e.state.IsHalted = false
+	}
+}
+
 // Returns the number of undos possible
 func (e *Engine) UndoCount() int {
 	return e.undoStack.Size()

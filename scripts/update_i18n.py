@@ -61,7 +61,10 @@ def merge_dicts(target: dict, source: dict) -> None:
 
 
 def extract_keys_to_file(
-    directory: str | Path, keys: list[str], output_file: str | Path
+    directory: str | Path,
+    keys: list[str] | None,
+    output_file: str | Path,
+    include_missing: bool = False,
 ) -> None:
     dir_path = Path(directory)
     out_path = Path(output_file)
@@ -75,27 +78,42 @@ def extract_keys_to_file(
         print(f"No .toml files found in '{dir_path}'.")
         return
 
-    blocks = []
+    target_keys = set(keys) if keys else set()
+
+    # Load all TOML data
+    file_data_map = {}
     for file_path in toml_files:
         try:
             with open(file_path, "rb") as f:
-                data = tomllib.load(f)
+                file_data_map[file_path] = tomllib.load(f)
         except Exception as e:
             print(f"Error reading {file_path.name}: {e}")
-            continue
 
+    # Calculate keys that are present in some but not all files
+    if include_missing and file_data_map:
+        total_files = len(file_data_map)
+        key_counts: dict[str, int] = {}
+        for data in file_data_map.values():
+            for key in data.keys():
+                key_counts[key] = key_counts.get(key, 0) + 1
+
+        missing_keys = {key for key, count in key_counts.items() if count < total_files}
+        target_keys.update(missing_keys)
+
+    sorted_target_keys = sorted(target_keys)
+
+    blocks = []
+    for file_path in toml_files:
+        data = file_data_map.get(file_path, {})
         matches = []
-        for key in keys:
+        for key in sorted_target_keys:
             if key in data:
                 matches.append(format_toml_value(key, data[key]))
 
-        if matches:
-            block = f"--- {file_path.name} ---\n" + "\n\n".join(matches)
-            blocks.append(block)
-
-    if not blocks:
-        print("No matching keys found.")
-        return
+        # Always include the file header, even if matches is empty
+        match_str = "\n\n".join(matches) if matches else ""
+        block = f"--- {file_path.name} ---\n{match_str}".strip()
+        blocks.append(block)
 
     out_path.write_text("\n\n".join(blocks) + "\n", encoding="utf-8")
     print(f"Successfully extracted {len(blocks)} file match(es) to '{out_path}'.")
@@ -123,8 +141,7 @@ def merge_file_to_toml(directory: str | Path, input_file: str | Path) -> None:
         start = match.end()
         end = matches[i + 1].start() if i + 1 < len(matches) else len(input_text)
         content = input_text[start:end].strip()
-        if content:
-            file_updates[filename] = content
+        file_updates[filename] = content
 
     for filename, raw_toml in file_updates.items():
         target_path = dir_path / filename
@@ -139,7 +156,7 @@ def merge_file_to_toml(directory: str | Path, input_file: str | Path) -> None:
                 continue
 
         try:
-            updates_dict = tomllib.loads(raw_toml)
+            updates_dict = tomllib.loads(raw_toml) if raw_toml else {}
             existing_dict = {}
             if target_path.exists():
                 with open(target_path, "rb") as f:
@@ -163,7 +180,7 @@ def main():
     mode_group.add_argument(
         "-e",
         "--extract",
-        nargs="+",
+        nargs="*",
         metavar="KEY",
         help="Extract key(s) from TOML files into the updates file.",
     )
@@ -174,6 +191,12 @@ def main():
         help="Merge entries from the updates file back into TOML files.",
     )
 
+    parser.add_argument(
+        "-i",
+        "--include-missing-keys",
+        action="store_true",
+        help="Include keys present in some but not all translation files during extraction.",
+    )
     parser.add_argument(
         "-f",
         "--file",
@@ -189,8 +212,13 @@ def main():
 
     args = parser.parse_args()
 
-    if args.extract:
-        extract_keys_to_file(args.path, args.extract, args.file)
+    if args.extract is not None:
+        extract_keys_to_file(
+            args.path,
+            args.extract,
+            args.file,
+            include_missing=args.include_missing_keys,
+        )
     elif args.merge:
         merge_file_to_toml(args.path, args.file)
 

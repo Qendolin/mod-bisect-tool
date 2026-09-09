@@ -378,6 +378,21 @@ other = "Mods von der Suche ausschließen"
 [setup_excluded_mods_keep_disabled]
 other = "Bereits deaktivierte Mods deaktiviert lassen."
 
+[cancel]
+other = "Abbrechen"
+
+[cascade_all_disable_potential]
+other = "Wenn du alle Mods in diesem Konflikt deaktivierst, musst du eventuell auch Folgendes deaktivieren:"
+
+[cascade_disable_potential]
+other = "Das Deaktivieren dieser Mod erfordert eventuell auch das Deaktivieren von:"
+
+[undeclared_dependencies]
+other = "Nicht deklarierte Abhängigkeiten erkannt"
+
+[undeclared_dependencies_description]
+other = "Die Suche wurde durch zwei Mod-Gruppen blockiert, die durch nicht deklarierte Abhängigkeiten voneinander abhängen. Die folgenden Abhängigkeiten wurden aus dem Code der Mods abgeleitet. Klicke auf „Weiter“, um die Aufteilung mit diesen angewendeten Abhängigkeiten erneut zu versuchen."
+
 [active_test_set]
 other = "Aktive Gruppe"
 

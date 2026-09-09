@@ -48,14 +48,16 @@ const (
 
 // CascadingDisables captures the side-effects of removing a single mod.
 type CascadingDisables struct {
-	Mod                ModViewModel   // The target mod
-	AlsoRequireDisable []ModViewModel // Other mods broken transitively by removing this mod
+	Mod                         ModViewModel
+	AlsoRequireDisable          []ModViewModel
+	PotentialAlsoRequireDisable []ModViewModel
 }
 
 // ConflictSetReport details an isolated group of mutually incompatible mods.
 type ConflictSetReport struct {
-	Mods              []CascadingDisables // List of conflicting mods and their specific cascades
-	IfAllDisabledAlso []ModViewModel      // Extra cascades that occur ONLY if the entire set is disabled
+	Mods                       []CascadingDisables
+	IfAllDisabledAlso          []ModViewModel
+	IfAllDisabledPotentialAlso []ModViewModel
 }
 
 // UnresolvedDependencyReport captures pre-existing dependency errors unrelated to conflicts.

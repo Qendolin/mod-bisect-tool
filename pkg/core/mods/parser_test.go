@@ -49,7 +49,7 @@ func TestFallbackWarningOncePerSubtree(t *testing.T) {
 
 	p := ModParser{RunLoader: RunLoaderNeoForgeWithFabric}
 	var lb logBuffer
-	if _, _, err := p.ExtractModMetadata(jarPath, "top_mod.jar", &lb); err != nil {
+	if _, _, _, err := p.ExtractModMetadata(jarPath, "top_mod.jar", &lb); err != nil {
 		t.Fatalf("ExtractModMetadata failed: %v", err)
 	}
 
@@ -94,7 +94,7 @@ displayName = "With Missing Nested"`),
 
 			p := ModParser{RunLoader: tc.loader}
 			var lb logBuffer
-			metadata, nested, err := p.ExtractModMetadata(jarPath, "with_missing_nested.jar", &lb)
+			metadata, nested, _, err := p.ExtractModMetadata(jarPath, "with_missing_nested.jar", &lb)
 			if err != nil {
 				t.Fatalf("ExtractModMetadata failed: %v", err)
 			}

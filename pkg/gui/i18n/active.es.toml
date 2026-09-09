@@ -378,6 +378,21 @@ other = "Excluir mods de la búsqueda"
 [setup_excluded_mods_keep_disabled]
 other = "Mantener desactivados los mods que ya están desactivados."
 
+[cancel]
+other = "Cancelar"
+
+[cascade_all_disable_potential]
+other = "Si desactivas todos los mods en este conflicto, tal vez también tengas que desactivar:"
+
+[cascade_disable_potential]
+other = "Desactivar este mod tal vez requiera desactivar también:"
+
+[undeclared_dependencies]
+other = "Dependencias no declaradas detectadas"
+
+[undeclared_dependencies_description]
+other = "La búsqueda fue bloqueada por dos grupos de mods que dependen entre sí a través de dependencias no declaradas. Las siguientes dependencias se dedujeron del código de los mods. Haz clic en «Continuar» para reintentar la división con estas dependencias aplicadas."
+
 [active_test_set]
 other = "Grupo activo"
 

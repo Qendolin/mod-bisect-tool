@@ -79,13 +79,14 @@ func StartupInfo() string {
 
 // CLIArgs holds all command-line arguments passed to the application.
 type CLIArgs struct {
-	NoEmbeddedOverrides     bool
-	NoLogFile               bool
-	Verbose                 bool
-	Loader                  mods.RunLoader
-	LogDir                  string
-	Locale                  string
-	AdditionalOverridesPath string
+	NoEmbeddedOverrides       bool
+	NoLogFile                 bool
+	Verbose                   bool
+	Loader                    mods.RunLoader
+	LogDir                    string
+	Locale                    string
+	AdditionalOverridesPath   string
+	ApplyInferredDependencies bool
 }
 
 // ParseCLIArgs parses the command-line flags and returns a populated CLIArgs struct.
@@ -95,6 +96,7 @@ func ParseCLIArgs() *CLIArgs {
 	flag.BoolVar(&args.NoEmbeddedOverrides, "no-embedded-overrides", false, "Disable the built-in dependency overrides for known problematic mods.")
 	flag.BoolVar(&args.NoLogFile, "no-log-file", false, "Disable logging to a file; log output stays in memory only.")
 	flag.BoolVar(&args.Verbose, "verbose", false, "Enable verbose (debug) logging.")
+	flag.BoolVar(&args.ApplyInferredDependencies, "apply-inferred-deps", false, "Infer and apply undeclared dependencies from bytecode from the start of the search.")
 	flag.Func("loader", "Mod loader to run with: fabric, neoforge, connector (NeoForge with Fabric) or kilt (Fabric with NeoForge). Defaults to auto-detection.", func(value string) error {
 		loader, err := mods.ParseRunLoader(value)
 		if err != nil {

@@ -376,6 +376,21 @@ other = "從搜尋中排除模組"
 [setup_excluded_mods_keep_disabled]
 other = "維持已停用的模組處於停用狀態。"
 
+[cancel]
+other = "取消"
+
+[cascade_all_disable_potential]
+other = "若你停用此衝突中的所有模組，可能還需要停用："
+
+[cascade_disable_potential]
+other = "停用此模組可能還需要停用："
+
+[undeclared_dependencies]
+other = "偵測到未宣告的相依性"
+
+[undeclared_dependencies_description]
+other = "搜尋因兩個模組群組之間存在未宣告的相互相依而被封鎖。以下相依性是從模組程式碼中推斷出來的。點擊「繼續」以套用這些相依性並重試拆分。"
+
 [active_test_set]
 other = "活動群組"
 

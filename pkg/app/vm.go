@@ -1,6 +1,7 @@
 package app
 
 import (
+	"slices"
 	"sort"
 
 	"github.com/Qendolin/mod-bisect-tool/pkg/core/imcs"
@@ -23,6 +24,24 @@ func makeModVM(id string, mods map[string]*mods.Mod) ui.ModViewModel {
 			IsUnknown: true,
 		}
 	}
+}
+
+func buildInferredDepsVM(deps []mods.InferredDependency) []ui.InferredDependency {
+	uiDeps := make([]ui.InferredDependency, len(deps))
+	for i, d := range deps {
+		uiDeps[i] = ui.InferredDependency{
+			SourceID: d.SourceID,
+			TargetID: d.TargetID,
+			Classes:  slices.Clone(d.Classes),
+		}
+	}
+	sort.Slice(uiDeps, func(i, j int) bool {
+		if uiDeps[i].SourceID != uiDeps[j].SourceID {
+			return uiDeps[i].SourceID < uiDeps[j].SourceID
+		}
+		return uiDeps[i].TargetID < uiDeps[j].TargetID
+	})
+	return uiDeps
 }
 
 func (a *App) GetViewModel() ui.BisectionViewModel {
@@ -184,6 +203,14 @@ func buildCascadingDisablesSlice(conflictSet, allModsSet sets.Set, modMap map[st
 		for _, depID := range sets.MakeSlice(perModSpecific) {
 			item.AlsoRequireDisable = append(item.AlsoRequireDisable, makeModVM(depID, modMap))
 		}
+		if dr := modState.Resolver(); dr.HasInferredDeps() {
+			allCascades := dr.CalculateTransitivelyUnresolvableModsWithInferred(sets.Subtract(allModsSet, sets.MakeSet([]string{id})))
+			potential := sets.Subtract(allCascades, perModUnresolvable)
+			delete(potential, id)
+			for _, depID := range sets.MakeSlice(potential) {
+				item.PotentialAlsoRequireDisable = append(item.PotentialAlsoRequireDisable, makeModVM(depID, modMap))
+			}
+		}
 		list = append(list, item)
 	}
 	return list, union
@@ -201,9 +228,20 @@ func buildConflictSetReport(conflictSet, allModsSet sets.Set, modMap map[string]
 		footerRefs = append(footerRefs, makeModVM(depID, modMap))
 	}
 
+	var potentialFooterRefs []ui.ModViewModel
+	if dr := modState.Resolver(); dr.HasInferredDeps() {
+		allCascades := dr.CalculateTransitivelyUnresolvableModsWithInferred(sets.Subtract(allModsSet, conflictSet))
+		potential := sets.Subtract(allCascades, fullSetUnresolvable)
+		potential = sets.Subtract(potential, conflictSet)
+		for _, depID := range sets.MakeSlice(potential) {
+			potentialFooterRefs = append(potentialFooterRefs, makeModVM(depID, modMap))
+		}
+	}
+
 	return ui.ConflictSetReport{
-		Mods:              modsSlice,
-		IfAllDisabledAlso: footerRefs,
+		Mods:                       modsSlice,
+		IfAllDisabledAlso:          footerRefs,
+		IfAllDisabledPotentialAlso: potentialFooterRefs,
 	}
 }
 

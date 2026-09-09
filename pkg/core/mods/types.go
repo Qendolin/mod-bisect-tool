@@ -105,9 +105,7 @@ type ProviderInfo struct {
 	VersionOfProvidedItem version.Version
 	IsDirectProvide       bool
 	TopLevelModVersion    version.Version
-	// ProviderJarPath is the path of the jar whose metadata created this
-	// entry, relative to the mods directory: "<file>.jar" for the top-level
-	// mod itself, "<file>.jar/<nested path>" for a nested module.
+	// ProviderJarPath is the metadata source jar path relative to the mods directory.
 	ProviderJarPath string
 }
 
@@ -157,6 +155,10 @@ type Mod struct {
 	Metadata          ModMetadata
 	NestedModules     []NestedModule
 	EffectiveProvides map[string]version.Version // Maps all unique IDs this mod provides to their version.
+	// ClassIndex indexes the declared and referenced class names of the jar
+	// tree, used for the potential (undeclared) dependency inference. It is
+	// built during mod loading and may be nil for hand-built mods.
+	ClassIndex *JarClassIndex
 }
 
 // FriendlyName returns a human-readable name for the mod.

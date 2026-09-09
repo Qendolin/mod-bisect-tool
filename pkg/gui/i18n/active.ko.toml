@@ -376,6 +376,21 @@ other = "검색에서 모드 제외"
 [setup_excluded_mods_keep_disabled]
 other = "이미 비활성화된 모드를 비활성화 상태로 유지합니다."
 
+[cancel]
+other = "취소"
+
+[cascade_all_disable_potential]
+other = "이 충돌의 모든 모드를 비활성화할 경우 다음 항목도 비활성화해야 할 수도 있습니다:"
+
+[cascade_disable_potential]
+other = "이 모드를 비활성화하면 다음 항목도 비활성화해야 할 수도 있습니다:"
+
+[undeclared_dependencies]
+other = "미선언된 의존성 감지됨"
+
+[undeclared_dependencies_description]
+other = "미선언된 의존성을 통해 서로 의존하는 두 모드 그룹으로 인해 검색이 차단되었습니다. 다음 의존성은 모드 코드에서 추론되었습니다. 이 의존성을 적용한 상태로 분할을 다시 시도하려면 '계속'을 클릭하세요."
+
 [active_test_set]
 other = "활성 그룹"
 

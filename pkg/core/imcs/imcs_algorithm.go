@@ -119,10 +119,6 @@ func applyComplementResult(newState SearchState, stable sets.Set, candidates []s
 		newStable := sets.Union(stable, sets.MakeSet(c2))
 		replaceStackTop(&newState, newSearchStep(newStable, c1))
 	case TestResultIndeterminate:
-		// Both halves have independent secondary conflicts and neither has a
-		// verified reading, so the search cannot proceed. Halt and leave the
-		// search stack intact so the UI can reconstruct the two groups from the
-		// current candidate set.
 		logging.Infof("IMCSAlgorithm: Both halves indeterminate (%v / %v). Halting search.", c1, c2)
 		newState.IsHalted = true
 	}
